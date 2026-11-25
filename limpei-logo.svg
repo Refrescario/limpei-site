@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" rx="40" fill="#1A2B4A"/>
+  <path d="M100 32C100 32 58 63 58 95C58 118 76.8 137 100 137C123.2 137 142 118 142 95C142 63 100 32 100 32Z" fill="url(#dropGradLogo)"/>
+  <ellipse cx="84" cy="72" rx="10" ry="16" fill="white" fill-opacity="0.22" transform="rotate(-20 84 72)"/>
+  <defs>
+    <linearGradient id="dropGradLogo" x1="100" y1="32" x2="100" y2="137" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#14A49A"/>
+      <stop offset="100%" stop-color="#0D7377"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LimpaJá — Painel Admin</title>
+  <style>
+    :root {
+      --navy:  #1A2B4A;
+      --teal:  #0D7377;
+      --teal2: #14A49A;
+      --amber: #F4A261;
+      --red:   #EF4444;
+      --green: #10B981;
+      --yellow:#F59E0B;
+      --ice:   #F8F9FA;
+      --mist:  #E2E8F0;
+      --slate: #64748B;
+      --ink:   #1E293B;
+      --white: #FFFFFF;
+      --sidebar-w: 240px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--ice); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* ========== LOGIN ========== */
+    #login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--navy) 0%, #0F1E35 100%);
+    }
+    .login-box {
+      background: var(--white); border-radius: 20px; padding: 48px 40px;
+      width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .login-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--navy); margin-bottom: 32px; }
+    .login-logo-icon { width: 36px; height: 36px; background: var(--teal); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .login-title { font-size: 1.375rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .login-sub { font-size: .9rem; color: var(--slate); margin-bottom: 28px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: .875rem; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+    .form-input {
+      width: 100%; padding: 11px 14px; border-radius: 8px;
+      border: 1.5px solid var(--mist); font-size: .9375rem; font-family: inherit;
+      outline: none; transition: border-color .15s;
+    }
+    .form-input:focus { border-color: var(--teal); }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 20px; border-radius: 8px; font-size: .9375rem; font-weight: 600; border: none; cursor: pointer; transition: all .15s; }
+    .btn-primary { background: var(--teal); color: var(--white); }
+    .btn-primary:hover { background: var(--teal2); }
+    .btn-danger { background: var(--red); color: var(--white); }
+    .btn-danger:hover { opacity: .9; }
+    .btn-success { background: var(--green); color: var(--white); }
+    .btn-success:hover { opacity: .9; }
+    .btn-ghost { background: transparent; color: var(--slate); border: 1.5px solid var(--mist); }
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+    .btn-full { width: 100%; justify-content: center; }
+    .btn-sm { padding: 7px 14px; font-size: .8125rem; }
+    .login-error { background: #FEF2F2; border: 1px solid #FECACA; color: var(--red); border-radius: 8px; padding: 10px 14px; font-size: .875rem; margin-bottom: 16px; display: none; }
+
+    /* ========== LAYOUT ========== */
+    #app { display: none; min-height: 100vh; }
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+      background: var(--navy); display: flex; flex-direction: column;
+      z-index: 50;
+    }
+    .sidebar-logo { padding: 24px 20px; display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--white); border-bottom: 1px solid rgba(255,255,255,.1); }
+    .sidebar-logo-icon { width: 32px; height: 32px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px;
+      font-size: .9rem; font-weight: 500; color: rgba(255,255,255,.65);
+      cursor: pointer; transition: all .15s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.08); color: var(--white); }
+    .nav-item.active { background: var(--teal); color: var(--white); }
+    .nav-item svg { flex-shrink: 0; }
+    .sidebar-bottom { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,.1); }
+    .admin-info { display: flex; align-items: center; gap: 10px; padding: 8px 12px; }
+    .admin-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; color: var(--white); flex-shrink: 0; }
+    .admin-name { font-size: .875rem; font-weight: 500; color: rgba(255,255,255,.8); }
+    .admin-role { font-size: .75rem; color: rgba(255,255,255,.45); }
+    .btn-logout { width: 100%; margin-top: 8px; justify-content: center; background: rgba(255,255,255,.08); color: rgba(255,255,255,.65); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 9px; font-size: .875rem; font-weight: 500; display: flex; gap: 7px; align-items: center; cursor: pointer; transition: all .15s; }
+    .btn-logout:hover { background: rgba(255,0,0,.15); color: #FCA5A5; }
+
+    .main { margin-left: var(--sidebar-w); padding: 32px; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-title { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .page-sub { font-size: .9rem; color: var(--slate); margin-bottom: 28px; }
+
+    /* ========== CARDS / STATS ========== */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--white); border-radius: 14px; padding: 20px 24px; border: 1px solid var(--mist); }
+    .stat-label { font-size: .8125rem; font-weight: 500; color: var(--slate); margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+    .stat-val { font-size: 2rem; font-weight: 800; color: var(--navy); line-height: 1; }
+    .stat-sub { font-size: .8125rem; color: var(--slate); margin-top: 4px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-yellow { background: var(--yellow); }
+    .dot-green  { background: var(--green); }
+    .dot-red    { background: var(--red); }
+    .dot-teal   { background: var(--teal); }
+
+    /* ========== TABLE ========== */
+    .table-card { background: var(--white); border-radius: 14px; border: 1px solid var(--mist); overflow: hidden; }
+    .table-header { padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--mist); gap: 12px; flex-wrap: wrap; }
+    .table-title { font-size: 1rem; font-weight: 600; color: var(--navy); }
+    .search-input { padding: 8px 14px; border: 1.5px solid var(--mist); border-radius: 8px; font-size: .875rem; outline: none; transition: border-color .15s; min-width: 220px; }
+    .search-input:focus { border-color: var(--teal); }
+    .filter-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .filter-btn { padding: 7px 14px; border-radius: 100px; font-size: .8125rem; font-weight: 500; border: 1.5px solid var(--mist); background: var(--white); color: var(--slate); cursor: pointer; transition: all .15s; }
+    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .filter-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: .8125rem; font-weight: 600; color: var(--slate); padding: 12px 16px; text-align: left; background: var(--ice); border-bottom: 1px solid var(--mist); }
+    td { font-size: .875rem; padding: 14px 16px; border-bottom: 1px solid var(--mist); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #FAFBFC; }
+
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 100px; font-size: .75rem; font-weight: 600; }
+    .badge-pendente  { background: #FEF9C3; color: #854D0E; }
+    .badge-aprovada  { background: #DCFCE7; color: #166534; }
+    .badge-rejeitada { background: #FEE2E2; color: #991B1B; }
+    .badge-suspensa  { background: #F1F5F9; color: #475569; }
+    .badge-aguardando{ background: #FEF9C3; color: #854D0E; }
+    .badge-confirmado{ background: #DBEAFE; color: #1E40AF; }
+    .badge-concluido { background: #DCFCE7; color: #166534; }
+    .badge-cancelado { background: #FEE2E2; color: #991B1B; }
+
+    .table-empty { padding: 48px; text-align: center; color: var(--slate); }
+    .table-pagination { padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--mist); font-size: .875rem; color: var(--slate); }
+    .pagination-btns { display: flex; gap: 6px; }
+    .pag-btn { width: 32px; height: 32px; border-radius: 6px; border: 1.5px solid var(--mist); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 600; font-size: .875rem; transition: all .15s; }
+    .pag-btn:hover:not(:disabled) { border-color: var(--teal); color: var(--teal); }
+    .pag-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+    .pag-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ========== MODAL ========== */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; display: flex; align-items: flex-start; justify-content: center; padding: 32px 16px; overflow-y: auto; }
+    .modal { background: var(--white); border-radius: 20px; width: 100%; max-width: 680px; }
+    .modal-header { padding: 24px 28px; border-bottom: 1px solid var(--mist); display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: 1.125rem; font-weight: 700; color: var(--navy); }
+    .modal-close { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--mist); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .modal-close:hover { background: var(--ice); }
+    .modal-body { padding: 28px; }
+    .modal-footer { padding: 20px 28px; border-top: 1px solid var(--mist); display: flex; gap: 10px; justify-content: flex-end; }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .detail-item label { font-size: .75rem; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: .04em; display: block; margin-bottom: 4px; }
+    .detail-item span { font-size: .9375rem; color: var(--ink); }
+    .detail-full { grid-column: span 2; }
+
+    .foto-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .foto-box { border-radius: 10px; overflow: hidden; border: 1px solid var(--mist); aspect-ratio: 4/3; background: var(--ice); display: flex; align-items: center; justify-content: center; }
+    .foto-box img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
+    .foto-label { font-size: .75rem; font-weight: 600; color: var(--slate); text-align: center; padding: 6px; background: var(--ice); }
+    .foto-loading { font-size: .8125rem; color: var(--slate); }
+
+    .reject-textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--mist); border-radius: 8px; font-family: inherit; font-size: .9375rem; resize: vertical; min-height: 80px; outline: none; }
+    .reject-textarea:focus { border-color: var(--teal); }
+
+    /* ========== TOAST ========== */
+    #toast { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast-item { background: var(--navy); color: var(--white); padding: 12px 20px; border-radius: 10px; font-size: .875rem; font-weight: 500; box-shadow: 0 4px 20px rgba(0,0,0,.2); animation: slideIn .2s ease; max-width: 300px; }
+    .toast-item.success { background: var(--green); }
+    .toast-item.error { background: var(--red); }
+    @keyframes slideIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1100px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform .2s; }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 20px 16px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .detail-full { grid-column: span 1; }
+      .foto-row { grid-template-columns: 1fr; }
+    }
+
+    .loading { display: flex; align-items: center; justify-content: center; padding: 48px; color: var(--slate); }
+    .spinner { width: 24px; height: 24px; border: 2px solid var(--mist); border-top-color: var(--teal); border-radius: 50%; animation: spin .6s linear infinite; margin-right: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- =================== LOGIN =================== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h12"/></svg>
+      </div>
+      LimpaJá Admin
+    </div>
+    <div class="login-title">Painel Administrativo</div>
+    <div class="login-sub">Acesso restrito a administradores autorizados.</div>
+    <div class="login-error" id="login-error"></div>
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="login-email" placeholder="admin@limpaja.com.br" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input type="password" class="form-input" id="login-senha" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;" id="login-btn">
+        Entrar
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- =================== APP =================== -->
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h12"/></svg>
+      </div>
+      LimpaJá
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('faxineiras')" id="nav-faxineiras">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Faxineiras
+        <span id="badge-pendentes" style="display:none;margin-left:auto;background:#EF4444;color:white;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:100px;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('servicos')" id="nav-servicos">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Serviços / Leads
+      </div>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="admin-info">
+        <div class="admin-avatar" id="admin-initials">?</div>
+        <div>
+          <div class="admin-name" id="admin-name">—</div>
+          <div class="admin-role">Administrador</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub" id="dashboard-greeting">Bem-vindo de volta.</div>
+
+      <div class="stats-row" id="stats-row">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Cadastros recentes</span>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('faxineiras')">Ver todas</button>
+        </div>
+        <div id="recent-table-wrap">
+          <div class="loading"><div class="spinner"></div>Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAXINEIRAS PAGE -->
+    <div class="page" id="page-faxineiras">
+      <div class="page-title">Faxineiras</div>
+      <div class="page-sub">Gerencie cadastros, aprove ou rejeite profissionais.</div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <input type="text" class="search-input" placeholder="Buscar por nome, CPF ou cidade…" id="fx-search" oninput="debounceFxSearch()">
+          <div class="filter-row">
+            <button class="filter-btn active" onclick="setFxFilter('')" data-filter="">Todas</button>
+            <button class="filter-btn" onclick="setFxFilter('pendente')" data-filter="pendente">Pendentes</button>
+            <button class="filter-btn" onclick="setFxFilter('aprovada')" data-filter="aprovada">Aprovadas</button>
+            <button class="filter-btn" onclick="setFxFilter('rejeitada')" data-filter="rejeitada">Rejeitadas</button>
+            <button class="filter-btn" onclick="setFxFilter('suspensa')" data-filter="suspensa">Suspensas</button>
+          </div>
+        </div>
+        <div id="fx-table-wrap">
+          <div class="loading"><div class="spinner"></div>Carregando...</div>
+        </div>
+        <div class="table-pagination" id="fx-pagination" style="display:none;">
+          <span id="fx-pag-info"></span>
+          <div class="pagination-btns" id="fx-pag-btns"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVIÇOS PAGE -->
+    <div class="page" id="page-servicos">
+      <div class="page-title">Serviços / Leads</div>
+      <div class="page-sub">Contratações e leads recebidos pelo site.</div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Todos os serviços</span>
+          <div class="filter-row">
+            <button class="filter-btn active" onclick="setSvcFilter('')" data-svc-filter="">Todos</button>
+            <button class="filter-btn" onclick="setSvcFilter('aguardando')" data-svc-filter="aguardando">Aguardando</button>
+            <button class="filter-btn" onclick="setSvcFilter('confirmado')" data-svc-filter="confirmado">Confirmados</button>
+            <button class="filter-btn" onclick="setSvcFilter('concluido')" data-svc-filter="concluido">Concluídos</button>
+            <button class="filter-btn" onclick="setSvcFilter('cancelado')" data-svc-filter="cancelado">Cancelados</button>
+          </div>
+        </div>
+        <div id="svc-table-wrap">
+          <div class="loading"><div class="spinner"></div>Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- =================== MODAIS =================== -->
+<!-- Modal detalhe faxineira -->
+<div class="modal-overlay" id="modal-fx" style="display:none;" onclick="if(event.target===this)closeModal('modal-fx')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-fx-title">Detalhes da Faxineira</span>
+      <button class="modal-close" onclick="closeModal('modal-fx')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-fx-body">
+      <div class="loading"><div class="spinner"></div>Carregando...</div>
+    </div>
+    <div class="modal-footer" id="modal-fx-footer"></div>
+  </div>
+</div>
+
+<!-- Modal rejeição -->
+<div class="modal-overlay" id="modal-reject" style="display:none;" onclick="if(event.target===this)closeModal('modal-reject')">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <span class="modal-title">Rejeitar Cadastro</span>
+      <button class="modal-close" onclick="closeModal('modal-reject')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.9375rem;color:var(--slate);margin-bottom:14px;">Informe o motivo da rejeição. Ele será registrado no histórico.</p>
+      <textarea class="reject-textarea" id="reject-motivo" placeholder="Motivo da rejeição (obrigatório)…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-reject')">Cancelar</button>
+      <button class="btn btn-danger" onclick="confirmReject()">Confirmar Rejeição</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast"></div>
+
+<script>
+/* ==========================================
+   STATE
+========================================== */
+let sessionToken = localStorage.getItem('limpaja_token');
+let currentFxPage = 1, currentFxFilter = '', currentFxSearch = '', fxSearchTimeout;
+let currentSvcFilter = '';
+let pendingRejectId = null;
+
+/* ==========================================
+   API HELPER
+========================================== */
+async function api(method, url, body) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken || '' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(data.erro || 'Erro desconhecido'), { status: r.status, data });
+  return data;
+}
+
+/* ==========================================
+   TOAST
+========================================== */
+function toast(msg, type = '') {
+  const el = document.createElement('div');
+  el.className = 'toast-item' + (type ? ` ${type}` : '');
+  el.textContent = msg;
+  document.getElementById('toast').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+/* ==========================================
+   AUTH
+========================================== */
+document.getElementById('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  btn.textContent = 'Entrando…'; btn.disabled = true;
+  document.getElementById('login-error').style.display = 'none';
+  try {
+    const d = await api('POST', '/api/admin/login', {
+      email: document.getElementById('login-email').value,
+      senha: document.getElementById('login-senha').value
+    });
+    sessionToken = d.token;
+    localStorage.setItem('limpaja_token', d.token);
+    initApp(d);
+  } catch(err) {
+    const el = document.getElementById('login-error');
+    el.textContent = err.data?.erro || 'Falha ao entrar.';
+    el.style.display = 'block';
+  } finally { btn.textContent = 'Entrar'; btn.disabled = false; }
+});
+
+async function logout() {
+  try { await api('POST', '/api/admin/logout'); } catch {}
+  localStorage.removeItem('limpaja_token');
+  sessionToken = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+/* ==========================================
+   INIT
+========================================== */
+async function initApp(adminData) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('admin-name').textContent = adminData.nome;
+  document.getElementById('admin-initials').textContent = adminData.nome.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  const h = new Date().getHours();
+  const greeting = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  document.getElementById('dashboard-greeting').textContent = `${greeting}, ${adminData.nome.split(' ')[0]}. Aqui está o resumo de hoje.`;
+  loadDashboard();
+}
+
+// Verifica sessão ao carregar
+(async () => {
+  if (!sessionToken) return;
+  try {
+    const d = await api('GET', '/api/admin/me');
+    initApp(d);
+  } catch { localStorage.removeItem('limpaja_token'); sessionToken = null; }
+})();
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  document.getElementById(`nav-${name}`).classList.add('active');
+  if (name === 'faxineiras') loadFaxineiras();
+  if (name === 'servicos')   loadServicos();
+}
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+async function loadDashboard() {
+  try {
+    const d = await api('GET', '/api/admin/dashboard');
+    const fx = d.faxineiras;
+    const sv = d.servicos;
+
+    // Update badge
+    const badge = document.getElementById('badge-pendentes');
+    if (parseInt(fx.pendentes) > 0) {
+      badge.textContent = fx.pendentes; badge.style.display = 'inline-flex';
+    }
+
+    document.getElementById('stats-row').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label"><span class="dot dot-teal"></span>Total de faxineiras</div>
+        <div class="stat-val">${fx.total}</div>
+        <div class="stat-sub">${fx.aprovadas} aprovadas atualmente</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="dot dot-yellow"></span>Aguardando aprovação</div>
+        <div class="stat-val" style="color:var(--yellow)">${fx.pendentes}</div>
+        <div class="stat-sub">Revisão necessária</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="dot dot-teal"></span>Serviços este mês</div>
+        <div class="stat-val">${sv.mes_atual}</div>
+        <div class="stat-sub">${sv.aguardando} aguardando confirmação</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span class="dot dot-green"></span>Receita do mês</div>
+        <div class="stat-val" style="color:var(--green)">R$ ${parseFloat(sv.receita_mes).toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
+        <div class="stat-sub">Serviços concluídos</div>
+      </div>
+    `;
+
+    document.getElementById('recent-table-wrap').innerHTML = `
+      <table>
+        <thead><tr><th>Nome</th><th>Cidade/UF</th><th>Telefone</th><th>Status</th><th>Cadastro</th><th></th></tr></thead>
+        <tbody>
+          ${d.recentes_cadastros.length === 0
+            ? `<tr><td colspan="6" class="table-empty">Nenhum cadastro ainda.</td></tr>`
+            : d.recentes_cadastros.map(f => `
+              <tr>
+                <td><strong>${esc(f.nome_completo)}</strong></td>
+                <td>${esc(f.cidade)}/${esc(f.estado)}</td>
+                <td>${esc(f.telefone)}</td>
+                <td><span class="badge badge-${f.status}">${f.status.charAt(0).toUpperCase()+f.status.slice(1)}</span></td>
+                <td>${formatDate(f.created_at)}</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="openFaxineira('${f.id}')">Ver</button></td>
+              </tr>`).join('')
+          }
+        </tbody>
+      </table>`;
+  } catch(err) {
+    document.getElementById('stats-row').innerHTML = `<div style="color:var(--red);padding:16px;">Erro ao carregar: ${err.message}</div>`;
+  }
+}
+
+/* ==========================================
+   FAXINEIRAS
+========================================== */
+function setFxFilter(val) {
+  currentFxFilter = val; currentFxPage = 1;
+  document.querySelectorAll('[data-filter]').forEach(b => b.classList.toggle('active', b.dataset.filter === val));
+  loadFaxineiras();
+}
+
+function debounceFxSearch() {
+  clearTimeout(fxSearchTimeout);
+  fxSearchTimeout = setTimeout(() => {
+    currentFxSearch = document.getElementById('fx-search').value;
+    currentFxPage = 1; loadFaxineiras();
+  }, 350);
+}
+
+async function loadFaxineiras() {
+  document.getElementById('fx-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  try {
+    const params = new URLSearchParams({ page: currentFxPage, per: 20 });
+    if (currentFxFilter) params.set('status', currentFxFilter);
+    if (currentFxSearch) params.set('search', currentFxSearch);
+    const d = await api('GET', `/api/admin/faxineiras?${params}`);
+
+    document.getElementById('fx-table-wrap').innerHTML = `
+      <table>
+        <thead><tr><th>Nome</th><th>CPF</th><th>Cidade/UF</th><th>Experiência</th><th>Status</th><th>Cadastro</th><th></th></tr></thead>
+        <tbody>
+          ${d.data.length === 0
+            ? `<tr><td colspan="7" class="table-empty">Nenhuma faxineira encontrada.</td></tr>`
+            : d.data.map(f => `
+              <tr>
+                <td><strong>${esc(f.nome_completo)}</strong></td>
+                <td>${maskCPF(f.cpf)}</td>
+                <td>${esc(f.cidade)}/${esc(f.estado)}</td>
+                <td>${f.experiencia_anos} ${f.experiencia_anos === 1 ? 'ano' : 'anos'}</td>
+                <td><span class="badge badge-${f.status}">${f.status.charAt(0).toUpperCase()+f.status.slice(1)}</span></td>
+                <td>${formatDate(f.created_at)}</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="openFaxineira('${f.id}')">Ver detalhes</button></td>
+              </tr>`).join('')
+          }
+        </tbody>
+      </table>`;
+
+    // Paginação
+    const totalPages = Math.ceil(d.total / 20);
+    const pag = document.getElementById('fx-pagination');
+    if (totalPages > 1) {
+      pag.style.display = 'flex';
+      document.getElementById('fx-pag-info').textContent = `Mostrando ${((d.page-1)*20)+1}–${Math.min(d.page*20, d.total)} de ${d.total}`;
+      let btns = `<button class="pag-btn" ${d.page <= 1 ? 'disabled' : ''} onclick="currentFxPage=${d.page-1};loadFaxineiras()">‹</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - d.page) <= 1) btns += `<button class="pag-btn ${i === d.page ? 'active' : ''}" onclick="currentFxPage=${i};loadFaxineiras()">${i}</button>`;
+        else if (Math.abs(i - d.page) === 2) btns += `<span style="padding:0 4px;color:var(--slate)">…</span>`;
+      }
+      btns += `<button class="pag-btn" ${d.page >= totalPages ? 'disabled' : ''} onclick="currentFxPage=${d.page+1};loadFaxineiras()">›</button>`;
+      document.getElementById('fx-pag-btns').innerHTML = btns;
+    } else { pag.style.display = 'none'; }
+
+  } catch(err) {
+    document.getElementById('fx-table-wrap').innerHTML = `<div class="table-empty" style="color:var(--red)">Erro: ${err.message}</div>`;
+  }
+}
+
+/* ==========================================
+   FAXINEIRA DETAIL MODAL
+========================================== */
+async function openFaxineira(id) {
+  document.getElementById('modal-fx').style.display = 'flex';
+  document.getElementById('modal-fx-body').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  document.getElementById('modal-fx-footer').innerHTML = '';
+
+  try {
+    const f = await api('GET', `/api/admin/faxineiras/${id}`);
+    document.getElementById('modal-fx-title').textContent = f.nome_completo;
+
+    document.getElementById('modal-fx-body').innerHTML = `
+      <div class="foto-row">
+        <div>
+          <div class="foto-box">
+            ${f.foto_selfie_url
+              ? `<img src="${esc(f.foto_selfie_url)}" alt="Selfie" onclick="window.open(this.src,'_blank')">`
+              : `<span class="foto-loading">Selfie</span>`}
+          </div>
+          <div class="foto-label">Selfie do rosto</div>
+        </div>
+        <div>
+          <div class="foto-box">
+            ${f.foto_documento_url
+              ? `<img src="${esc(f.foto_documento_url)}" alt="Documento" onclick="window.open(this.src,'_blank')">`
+              : `<span class="foto-loading">Documento</span>`}
+          </div>
+          <div class="foto-label">Documento (RG / CPF)</div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item"><label>Nome completo</label><span>${esc(f.nome_completo)}</span></div>
+        <div class="detail-item"><label>CPF</label><span>${maskCPF(f.cpf)}</span></div>
+        <div class="detail-item"><label>RG</label><span>${esc(f.rg || '—')}</span></div>
+        <div class="detail-item"><label>Nascimento</label><span>${formatDate(f.data_nascimento)}</span></div>
+        <div class="detail-item"><label>Telefone</label><span>${esc(f.telefone)}</span></div>
+        <div class="detail-item"><label>Email</label><span>${esc(f.email || '—')}</span></div>
+        <div class="detail-item detail-full"><label>Endereço</label><span>${esc(f.endereco)}, ${esc(f.numero)}${f.complemento ? ' ' + esc(f.complemento) : ''} — ${esc(f.bairro)}, ${esc(f.cidade)}/${esc(f.estado)} — CEP ${esc(f.cep)}</span></div>
+        <div class="detail-item"><label>Experiência</label><span>${f.experiencia_anos} ${f.experiencia_anos === 1 ? 'ano' : 'anos'}</span></div>
+        <div class="detail-item"><label>Status</label><span class="badge badge-${f.status}">${f.status.charAt(0).toUpperCase()+f.status.slice(1)}</span></div>
+        ${f.tipos_limpeza?.length ? `<div class="detail-item detail-full"><label>Tipos de limpeza</label><span>${f.tipos_limpeza.join(', ')}</span></div>` : ''}
+        ${f.sobre ? `<div class="detail-item detail-full"><label>Sobre</label><span>${esc(f.sobre)}</span></div>` : ''}
+        ${f.motivo_rejeicao ? `<div class="detail-item detail-full"><label>Motivo de rejeição/suspensão</label><span style="color:var(--red)">${esc(f.motivo_rejeicao)}</span></div>` : ''}
+        <div class="detail-item"><label>Cadastrado em</label><span>${formatDate(f.created_at)}</span></div>
+        ${f.aprovado_em ? `<div class="detail-item"><label>Decisão em</label><span>${formatDate(f.aprovado_em)}</span></div>` : ''}
+      </div>
+    `;
+
+    // Footer actions
+    let footer = '';
+    if (f.status === 'pendente') {
+      footer = `
+        <button class="btn btn-ghost" onclick="closeModal('modal-fx')">Fechar</button>
+        <button class="btn btn-danger" onclick="openReject('${f.id}')">Rejeitar</button>
+        <button class="btn btn-success" onclick="aprovar('${f.id}')">Aprovar</button>`;
+    } else if (f.status === 'aprovada') {
+      footer = `
+        <button class="btn btn-ghost" onclick="closeModal('modal-fx')">Fechar</button>
+        <button class="btn btn-danger btn-sm" onclick="openReject('${f.id}')">Suspender</button>`;
+    } else {
+      footer = `<button class="btn btn-ghost" onclick="closeModal('modal-fx')">Fechar</button>`;
+    }
+    document.getElementById('modal-fx-footer').innerHTML = footer;
+
+  } catch(err) {
+    document.getElementById('modal-fx-body').innerHTML = `<div style="color:var(--red);padding:12px">Erro ao carregar: ${err.message}</div>`;
+  }
+}
+
+async function aprovar(id) {
+  try {
+    await api('PATCH', `/api/admin/faxineiras/${id}/aprovar`);
+    toast('Faxineira aprovada com sucesso!', 'success');
+    closeModal('modal-fx');
+    loadFaxineiras(); loadDashboard();
+  } catch(err) {
+    toast(err.data?.erro || 'Erro ao aprovar.', 'error');
+  }
+}
+
+function openReject(id) {
+  pendingRejectId = id;
+  document.getElementById('reject-motivo').value = '';
+  document.getElementById('modal-reject').style.display = 'flex';
+}
+
+async function confirmReject() {
+  const motivo = document.getElementById('reject-motivo').value.trim();
+  if (!motivo || motivo.length < 5) { toast('Informe o motivo (mínimo 5 caracteres).', 'error'); return; }
+  try {
+    await api('PATCH', `/api/admin/faxineiras/${pendingRejectId}/rejeitar`, { motivo });
+    toast('Cadastro rejeitado.', 'success');
+    closeModal('modal-reject'); closeModal('modal-fx');
+    loadFaxineiras(); loadDashboard();
+  } catch(err) {
+    toast(err.data?.erro || 'Erro ao rejeitar.', 'error');
+  }
+}
+
+/* ==========================================
+   SERVIÇOS
+========================================== */
+function setSvcFilter(val) {
+  currentSvcFilter = val;
+  document.querySelectorAll('[data-svc-filter]').forEach(b => b.classList.toggle('active', b.dataset.svcFilter === val));
+  loadServicos();
+}
+
+async function loadServicos() {
+  document.getElementById('svc-table-wrap').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  try {
+    const params = new URLSearchParams();
+    if (currentSvcFilter) params.set('status', currentSvcFilter);
+    const d = await api('GET', `/api/admin/servicos?${params}`);
+
+    document.getElementById('svc-table-wrap').innerHTML = `
+      <table>
+        <thead><tr><th>Cliente</th><th>WhatsApp</th><th>Serviço</th><th>Valor</th><th>Status</th><th>Faxineira</th><th>Data</th><th></th></tr></thead>
+        <tbody>
+          ${d.data.length === 0
+            ? `<tr><td colspan="8" class="table-empty">Nenhum serviço encontrado.</td></tr>`
+            : d.data.map(s => `
+              <tr>
+                <td><strong>${esc(s.nome_cliente)}</strong></td>
+                <td>${esc(s.telefone_cliente)}</td>
+                <td>${esc(s.tipo_limpeza)}</td>
+                <td><strong>R$ ${parseFloat(s.valor).toLocaleString('pt-BR', {minimumFractionDigits:2})}</strong></td>
+                <td><span class="badge badge-${s.status}">${s.status.charAt(0).toUpperCase()+s.status.slice(1)}</span></td>
+                <td>${s.faxineira_nome ? esc(s.faxineira_nome) : '<span style="color:var(--slate)">—</span>'}</td>
+                <td>${formatDate(s.created_at)}</td>
+                <td>
+                  <a href="https://wa.me/55${s.telefone_cliente}?text=Olá+${encodeURIComponent(s.nome_cliente)}!+Seu+agendamento+foi+confirmado." target="_blank" class="btn btn-primary btn-sm">WhatsApp</a>
+                </td>
+              </tr>`).join('')}
+        </tbody>
+      </table>`;
+  } catch(err) {
+    document.getElementById('svc-table-wrap').innerHTML = `<div class="table-empty" style="color:var(--red)">Erro: ${err.message}</div>`;
+  }
+}
+
+/* ==========================================
+   UTILS
+========================================== */
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function maskCPF(cpf) {
+  if (!cpf) return '—';
+  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+
+function formatDate(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+</script>
+</body>
+</html>

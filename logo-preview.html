@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F0F4F8; padding: 48px; }
+.row { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; margin-bottom: 48px; }
+.bg-light { background: #fff; padding: 32px 48px; border-radius: 16px; }
+.bg-dark  { background: #1A2B4A; padding: 32px 48px; border-radius: 16px; }
+.bg-teal  { background: #0D7377; padding: 32px 48px; border-radius: 16px; }
+
+/* ── LOGO MARK: spark / shine — 3 strokes em ângulo + dot ── */
+.logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  user-select: none;
+}
+.logo-mark {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+}
+.logo-wordmark {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1A2B4A;
+  line-height: 1;
+}
+.logo-wordmark-white { color: #fff; }
+
+/* variante compacta topbar */
+.logo-wrap-sm { gap: 9px; }
+.logo-wrap-sm .logo-mark { width: 32px; height: 32px; }
+.logo-wrap-sm .logo-wordmark { font-size: 17px; }
+</style>
+</head>
+<body>
+
+<h3 style="font-family:sans-serif;font-size:12px;color:#888;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase;">Logo options — fundo claro</h3>
+
+<div class="row bg-light">
+
+  <!-- OPÇÃO A: ícone geométrico — losango com faísca interna -->
+  <a href="#" class="logo-wrap">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- fundo quadrado arredondado navy -->
+      <rect width="38" height="38" rx="10" fill="#1A2B4A"/>
+      <!-- brilho/spark: 3 linhas irradiando + ponto central -->
+      <circle cx="19" cy="19" r="2.4" fill="#14A49A"/>
+      <!-- linha diagonal topo-direita -->
+      <line x1="19" y1="19" x2="27" y2="11" stroke="#14A49A" stroke-width="2" stroke-linecap="round"/>
+      <!-- linha diagonal topo-esquerda mais curta -->
+      <line x1="19" y1="19" x2="13" y2="11.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".5"/>
+      <!-- linha vertical baixo -->
+      <line x1="19" y1="21.4" x2="19" y2="27" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".4"/>
+      <!-- linha horizontal esquerda curta -->
+      <line x1="16.6" y1="19" x2="11" y2="19" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".3"/>
+    </svg>
+    <span class="logo-wordmark">Limpei</span>
+  </a>
+
+  <!-- OPÇÃO B: "L" negativo no quadrado teal -->
+  <a href="#" class="logo-wrap">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="10" fill="#0D7377"/>
+      <!-- L em negativo + dot -->
+      <path d="M13 10 L13 25 L23 25" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="26" cy="25" r="2.5" fill="#F4A261"/>
+    </svg>
+    <span class="logo-wordmark">Limpei</span>
+  </a>
+
+  <!-- OPÇÃO C: folha/gota clean com brilho -->
+  <a href="#" class="logo-wrap">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="10" fill="#1A2B4A"/>
+      <!-- gota estilizada -->
+      <path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="#0D7377"/>
+      <!-- brilho interno -->
+      <path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dropGrad)"/>
+      <!-- reflexo de luz -->
+      <ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/>
+      <defs>
+        <linearGradient id="dropGrad" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#14A49A"/>
+          <stop offset="100%" stop-color="#0D7377"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="logo-wordmark">Limpei</span>
+  </a>
+
+  <!-- OPÇÃO D: sparkle — 4 pontas estrela fina + dot -->
+  <a href="#" class="logo-wrap">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="10" fill="#1A2B4A"/>
+      <!-- sparkle 4 pontas: forma de losango suave por 2 paths cruzados -->
+      <path d="M19 9 C19 9 20.5 16.5 19 19 C17.5 21.5 19 29 19 29 C19 29 17.5 21.5 19 19 C20.5 16.5 19 9 19 9Z" fill="#14A49A"/>
+      <path d="M9 19 C9 19 16.5 17.5 19 19 C21.5 20.5 29 19 29 19 C29 19 21.5 20.5 19 19 C16.5 17.5 9 19 9 19Z" fill="#14A49A" opacity=".7"/>
+      <!-- dot âmbar no centro -->
+      <circle cx="19" cy="19" r="2" fill="#F4A261"/>
+    </svg>
+    <span class="logo-wordmark">Limpei</span>
+  </a>
+
+</div>
+
+<h3 style="font-family:sans-serif;font-size:12px;color:#888;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase;">Opção D — fundo escuro (topbar)</h3>
+
+<div class="row bg-dark">
+  <a href="#" class="logo-wrap logo-wrap-sm">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="10" fill="#14A49A"/>
+      <path d="M19 9 C19 9 20.5 16.5 19 19 C17.5 21.5 19 29 19 29 C19 29 17.5 21.5 19 19 C20.5 16.5 19 9 19 9Z" fill="white"/>
+      <path d="M9 19 C9 19 16.5 17.5 19 19 C21.5 20.5 29 19 29 19 C29 19 21.5 20.5 19 19 C16.5 17.5 9 19 9 19Z" fill="white" opacity=".6"/>
+      <circle cx="19" cy="19" r="2" fill="#F4A261"/>
+    </svg>
+    <span class="logo-wordmark logo-wordmark-white">Limpei</span>
+  </a>
+</div>
+
+<h3 style="font-family:sans-serif;font-size:12px;color:#888;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase;">Variante B — fundo escuro</h3>
+
+<div class="row bg-dark">
+  <a href="#" class="logo-wrap logo-wrap-sm">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="10" fill="#14A49A"/>
+      <path d="M13 10 L13 25 L23 25" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="26" cy="25" r="2.5" fill="#F4A261"/>
+    </svg>
+    <span class="logo-wordmark logo-wordmark-white">Limpei</span>
+  </a>
+</div>
+
+</body>
+</html>

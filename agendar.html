@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agendar Limpeza | Limpei</title>
+<meta name="description" content="Agende seu serviço de limpeza em minutos. Profissionais verificados em São Paulo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A2B4A;
+  --teal: #0D7377;
+  --teal2: #14A085;
+  --amber: #F4A261;
+  --amber-dark: #E07D3C;
+  --bg: #F0F4F8;
+  --border: #DDE3EC;
+  --muted: #64748B;
+  --white: #fff;
+  --error: #DC2626;
+  --success: #059669;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--navy);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--navy);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  flex-shrink: 0;
+}
+.logo { display:flex; align-items:center; gap:4px;  font-size: 20px; font-weight: 800; color: #fff; text-decoration: none; }
+.logo span { color: #14A49A; }
+.topbar-back {
+  font-size: 13px; color: rgba(255,255,255,.55);
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+  transition: color .2s;
+}
+.topbar-back:hover { color: #fff; }
+.topbar-secure {
+  font-size: 12px; color: rgba(255,255,255,.45);
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+}
+.progress-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 52px;
+}
+.prog-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  position: relative;
+  cursor: default;
+}
+.prog-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: calc(50% + 20px);
+  right: calc(-50% + 20px);
+  top: 50%;
+  height: 1px;
+  background: var(--border);
+  transition: background .3s;
+}
+.prog-step.done:not(:last-child)::after { background: var(--teal); }
+.prog-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  background: var(--bg); border: 2px solid var(--border);
+  color: var(--muted);
+  transition: all .3s;
+  flex-shrink: 0;
+  position: relative; z-index: 1;
+}
+.prog-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; transition: color .3s; }
+.prog-step.active .prog-num { background: var(--teal); border-color: var(--teal); color: #fff; }
+.prog-step.active .prog-label { color: var(--teal); }
+.prog-step.done .prog-num { background: var(--teal); border-color: var(--teal); color: #fff; }
+.prog-step.done .prog-num::after { content: '✓'; }
+.prog-step.done .prog-num span { display: none; }
+.prog-step.done .prog-label { color: var(--navy); }
+
+/* ── LAYOUT SPLIT ── */
+.split {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 0 48px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ── SUMMARY PANEL (left) ── */
+.summary {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: sticky;
+  top: calc(60px + 52px + 24px);
+}
+.summary-header {
+  background: linear-gradient(135deg, var(--navy), #0A3A4A);
+  padding: 22px 24px;
+}
+.summary-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.5); letter-spacing: .07em; margin-bottom: 6px; }
+.summary-title { font-size: 18px; font-weight: 800; color: #fff; }
+.summary-body { padding: 20px 24px; }
+.sum-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.sum-row:last-of-type { border-bottom: none; }
+.sum-key { color: var(--muted); font-weight: 500; }
+.sum-val { font-weight: 600; color: var(--navy); text-align: right; max-width: 160px; }
+.sum-val.placeholder { color: var(--border); font-style: italic; font-weight: 400; }
+.summary-total {
+  margin: 0 24px 20px;
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sum-total-label { font-size: 13px; color: var(--muted); font-weight: 500; }
+.sum-total-val { font-size: 22px; font-weight: 800; color: var(--teal); }
+.sum-total-sub { font-size: 11px; color: var(--muted); }
+.summary-trust { padding: 0 24px 20px; display: flex; flex-direction: column; gap: 4px; }
+.trust-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
+.trust-ic { font-size: 14px; }
+
+/* ── FORM PANEL (right) ── */
+.form-panel {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.step-content { display: none; }
+.step-content.active { display: block; }
+
+.step-header { padding: 28px 32px 0; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+.step-num-label { font-size: 11px; font-weight: 700; color: var(--teal); letter-spacing: .07em; margin-bottom: 6px; }
+.step-title { font-size: 22px; font-weight: 800; color: var(--navy); }
+.step-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+.step-body { padding: 28px 32px; }
+
+/* ── SERVICE CARDS (step 1) ── */
+.service-cards { display: flex; flex-direction: column; gap: 12px; }
+.svc-card {
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all .2s;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+.svc-card:hover { border-color: var(--teal); background: rgba(13,115,119,.03); }
+.svc-card.selected { border-color: var(--teal); background: rgba(13,115,119,.05); }
+.svc-ic { width: 48px; height: 48px; border-radius: 12px; overflow: hidden; flex-shrink: 0; }
+.svc-ic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.svc-card.selected .svc-ic { outline: 2px solid var(--teal); }
+.svc-name { font-size: 15px; font-weight: 700; color: var(--navy); }
+.svc-desc-s { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.svc-price { font-size: 15px; font-weight: 800; color: var(--teal); white-space: nowrap; }
+.svc-price-from { font-size: 11px; color: var(--muted); display: block; text-align: right; }
+.svc-radio { display: none; }
+.svc-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; flex-shrink: 0;
+}
+.svc-card.selected .svc-check { background: var(--teal); border-color: var(--teal); color: #fff; font-size: 11px; }
+
+/* ── CÔMODOS SECTION ── */
+.rooms-section-label {
+  font-size: 14px; font-weight: 700; color: var(--navy);
+  margin: 24px 0 4px;
+}
+.rooms-section-sub {
+  font-size: 12px; color: var(--muted); margin-bottom: 14px;
+}
+
+/* Tipo de lar */
+.tipo-lar-row { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+.tipo-btn {
+  border: 2px solid var(--border); border-radius: 10px;
+  padding: 9px 18px; font-family: inherit; font-size: 13px; font-weight: 700;
+  color: var(--muted); background: var(--white); cursor: pointer; transition: all .2s;
+}
+.tipo-btn:hover { border-color: var(--teal); color: var(--navy); }
+.tipo-btn.selected { border-color: var(--teal); background: rgba(13,115,119,.07); color: var(--teal); }
+
+/* Counter rows */
+.counter-wrap { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.counter-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border: 2px solid var(--border); border-radius: 14px;
+  background: var(--white);
+}
+.counter-label-wrap {}
+.counter-label { font-size: 15px; font-weight: 700; color: var(--navy); display: block; }
+.counter-sublabel { font-size: 12px; color: var(--muted); margin-top: 2px; display: block; }
+.counter-ctrl { display: flex; align-items: center; gap: 0; }
+.counter-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--border); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 300; color: var(--navy);
+  cursor: pointer; transition: all .2s; font-family: inherit; line-height: 1;
+  flex-shrink: 0;
+}
+.counter-btn:hover:not(:disabled) { border-color: var(--teal); color: var(--teal); background: rgba(13,115,119,.06); }
+.counter-btn:disabled { opacity: .3; cursor: not-allowed; }
+.counter-val {
+  min-width: 44px; text-align: center;
+  font-size: 22px; font-weight: 800; color: var(--navy);
+}
+
+/* Hint below counters */
+.rooms-hint {
+  font-size: 12px; color: var(--muted); margin-bottom: 20px;
+  padding: 10px 14px; background: var(--bg); border-radius: 10px;
+  line-height: 1.5;
+}
+
+/* Auto-hours display */
+.hours-auto-box {
+  border: 2px solid var(--border); border-radius: 14px;
+  background: var(--white); padding: 16px 18px;
+  margin-bottom: 4px;
+}
+.hours-auto-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.hours-auto-label { font-size: 13px; color: var(--muted); font-weight: 600; }
+.hours-auto-ctrl { display: flex; align-items: center; gap: 0; }
+.hours-auto-val {
+  min-width: 70px; text-align: center;
+  font-size: 24px; font-weight: 800; color: var(--teal);
+}
+.hours-auto-unit { font-size: 13px; color: var(--muted); font-weight: 500; margin-left: 2px; }
+.hours-adj-hint {
+  font-size: 11px; color: var(--muted); margin-top: 8px;
+  text-align: center; line-height: 1.4;
+}
+
+/* Pros badge */
+.pros-badge {
+  display: flex; align-items: center; gap: 4px;
+  padding: 12px 16px; border-radius: 12px;
+  background: rgba(13,115,119,.07); border: 1.5px solid rgba(13,115,119,.2);
+  margin-top: 12px;
+}
+.pros-ic { font-size: 20px; }
+.pros-badge span:last-child { font-size: 13px; font-weight: 600; color: var(--teal); }
+
+/* keep .rooms-row for any other uses */
+.rooms-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.room-btn {
+  border: 2px solid var(--border); border-radius: 10px;
+  padding: 10px 16px; font-family: inherit; font-size: 14px; font-weight: 700;
+  color: var(--muted); background: var(--white); cursor: pointer; transition: all .2s;
+}
+.room-btn:hover { border-color: var(--teal); color: var(--navy); }
+.room-btn.selected { border-color: var(--teal); background: rgba(13,115,119,.06); color: var(--teal); }
+
+/* ── DATETIME (step 2) ── */
+.dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .05em; margin-bottom: 8px; display: block; }
+.date-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 24px; }
+.date-pill {
+  border: 2px solid var(--border); border-radius: 10px;
+  padding: 10px 8px; text-align: center; cursor: pointer;
+  transition: all .2s; background: var(--white);
+}
+.date-pill:hover { border-color: var(--teal); }
+.date-pill.selected { border-color: var(--teal); background: rgba(13,115,119,.06); }
+.date-pill-day { font-size: 11px; color: var(--muted); font-weight: 600; }
+.date-pill-num { font-size: 20px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+.date-pill-month { font-size: 11px; color: var(--muted); }
+.date-pill.selected .date-pill-num { color: var(--teal); }
+
+.time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.time-btn {
+  border: 2px solid var(--border); border-radius: 10px; padding: 11px 8px;
+  text-align: center; font-size: 14px; font-weight: 700; color: var(--muted);
+  cursor: pointer; background: var(--white); font-family: inherit; transition: all .2s;
+}
+.time-btn:hover:not(.taken) { border-color: var(--teal); color: var(--navy); }
+.time-btn.selected { border-color: var(--teal); background: rgba(13,115,119,.06); color: var(--teal); }
+.time-btn.taken { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
+
+/* ── ADDRESS (step 3) ── */
+.field-group { margin-bottom: 20px; }
+.field-input {
+  width: 100%; padding: 12px 14px;
+  border: 2px solid var(--border); border-radius: 10px;
+  font-family: inherit; font-size: 15px; color: var(--navy);
+  background: var(--white); transition: border-color .2s, box-shadow .2s;
+  outline: none;
+}
+.field-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,115,119,.1); }
+.field-input.error { border-color: var(--error); }
+.field-hint { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.field-error { font-size: 12px; color: var(--error); margin-top: 5px; display: none; }
+.field-error.visible { display: block; }
+.addr-grid { display: grid; grid-template-columns: 1fr 120px; gap: 12px; }
+.addr-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* extras checkbox */
+.extras-title { font-size: 14px; font-weight: 700; color: var(--navy); margin: 24px 0 12px; }
+.extra-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px;
+  cursor: pointer; transition: all .2s; margin-bottom: 8px;
+}
+.extra-item:hover { border-color: var(--teal); }
+.extra-item.checked { border-color: var(--teal); background: rgba(13,115,119,.04); }
+.extra-cb { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .2s; font-size: 11px; color: #fff; }
+.extra-item.checked .extra-cb { background: var(--teal); border-color: var(--teal); }
+.extra-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.extra-price { font-size: 13px; color: var(--muted); margin-left: auto; font-weight: 600; }
+
+/* ── PAYMENT (step 4) ── */
+.pay-methods { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
+.pay-method {
+  flex: 1; min-width: 100px; border: 2px solid var(--border); border-radius: 12px;
+  padding: 14px 12px; text-align: center; cursor: pointer; transition: all .2s;
+  background: var(--white);
+}
+.pay-method:hover { border-color: var(--teal); }
+.pay-method.selected { border-color: var(--teal); background: rgba(13,115,119,.05); }
+.pay-ic { font-size: 24px; display: block; margin-bottom: 6px; }
+.pay-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+.pay-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.pay-fields { display: none; }
+.pay-fields.visible { display: block; }
+
+.card-row { display: grid; grid-template-columns: 1fr 100px 80px; gap: 12px; }
+
+.pix-box {
+  background: rgba(13,115,119,.05); border: 1.5px dashed var(--teal);
+  border-radius: 14px; padding: 24px; text-align: center;
+}
+.pix-box p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.pix-box strong { color: var(--navy); }
+
+/* terms */
+.terms-row { display: flex; align-items: flex-start; gap: 4px; margin-top: 20px; }
+.terms-cb { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; }
+.terms-cb.checked { background: var(--teal); border-color: var(--teal); }
+.terms-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.terms-text a { color: var(--teal); }
+
+/* ── STEP FOOTER ── */
+.step-footer {
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--white);
+}
+.btn-back {
+  font-size: 14px; font-weight: 600; color: var(--muted);
+  background: none; border: none; cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; gap: 6px; transition: color .2s;
+  padding: 10px 0;
+}
+.btn-back:hover { color: var(--navy); }
+.btn-back:disabled { opacity: 0; pointer-events: none; }
+.btn-next {
+  background: var(--teal); color: #fff;
+  border: none; border-radius: 12px;
+  padding: 14px 32px; font-family: inherit;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 4px;
+}
+.btn-next:hover:not(:disabled) { background: var(--teal2); }
+.btn-next:disabled { opacity: .45; cursor: not-allowed; }
+.btn-next.final { background: var(--amber); color: var(--navy); }
+.btn-next.final:hover:not(:disabled) { background: var(--amber-dark); }
+.btn-next.loading { pointer-events: none; }
+.btn-next .spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  animation: spin .6s linear infinite;
+  display: none;
+}
+.btn-next.loading .spinner { display: block; }
+.btn-next.loading .btn-label { opacity: .6; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── SECTION PADDING ── */
+.wrap { padding: 0 32px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .split { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+  .summary { position: static; order: 2; }
+  .form-panel { order: 1; }
+  .progress-wrap { padding: 0 16px; }
+  .prog-label { display: none; }
+  .step-header { padding: 20px 20px 16px; }
+  .step-body { padding: 20px; }
+  .step-footer { padding: 16px 20px; }
+  .topbar { padding: 0 16px; }
+  .date-grid { grid-template-columns: repeat(4,1fr); }
+  .time-grid { grid-template-columns: repeat(3,1fr); }
+  .card-row { grid-template-columns: 1fr; }
+  .addr-grid { grid-template-columns: 1fr; }
+  .addr-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .split { padding: 12px; }
+  .date-grid { grid-template-columns: repeat(3,1fr); }
+  .time-grid { grid-template-columns: repeat(2,1fr); }
+  .addr-grid-3 { grid-template-columns: 1fr; }
+  .pay-methods { gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="index.html" class="logo"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_agendar_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_agendar_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <a href="servicos.html" class="topbar-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Serviços
+  </a>
+  <div class="topbar-secure">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    Pagamento seguro
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="prog-step active" id="ps1">
+      <div class="prog-num"><span>1</span></div>
+      <span class="prog-label">Serviço</span>
+    </div>
+    <div class="prog-step" id="ps2">
+      <div class="prog-num"><span>2</span></div>
+      <span class="prog-label">Data e hora</span>
+    </div>
+    <div class="prog-step" id="ps3">
+      <div class="prog-num"><span>3</span></div>
+      <span class="prog-label">Endereço</span>
+    </div>
+    <div class="prog-step" id="ps4">
+      <div class="prog-num"><span>4</span></div>
+      <span class="prog-label">Pagamento</span>
+    </div>
+  </div>
+</div>
+
+<!-- SPLIT LAYOUT -->
+<div class="wrap">
+<div class="split">
+
+  <!-- ── LEFT: SUMMARY ── -->
+  <div class="summary">
+    <div class="summary-header">
+      <div class="summary-label">Resumo do pedido</div>
+      <div class="summary-title" id="sum-svc-title">Escolha um serviço</div>
+    </div>
+    <div class="summary-body">
+      <div class="sum-row">
+        <span class="sum-key">Serviço</span>
+        <span class="sum-val placeholder" id="sum-svc">—</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Duração</span>
+        <span class="sum-val placeholder" id="sum-hours">—</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Profissionais</span>
+        <span class="sum-val placeholder" id="sum-pros">—</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Data</span>
+        <span class="sum-val placeholder" id="sum-date">—</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Horário</span>
+        <span class="sum-val placeholder" id="sum-time">—</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Endereço</span>
+        <span class="sum-val placeholder" id="sum-addr">—</span>
+      </div>
+      <div class="sum-row" id="sum-extras-row" style="display:none;">
+        <span class="sum-key">Extras</span>
+        <span class="sum-val" id="sum-extras">—</span>
+      </div>
+    </div>
+    <div class="summary-total">
+      <div>
+        <div class="sum-total-label">Total estimado</div>
+        <div class="sum-total-sub" id="sum-total-sub">a partir de</div>
+      </div>
+      <div class="sum-total-val" id="sum-total">R$ —</div>
+    </div>
+    <div class="summary-trust">
+      <div class="trust-item"><span class="trust-ic">🛡️</span> Profissional verificada e segurada</div>
+      <div class="trust-item"><span class="trust-ic">↩️</span> Reembolso em 24h se insatisfeito</div>
+      <div class="trust-item"><span class="trust-ic">🔒</span> Pagamento 100% seguro</div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: FORM ── -->
+  <div class="form-panel">
+
+    <!-- STEP 1: Serviço -->
+    <div class="step-content active" id="step1">
+      <div class="step-header">
+        <div class="step-num-label">PASSO 1 DE 4</div>
+        <div class="step-title">Qual serviço você precisa?</div>
+        <div class="step-sub">Selecione o tipo de limpeza e quantas horas você precisa.</div>
+      </div>
+      <div class="step-body">
+        <div class="service-cards">
+
+          <div class="svc-card" data-svc="padrao" onclick="selectSvc(this)">
+            <div class="svc-ic"><img src="img/svc-padrao.jpg" alt="Limpeza Padrão"></div>
+            <div>
+              <div class="svc-name">Limpeza Padrão</div>
+              <div class="svc-desc-s">Limpeza completa de rotina para manter o espaço sempre limpo</div>
+            </div>
+            <div>
+              <div class="svc-price">R$ 40</div>
+              <span class="svc-price-from">por hora</span>
+            </div>
+            <div class="svc-check"></div>
+          </div>
+
+          <div class="svc-card" data-svc="pesada" onclick="selectSvc(this)">
+            <div class="svc-ic"><img src="img/svc-pesada.jpg" alt="Limpeza Pesada"></div>
+            <div>
+              <div class="svc-name">Limpeza Pesada</div>
+              <div class="svc-desc-s">Limpeza profunda, incluindo detalhes difíceis e áreas acumuladas</div>
+            </div>
+            <div>
+              <div class="svc-price">R$ 55</div>
+              <span class="svc-price-from">por hora</span>
+            </div>
+            <div class="svc-check"></div>
+          </div>
+
+          <div class="svc-card" data-svc="mudanca" onclick="selectSvc(this)">
+            <div class="svc-ic"><img src="img/svc-premudanca.jpg" alt="Pré / Pós-Mudança"></div>
+            <div>
+              <div class="svc-name">Pré / Pós-Mudança</div>
+              <div class="svc-desc-s">Limpeza completa antes ou depois de uma mudança de imóvel</div>
+            </div>
+            <div>
+              <div class="svc-price">R$ 65</div>
+              <span class="svc-price-from">por hora</span>
+            </div>
+            <div class="svc-check"></div>
+          </div>
+
+          <div class="svc-card" data-svc="passadoria" onclick="selectSvc(this)">
+            <div class="svc-ic"><img src="img/svc-passadoria.jpg" alt="Passadoria"></div>
+            <div>
+              <div class="svc-name">Passadoria</div>
+              <div class="svc-desc-s">Passagem de roupas com cuidado profissional, em casa</div>
+            </div>
+            <div>
+              <div class="svc-price">R$ 35</div>
+              <span class="svc-price-from">por hora</span>
+            </div>
+            <div class="svc-check"></div>
+          </div>
+
+        </div>
+
+        <!-- CÔMODOS SECTION (shown after service selected) -->
+        <div id="rooms-section" style="display:none;">
+
+          <!-- Tipo de lar (limpezas) -->
+          <div id="tipo-wrap">
+            <div class="rooms-section-label">Como é o seu lar?</div>
+            <div class="tipo-lar-row">
+              <button class="tipo-btn selected" data-tipo="apartamento" onclick="selectTipo(this)">Apartamento</button>
+              <button class="tipo-btn" data-tipo="casa" onclick="selectTipo(this)">Casa</button>
+              <button class="tipo-btn" data-tipo="studio" onclick="selectTipo(this)">Studio / Kitnet</button>
+            </div>
+          </div>
+
+          <!-- Contadores de cômodos -->
+          <div id="comodos-wrap">
+            <div class="counter-wrap">
+              <div class="counter-row">
+                <div class="counter-label-wrap">
+                  <span class="counter-label">Quartos</span>
+                  <span class="counter-sublabel" id="quartos-sublabel">inclui sala e cozinha</span>
+                </div>
+                <div class="counter-ctrl">
+                  <button class="counter-btn" id="btn-quartos-minus" onclick="changeCounter('quartos',-1)" aria-label="Diminuir quartos">−</button>
+                  <span class="counter-val" id="val-quartos">1</span>
+                  <button class="counter-btn" id="btn-quartos-plus" onclick="changeCounter('quartos',1)" aria-label="Aumentar quartos">+</button>
+                </div>
+              </div>
+              <div class="counter-row">
+                <div class="counter-label-wrap">
+                  <span class="counter-label">Banheiros</span>
+                  <span class="counter-sublabel">lavabo conta como banheiro</span>
+                </div>
+                <div class="counter-ctrl">
+                  <button class="counter-btn" id="btn-banheiros-minus" onclick="changeCounter('banheiros',-1)" aria-label="Diminuir banheiros">−</button>
+                  <span class="counter-val" id="val-banheiros">1</span>
+                  <button class="counter-btn" id="btn-banheiros-plus" onclick="changeCounter('banheiros',1)" aria-label="Aumentar banheiros">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="rooms-hint">Cozinha e sala já estão inclusos. Para lavabo, adicione banheiros. Para demais cômodos, adicione quartos.</div>
+          </div>
+
+          <!-- Peças (passadoria) -->
+          <div id="pecas-wrap" style="display:none;">
+            <div class="rooms-section-label">Quantas peças?</div>
+            <div class="counter-wrap">
+              <div class="counter-row">
+                <div class="counter-label-wrap">
+                  <span class="counter-label" id="pecas-label">Peças de roupa</span>
+                  <span class="counter-sublabel" id="pecas-sublabel">roupas para passar</span>
+                </div>
+                <div class="counter-ctrl">
+                  <button class="counter-btn" id="btn-pecas-minus" onclick="changeCounter('pecas',-1)" aria-label="Diminuir peças">−</button>
+                  <span class="counter-val" id="val-pecas">25</span>
+                  <button class="counter-btn" id="btn-pecas-plus" onclick="changeCounter('pecas',1)" aria-label="Aumentar peças">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Horas calculadas automático + ajuste manual -->
+          <div class="hours-auto-box">
+            <div class="hours-auto-row">
+              <span class="hours-auto-label">Horas de serviço</span>
+              <div class="hours-auto-ctrl">
+                <button class="counter-btn" id="btn-hours-minus" onclick="adjustHours(-0.5)" aria-label="Diminuir horas">−</button>
+                <span class="hours-auto-val" id="hours-auto-val">—</span>
+                <span class="hours-auto-unit">h</span>
+                <button class="counter-btn" id="btn-hours-plus" onclick="adjustHours(0.5)" aria-label="Aumentar horas">+</button>
+              </div>
+            </div>
+            <div class="hours-adj-hint" id="hours-adj-hint">Calculado automaticamente pelos cômodos · ajuste se preferir</div>
+          </div>
+
+          <!-- Badge de profissionais -->
+          <div class="pros-badge" id="pros-badge" style="display:none;">
+            <span class="pros-ic">👩‍💼</span>
+            <span id="pros-text"></span>
+          </div>
+
+        </div><!-- /rooms-section -->
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" disabled>← Voltar</button>
+        <button class="btn-next" id="btn-next-1" disabled onclick="goStep(2)">
+          <span class="btn-label">Escolher data e hora</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Data e hora -->
+    <div class="step-content" id="step2">
+      <div class="step-header">
+        <div class="step-num-label">PASSO 2 DE 4</div>
+        <div class="step-title">Quando você precisa?</div>
+        <div class="step-sub">Escolha a data e o horário de início do serviço.</div>
+      </div>
+      <div class="step-body">
+        <div class="field-label">DATA</div>
+        <div class="date-grid" id="date-grid"></div>
+
+        <div class="field-label" style="margin-top:4px;">HORÁRIO DE INÍCIO</div>
+        <div class="time-grid" id="time-grid"></div>
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" onclick="goStep(1)">← Voltar</button>
+        <button class="btn-next" id="btn-next-2" disabled onclick="goStep(3)">
+          <span class="btn-label">Informar endereço</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Endereço -->
+    <div class="step-content" id="step3">
+      <div class="step-header">
+        <div class="step-num-label">PASSO 3 DE 4</div>
+        <div class="step-title">Onde é o serviço?</div>
+        <div class="step-sub">O profissional precisará dessas informações para chegar.</div>
+      </div>
+      <div class="step-body">
+        <div class="field-group addr-grid">
+          <div>
+            <label class="field-label">CEP</label>
+            <input class="field-input" id="cep" placeholder="00000-000" maxlength="9" oninput="cepMask(this)" onblur="fetchCep(this.value)">
+            <div class="field-hint">Preencha o CEP para autocompletar o endereço</div>
+          </div>
+          <div></div>
+        </div>
+        <div class="field-group addr-grid">
+          <div>
+            <label class="field-label">RUA / AVENIDA</label>
+            <input class="field-input" id="rua" placeholder="Nome da rua">
+          </div>
+          <div>
+            <label class="field-label">NÚMERO</label>
+            <input class="field-input" id="numero" placeholder="123">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">COMPLEMENTO</label>
+          <input class="field-input" id="complemento" placeholder="Apto, bloco, referência (opcional)">
+        </div>
+        <div class="field-group addr-grid-3">
+          <div>
+            <label class="field-label">BAIRRO</label>
+            <input class="field-input" id="bairro" placeholder="Bairro">
+          </div>
+          <div>
+            <label class="field-label">CIDADE</label>
+            <input class="field-input" id="cidade" placeholder="São Paulo" value="São Paulo">
+          </div>
+          <div>
+            <label class="field-label">ESTADO</label>
+            <input class="field-input" id="estado" placeholder="SP" value="SP">
+          </div>
+        </div>
+
+        <div class="extras-title">Extras <span style="font-weight:400;color:var(--muted);font-size:13px;">— opcionais</span></div>
+        <div class="extra-item" onclick="toggleExtra(this, 'inside-fridge', 40)">
+          <div class="extra-cb"></div>
+          <div>
+            <div class="extra-name">Limpeza interna da geladeira</div>
+          </div>
+          <div class="extra-price">+ R$ 40</div>
+        </div>
+        <div class="extra-item" onclick="toggleExtra(this, 'inside-oven', 35)">
+          <div class="extra-cb"></div>
+          <div>
+            <div class="extra-name">Limpeza interna do forno</div>
+          </div>
+          <div class="extra-price">+ R$ 35</div>
+        </div>
+        <div class="extra-item" onclick="toggleExtra(this, 'windows', 50)">
+          <div class="extra-cb"></div>
+          <div>
+            <div class="extra-name">Limpeza de janelas (interno + externo)</div>
+          </div>
+          <div class="extra-price">+ R$ 50</div>
+        </div>
+        <div class="extra-item" onclick="toggleExtra(this, 'inside-cabinets', 45)">
+          <div class="extra-cb"></div>
+          <div>
+            <div class="extra-name">Interior de armários e gavetas</div>
+          </div>
+          <div class="extra-price">+ R$ 45</div>
+        </div>
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" onclick="goStep(2)">← Voltar</button>
+        <button class="btn-next" id="btn-next-3" disabled onclick="goStep(4)">
+          <span class="btn-label">Ir para pagamento</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Pagamento -->
+    <div class="step-content" id="step4">
+      <div class="step-header">
+        <div class="step-num-label">PASSO 4 DE 4</div>
+        <div class="step-title">Seus dados e pagamento</div>
+        <div class="step-sub">O pagamento é processado somente após a confirmação do serviço.</div>
+      </div>
+      <div class="step-body">
+
+        <!-- Dados pessoais -->
+        <div class="field-group addr-grid">
+          <div>
+            <label class="field-label">NOME COMPLETO</label>
+            <input class="field-input" id="nome" placeholder="Seu nome" oninput="checkStep4()">
+          </div>
+          <div></div>
+        </div>
+        <div class="field-group addr-grid">
+          <div>
+            <label class="field-label">E-MAIL</label>
+            <input class="field-input" id="email" type="email" placeholder="seu@email.com" oninput="checkStep4()">
+          </div>
+          <div>
+            <label class="field-label">CELULAR</label>
+            <input class="field-input" id="celular" placeholder="(11) 9 0000-0000" maxlength="16" oninput="phoneMask(this);checkStep4()">
+          </div>
+        </div>
+
+        <!-- Método de pagamento -->
+        <div class="field-label" style="margin-top:8px;">FORMA DE PAGAMENTO</div>
+        <div class="pay-methods">
+          <div class="pay-method selected" data-pay="cartao" onclick="selectPay(this)">
+            <span class="pay-ic">💳</span>
+            <div class="pay-name">Cartão</div>
+            <div class="pay-sub">Crédito / Débito</div>
+          </div>
+          <div class="pay-method" data-pay="pix" onclick="selectPay(this)">
+            <span class="pay-ic">⚡</span>
+            <div class="pay-name">Pix</div>
+            <div class="pay-sub">Instantâneo</div>
+          </div>
+          <div class="pay-method" data-pay="dinheiro" onclick="selectPay(this)">
+            <span class="pay-ic">💵</span>
+            <div class="pay-name">Dinheiro</div>
+            <div class="pay-sub">Na hora</div>
+          </div>
+        </div>
+
+        <!-- Card fields -->
+        <div class="pay-fields visible" id="pay-cartao">
+          <div class="field-group">
+            <label class="field-label">NÚMERO DO CARTÃO</label>
+            <input class="field-input" id="card-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="cardMask(this);checkStep4()">
+          </div>
+          <div class="field-group card-row">
+            <div>
+              <label class="field-label">NOME NO CARTÃO</label>
+              <input class="field-input" id="card-name" placeholder="Como está no cartão" oninput="checkStep4()">
+            </div>
+            <div>
+              <label class="field-label">VALIDADE</label>
+              <input class="field-input" id="card-exp" placeholder="MM/AA" maxlength="5" oninput="expMask(this);checkStep4()">
+            </div>
+            <div>
+              <label class="field-label">CVV</label>
+              <input class="field-input" id="card-cvv" placeholder="000" maxlength="4" type="password" oninput="checkStep4()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Pix info -->
+        <div class="pay-fields" id="pay-pix">
+          <div class="pix-box">
+            <p>Após confirmar o agendamento, você receberá um <strong>QR Code Pix</strong> por e-mail para concluir o pagamento. O serviço só é confirmado após a identificação do pagamento.</p>
+          </div>
+        </div>
+
+        <!-- Dinheiro info -->
+        <div class="pay-fields" id="pay-dinheiro">
+          <div class="pix-box">
+            <p>O pagamento em dinheiro é feito <strong>diretamente ao profissional</strong> ao final do serviço. Certifique-se de ter o valor exato em mãos.</p>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="terms-row">
+          <div class="terms-cb" id="terms-cb" onclick="toggleTerms()"></div>
+          <div class="terms-text">
+            Li e aceito os <a href="termos.html" target="_blank">Termos de Uso</a> e a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a> da Limpei.
+          </div>
+        </div>
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" onclick="goStep(3)">← Voltar</button>
+        <button class="btn-next final" id="btn-next-4" disabled onclick="submitOrder()">
+          <span class="btn-label">Confirmar agendamento</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /form-panel -->
+
+</div><!-- /split -->
+</div><!-- /wrap -->
+
+<script>
+// ── STATE ──
+var state = {
+  step: 1,
+  svc: null, svcName: null, svcHourlyRate: 0,
+  hours: null, pros: null,
+  dateLabel: null,
+  time: null,
+  extras: {}, extrasTotal: 0,
+  payMethod: 'cartao',
+  termsAccepted: false
+};
+
+// Regra de profissionais (lógica exata Parafuzo):
+// total_time > 18h → 3 profissionais | > 9h → 2 profissionais | ≤ 9h → 1 profissional
+function getProsForHours(svc, h) {
+  if (svc === 'passadoria') return 1; // passadoria sempre 1 profissional
+  if (h > 18) return 3;
+  if (h > 9)  return 2;
+  return 1;
+}
+
+// Taxa horária por serviço (R$/h de profissional)
+var HOURLY_RATES = {
+  padrao:    48,   // R$/h
+  pesada:    65,   // R$/h
+  mudanca:   75,   // R$/h
+  passadoria:42    // R$/h
+};
+
+// ── TABELA DE HORAS (extraída da API Parafuzo, subscription=SINGLE, APARTMENT)
+// Chave: "Q_B" (quartos_banheiros)  — quartos 0–6, banheiros 1–3
+// Para casa/studio usamos o mesmo cálculo (Parafuzo usa APARTMENT como base)
+var HOURS_TABLE = {
+  padrao: {
+    '0_1':2.5, '0_2':3,   '0_3':4,
+    '1_1':3,   '1_2':4,   '1_3':4.5,
+    '2_1':4,   '2_2':4.5, '2_3':5.5,
+    '3_1':4.5, '3_2':5.5, '3_3':6,
+    '4_1':5.5, '4_2':6,   '4_3':6.5,
+    '5_1':6,   '5_2':6.5, '5_3':7.5,
+    '6_1':6.5, '6_2':7.5, '6_3':8
+  },
+  pesada: {
+    '0_1':6,   '0_2':7.5, '0_3':9,
+    '1_1':7.5, '1_2':9,   '1_3':10.5,
+    '2_1':9,   '2_2':10.5,'2_3':12,
+    '3_1':10.5,'3_2':12,  '3_3':13.5,
+    '4_1':12,  '4_2':13.5,'4_3':15,
+    '5_1':13.5,'5_2':15,  '5_3':16.5,
+    '6_1':15,  '6_2':16.5,'6_3':18
+  },
+  mudanca: {
+    '0_1':7,   '0_2':8.5, '0_3':10.5,
+    '1_1':8.5, '1_2':10.5,'1_3':12,
+    '2_1':10.5,'2_2':12,  '2_3':14,
+    '3_1':12,  '3_2':14,  '3_3':15.5,
+    '4_1':14,  '4_2':15.5,'4_3':17.5,
+    '5_1':15.5,'5_2':17.5,'5_3':19,
+    '6_1':17.5,'6_2':19,  '6_3':21
+  }
+};
+
+// Horas para passadoria baseada em nº de peças (incrementos de 5 peças → ~0.5h)
+function hoursForPecas(n) {
+  // ~10 peças por hora, mínimo 2.5h
+  return Math.max(2.5, Math.round((n / 10) * 2) / 2);
+}
+
+// Busca horas na tabela, clampa quartos 0–6, banheiros 1–3
+function lookupHours(svc, quartos, banheiros) {
+  if (svc === 'passadoria') return hoursForPecas(state.counters.pecas);
+  var tbl = HOURS_TABLE[svc];
+  if (!tbl) return 4;
+  var q = Math.min(6, Math.max(0, quartos));
+  var b = Math.min(3, Math.max(1, banheiros));
+  return tbl[q + '_' + b] || 4;
+}
+
+function formatHours(h) {
+  return Number.isInteger(h) ? String(h) : String(h).replace('.', ',');
+}
+
+function formatPrice(val) {
+  var rounded = Math.round(val * 2) / 2;
+  if (Number.isInteger(rounded)) return 'R$ ' + rounded;
+  return 'R$ ' + rounded.toFixed(2).replace('.', ',');
+}
+
+// ── COUNTER STATE ──
+state.counters = { quartos: 1, banheiros: 1, pecas: 25, tipo: 'apartamento' };
+state.autoHours = null;   // horas calculadas pela tabela
+state.hoursAdj  = 0;      // ajuste manual em ± 0.5h
+
+function getBaseHours() {
+  if (!state.svc) return null;
+  if (state.svc === 'passadoria') return hoursForPecas(state.counters.pecas);
+  return lookupHours(state.svc, state.counters.quartos, state.counters.banheiros);
+}
+
+function recalcHours() {
+  var base = getBaseHours();
+  if (base === null) return;
+
+  // clamp adjustment so total stays ≥ base·0.5 and ≤ base·3
+  var total = base + state.hoursAdj;
+  var minH = Math.max(0.5, Math.round(base * 0.5 * 2) / 2);
+  var maxH = Math.round(base * 3 * 2) / 2;
+  total = Math.min(maxH, Math.max(minH, total));
+  total = Math.round(total * 2) / 2; // snap to 0.5
+
+  state.autoHours = base;
+  state.hours = total;
+  state.pros = getProsForHours(state.svc, total);
+  state.durationOnSite = Math.round((total / state.pros) * 2) / 2;
+
+  // update display
+  document.getElementById('hours-auto-val').textContent = formatHours(state.durationOnSite);
+
+  // badge
+  var badge = document.getElementById('pros-badge');
+  badge.style.display = 'flex';
+  var durationStr = formatHours(state.durationOnSite) + 'h';
+  var hStr = formatHours(total);
+  var prosLabel = state.pros === 1
+    ? '1 profissional · ' + hStr + 'h de serviço'
+    : state.pros + ' profissionais · concluído em ' + durationStr;
+  document.getElementById('pros-text').textContent = prosLabel;
+
+  // hint: show when adjusted
+  var hint = document.getElementById('hours-adj-hint');
+  if (state.hoursAdj !== 0) {
+    hint.textContent = 'Ajustado manualmente · base calculada: ' + formatHours(base) + 'h';
+    hint.style.color = 'var(--teal)';
+  } else {
+    hint.textContent = 'Calculado automaticamente pelos cômodos · ajuste se preferir';
+    hint.style.color = '';
+  }
+
+  // minus button disabled when at min
+  document.getElementById('btn-hours-minus').disabled = (total <= minH);
+  document.getElementById('btn-hours-plus').disabled  = (total >= maxH);
+
+  updateSummary();
+  document.getElementById('btn-next-1').disabled = false;
+}
+
+function changeCounter(which, delta) {
+  var c = state.counters;
+  if (which === 'quartos') {
+    c.quartos = Math.min(6, Math.max(0, c.quartos + delta));
+    document.getElementById('val-quartos').textContent = c.quartos;
+    document.getElementById('btn-quartos-minus').disabled = (c.quartos === 0);
+    document.getElementById('btn-quartos-plus').disabled  = (c.quartos === 6);
+  } else if (which === 'banheiros') {
+    c.banheiros = Math.min(3, Math.max(1, c.banheiros + delta));
+    document.getElementById('val-banheiros').textContent = c.banheiros;
+    document.getElementById('btn-banheiros-minus').disabled = (c.banheiros === 1);
+    document.getElementById('btn-banheiros-plus').disabled  = (c.banheiros === 3);
+  } else if (which === 'pecas') {
+    c.pecas = Math.min(100, Math.max(5, c.pecas + delta * 5));
+    document.getElementById('val-pecas').textContent = c.pecas;
+    document.getElementById('btn-pecas-minus').disabled = (c.pecas <= 5);
+    document.getElementById('btn-pecas-plus').disabled  = (c.pecas >= 100);
+    document.getElementById('pecas-sublabel').textContent = 'aprox. ' + c.pecas + ' peças';
+  }
+  state.hoursAdj = 0; // reset manual adjustment on counter change
+  recalcHours();
+}
+
+function adjustHours(delta) {
+  state.hoursAdj = Math.round((state.hoursAdj + delta) * 2) / 2;
+  recalcHours();
+}
+
+function selectTipo(el) {
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.counters.tipo = el.dataset.tipo;
+  if (el.dataset.tipo === 'studio') {
+    // studio: 0 quartos pré-selecionado
+    state.counters.quartos = 0;
+    document.getElementById('val-quartos').textContent = 0;
+    document.getElementById('btn-quartos-minus').disabled = true;
+  } else {
+    // casa/apartamento: mínimo 1 quarto
+    if (state.counters.quartos < 1) {
+      state.counters.quartos = 1;
+      document.getElementById('val-quartos').textContent = 1;
+    }
+    document.getElementById('btn-quartos-minus').disabled = (state.counters.quartos <= 1);
+  }
+  state.hoursAdj = 0;
+  recalcHours();
+}
+
+// ── SERVICES ──
+function selectSvc(el) {
+  document.querySelectorAll('.svc-card').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('.svc-check').textContent = '';
+  });
+  el.classList.add('selected');
+  el.querySelector('.svc-check').textContent = '✓';
+
+  state.svc = el.dataset.svc;
+  state.svcName = el.querySelector('.svc-name').textContent;
+  state.svcHourlyRate = HOURLY_RATES[state.svc] || 40;
+  state.hours = null;
+  state.pros = null;
+  state.hoursAdj = 0;
+
+  // show cômodos section
+  document.getElementById('rooms-section').style.display = 'block';
+  document.getElementById('pros-badge').style.display = 'none';
+
+  if (state.svc === 'passadoria') {
+    document.getElementById('tipo-wrap').style.display = 'none';
+    document.getElementById('comodos-wrap').style.display = 'none';
+    document.getElementById('pecas-wrap').style.display = 'block';
+  } else {
+    document.getElementById('tipo-wrap').style.display = 'block';
+    document.getElementById('comodos-wrap').style.display = 'block';
+    document.getElementById('pecas-wrap').style.display = 'none';
+  }
+
+  document.getElementById('hours-auto-val').textContent = '—';
+  document.getElementById('btn-next-1').disabled = true;
+
+  // reset adjustments
+  state.counters.quartos = state.counters.tipo === 'studio' ? 0 : 1;
+  state.counters.banheiros = 1;
+  state.counters.pecas = 25;
+  document.getElementById('val-quartos').textContent = state.counters.quartos;
+  document.getElementById('val-banheiros').textContent = state.counters.banheiros;
+  document.getElementById('val-pecas').textContent = state.counters.pecas;
+
+  recalcHours();
+  updateSummary();
+}
+
+// ── DATES ──
+function buildDates() {
+  var grid = document.getElementById('date-grid');
+  grid.innerHTML = '';
+  var days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  var months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  var now = new Date();
+  // skip today (book at least 1 day ahead), show 8 options
+  for (var i = 1; i <= 8; i++) {
+    var d = new Date(now);
+    d.setDate(now.getDate() + i);
+    if (d.getDay() === 0) continue; // skip sunday
+    var el = document.createElement('div');
+    el.className = 'date-pill';
+    var label = days[d.getDay()] + ', ' + d.getDate() + ' de ' + months[d.getMonth()];
+    el.innerHTML = '<div class="date-pill-day">' + days[d.getDay()] + '</div>' +
+      '<div class="date-pill-num">' + d.getDate() + '</div>' +
+      '<div class="date-pill-month">' + months[d.getMonth()] + '</div>';
+    el.dataset.label = label;
+    el.onclick = function() { selectDate(this); };
+    grid.appendChild(el);
+  }
+}
+
+function selectDate(el) {
+  document.querySelectorAll('.date-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  state.dateLabel = el.dataset.label;
+  checkStep2();
+}
+
+function buildTimes() {
+  var grid = document.getElementById('time-grid');
+  grid.innerHTML = '';
+  var slots = ['07:00','08:00','09:00','10:00','11:00','13:00','14:00','15:00','16:00','17:00'];
+  var taken = ['11:00','16:00']; // simulate taken slots
+  slots.forEach(function(t) {
+    var el = document.createElement('button');
+    el.className = 'time-btn' + (taken.includes(t) ? ' taken' : '');
+    el.textContent = t;
+    el.disabled = taken.includes(t);
+    el.onclick = function() { selectTime(this, t); };
+    grid.appendChild(el);
+  });
+}
+
+function selectTime(el, t) {
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.time = t;
+  checkStep2();
+}
+
+function checkStep2() {
+  document.getElementById('btn-next-2').disabled = !(state.dateLabel && state.time);
+  updateSummary();
+}
+
+// ── EXTRAS ──
+function toggleExtra(el, key, price) {
+  var cb = el.querySelector('.extra-cb');
+  if (el.classList.contains('checked')) {
+    el.classList.remove('checked');
+    cb.textContent = '';
+    delete state.extras[key];
+    state.extrasTotal -= price;
+  } else {
+    el.classList.add('checked');
+    cb.textContent = '✓';
+    state.extras[key] = price;
+    state.extrasTotal += price;
+  }
+  updateSummary();
+  checkStep3();
+}
+
+// ── ADDRESS ──
+function checkStep3() {
+  var rua = document.getElementById('rua').value.trim();
+  var numero = document.getElementById('numero').value.trim();
+  var bairro = document.getElementById('bairro').value.trim();
+  var ok = rua && numero && bairro;
+  document.getElementById('btn-next-3').disabled = !ok;
+  if (ok) {
+    var comp = document.getElementById('complemento').value.trim();
+    var cidade = document.getElementById('cidade').value.trim() || 'São Paulo';
+    state.addr = rua + ', ' + numero + (comp ? ' ' + comp : '') + ' — ' + bairro + ', ' + cidade;
+    updateSummary();
+  }
+}
+
+document.querySelectorAll('#rua,#numero,#bairro').forEach(function(el) {
+  el.addEventListener('input', checkStep3);
+});
+
+function cepMask(el) {
+  var v = el.value.replace(/\D/g,'');
+  if (v.length > 5) v = v.slice(0,5) + '-' + v.slice(5,8);
+  el.value = v;
+}
+
+function fetchCep(cep) {
+  cep = cep.replace(/\D/g,'');
+  if (cep.length !== 8) return;
+  fetch('https://viacep.com.br/ws/' + cep + '/json/')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if (!d.erro) {
+        document.getElementById('rua').value = d.logradouro || '';
+        document.getElementById('bairro').value = d.bairro || '';
+        document.getElementById('cidade').value = d.localidade || 'São Paulo';
+        document.getElementById('estado').value = d.uf || 'SP';
+        document.getElementById('numero').focus();
+        checkStep3();
+      }
+    }).catch(function(){});
+}
+
+// ── PAYMENT ──
+function selectPay(el) {
+  document.querySelectorAll('.pay-method').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  state.payMethod = el.dataset.pay;
+  document.querySelectorAll('.pay-fields').forEach(f => f.classList.remove('visible'));
+  document.getElementById('pay-' + state.payMethod).classList.add('visible');
+  checkStep4();
+}
+
+function toggleTerms() {
+  var cb = document.getElementById('terms-cb');
+  state.termsAccepted = !state.termsAccepted;
+  cb.classList.toggle('checked', state.termsAccepted);
+  cb.textContent = state.termsAccepted ? '✓' : '';
+  checkStep4();
+}
+
+function checkStep4() {
+  var nome = document.getElementById('nome').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var cel = document.getElementById('celular').value.trim();
+  var payOk = false;
+  if (state.payMethod === 'cartao') {
+    var cn = document.getElementById('card-num').value.replace(/\s/g,'');
+    var cname = document.getElementById('card-name').value.trim();
+    var exp = document.getElementById('card-exp').value.trim();
+    var cvv = document.getElementById('card-cvv').value.trim();
+    payOk = cn.length >= 16 && cname && exp.length === 5 && cvv.length >= 3;
+  } else {
+    payOk = true;
+  }
+  var ok = nome && email && cel.length >= 14 && payOk && state.termsAccepted;
+  document.getElementById('btn-next-4').disabled = !ok;
+}
+
+// ── MASKS ──
+function cardMask(el) {
+  var v = el.value.replace(/\D/g,'').slice(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function expMask(el) {
+  var v = el.value.replace(/\D/g,'');
+  if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+  el.value = v;
+}
+function phoneMask(el) {
+  var v = el.value.replace(/\D/g,'').slice(0,11);
+  if (v.length <= 10) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/,'($1) $2-$3');
+  else v = v.replace(/^(\d{2})(\d{5})(\d{0,4})$/,'($1) $2-$3');
+  el.value = v;
+}
+
+// ── STEP NAV ──
+function goStep(n) {
+  document.getElementById('step' + state.step).classList.remove('active');
+  document.getElementById('ps' + state.step).classList.remove('active');
+  document.getElementById('ps' + state.step).classList.add('done');
+
+  if (n < state.step) {
+    document.getElementById('ps' + state.step).classList.remove('done');
+  }
+
+  state.step = n;
+  document.getElementById('step' + n).classList.add('active');
+
+  // update progress
+  for (var i = 1; i <= 4; i++) {
+    var ps = document.getElementById('ps' + i);
+    ps.classList.remove('active','done');
+    if (i < n) ps.classList.add('done');
+    if (i === n) ps.classList.add('active');
+  }
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  updateSummary();
+}
+
+// ── SUMMARY ──
+function updateSummary() {
+  var svcEl = document.getElementById('sum-svc');
+  var hoursEl = document.getElementById('sum-hours');
+  var prosEl = document.getElementById('sum-pros');
+  var dateEl = document.getElementById('sum-date');
+  var timeEl = document.getElementById('sum-time');
+  var addrEl = document.getElementById('sum-addr');
+  var totalEl = document.getElementById('sum-total');
+  var titleEl = document.getElementById('sum-svc-title');
+
+  if (state.svcName) {
+    svcEl.textContent = state.svcName;
+    svcEl.classList.remove('placeholder');
+    titleEl.textContent = state.svcName;
+  }
+  if (state.durationOnSite) {
+    hoursEl.textContent = formatHours(state.durationOnSite) + 'h de serviço';
+    hoursEl.classList.remove('placeholder');
+  }
+  if (state.pros) {
+    prosEl.textContent = state.pros + ' profissional' + (state.pros > 1 ? 'is' : '');
+    prosEl.classList.remove('placeholder');
+  }
+  if (state.dateLabel) {
+    dateEl.textContent = state.dateLabel;
+    dateEl.classList.remove('placeholder');
+  }
+  if (state.time) {
+    var timeDisplay = state.time;
+    if (state.durationOnSite) {
+      // show estimated end time
+      var parts = state.time.split(':');
+      var startMin = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      var endMin = startMin + Math.round(state.durationOnSite * 60);
+      var endH = Math.floor(endMin / 60);
+      var endM = endMin % 60;
+      var endStr = String(endH).padStart(2,'0') + ':' + String(endM).padStart(2,'0');
+      timeDisplay = state.time + ' → ' + endStr;
+    }
+    timeEl.textContent = timeDisplay;
+    timeEl.classList.remove('placeholder');
+  }
+  if (state.addr) {
+    addrEl.textContent = state.addr;
+    addrEl.classList.remove('placeholder');
+  }
+
+  // calc price: hours × hourly rate
+  if (state.svcHourlyRate > 0 && state.hours) {
+    var base = state.hours * state.svcHourlyRate;
+    var total = base + state.extrasTotal;
+    totalEl.textContent = formatPrice(total);
+    document.getElementById('sum-total-sub').textContent = state.extrasTotal > 0 ? 'inclui extras' : formatHours(state.hours) + 'h × R$' + state.svcHourlyRate + '/h';
+  } else if (state.svcHourlyRate > 0) {
+    totalEl.textContent = formatPrice(2.5 * state.svcHourlyRate);
+    document.getElementById('sum-total-sub').textContent = 'a partir de';
+  }
+
+  // extras
+  var extrasKeys = Object.keys(state.extras);
+  if (extrasKeys.length > 0) {
+    document.getElementById('sum-extras-row').style.display = 'flex';
+    document.getElementById('sum-extras').textContent = extrasKeys.length + ' item' + (extrasKeys.length > 1 ? 'ns' : '');
+  } else {
+    document.getElementById('sum-extras-row').style.display = 'none';
+  }
+}
+
+// ── SUBMIT ──
+function submitOrder() {
+  var btn = document.getElementById('btn-next-4');
+  btn.classList.add('loading');
+  btn.querySelector('.btn-label').textContent = 'Processando…';
+
+  // calc final total: hours × hourly rate + extras
+  var base = state.hours * state.svcHourlyRate;
+  var total = base + state.extrasTotal;
+
+  // store for confirmation page
+  var order = {
+    svc: state.svcName,
+    hours: state.hours,
+    pros: state.pros,
+    date: state.dateLabel,
+    time: state.time,
+    addr: state.addr || document.getElementById('rua').value + ', ' + document.getElementById('numero').value,
+    total: total,
+    pay: state.payMethod,
+    nome: document.getElementById('nome').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    code: 'LJ' + Math.floor(100000 + Math.random() * 900000)
+  };
+  localStorage.setItem('lj_order', JSON.stringify(order));
+
+  setTimeout(function() {
+    window.location.href = 'confirmacao.html';
+  }, 1800);
+}
+
+// ── INIT ──
+buildDates();
+buildTimes();
+
+// pre-select from URL
+var params = new URLSearchParams(window.location.search);
+var svcParam = params.get('servico');
+if (svcParam) {
+  var match = document.querySelector('[data-svc="' + svcParam + '"]');
+  if (match) selectSvc(match);
+}
+</script>
+</body>
+</html>

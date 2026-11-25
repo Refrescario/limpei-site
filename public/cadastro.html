@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LimpaJá — Cadastro de Profissional</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    :root {
+      --navy:#1A2B4A; --teal:#0D7377; --teal2:#14A49A; --amber:#F4A261;
+      --ice:#F8F9FA; --mist:#E2E8F0; --slate:#64748B; --ink:#1E293B;
+      --white:#FFFFFF; --red:#EF4444; --green:#10B981;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: var(--ice); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+    .header { background: var(--white); border-bottom: 1px solid var(--mist); padding: 16px 24px; display: flex; align-items: center; gap: 10px; }
+    .logo { font-weight: 800; font-size: 1.125rem; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 32px; height: 32px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+
+    .wrapper { max-width: 680px; margin: 40px auto; padding: 0 20px 80px; }
+    .hero-label { display: inline-block; background: rgba(13,115,119,.1); color: var(--teal); font-size: .8125rem; font-weight: 600; padding: 4px 12px; border-radius: 100px; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 14px; }
+    .hero-title { font-size: 1.75rem; font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 10px; }
+    .hero-sub { font-size: .9375rem; color: var(--slate); line-height: 1.65; margin-bottom: 32px; }
+
+    .card { background: var(--white); border-radius: 16px; border: 1px solid var(--mist); padding: 28px; margin-bottom: 20px; }
+    .card-title { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--mist); display: flex; align-items: center; gap: 10px; }
+    .card-title svg { flex-shrink: 0; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid .full { grid-column: span 2; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: .875rem; font-weight: 600; color: var(--ink); }
+    .form-label .req { color: var(--red); margin-left: 2px; }
+    .form-input, .form-select, .form-textarea {
+      padding: 10px 14px; border: 1.5px solid var(--mist); border-radius: 8px;
+      font-size: .9375rem; font-family: inherit; color: var(--ink);
+      outline: none; transition: border-color .15s; background: var(--white);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--teal); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-hint { font-size: .8125rem; color: var(--slate); margin-top: 2px; }
+    .field-error { font-size: .8125rem; color: var(--red); margin-top: 2px; display: none; }
+    .form-input.error { border-color: var(--red); }
+
+    /* Foto upload */
+    .foto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .foto-upload {
+      border: 2px dashed var(--mist); border-radius: 12px; padding: 20px;
+      text-align: center; cursor: pointer; transition: all .15s; position: relative;
+    }
+    .foto-upload:hover { border-color: var(--teal); background: rgba(13,115,119,.03); }
+    .foto-upload.has-file { border-color: var(--green); background: rgba(16,185,129,.04); }
+    .foto-upload.error { border-color: var(--red); }
+    .foto-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .foto-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+    .foto-label { font-size: .875rem; font-weight: 600; color: var(--navy); display: block; margin-bottom: 4px; }
+    .foto-hint { font-size: .8125rem; color: var(--slate); }
+    .foto-preview { max-width: 100%; max-height: 120px; border-radius: 8px; margin-top: 10px; object-fit: cover; display: none; }
+
+    /* Selfie live capture */
+    .selfie-wrap { position: relative; }
+    #video { width: 100%; border-radius: 8px; display: none; }
+    #canvas { display: none; }
+    .btn-camera { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; background: var(--navy); color: var(--white); font-size: .875rem; font-weight: 600; border: none; cursor: pointer; margin-top: 8px; }
+    .btn-camera:hover { background: var(--teal); }
+
+    /* Checkboxes */
+    .check-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .check-item {
+      display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+      border: 1.5px solid var(--mist); border-radius: 8px; cursor: pointer;
+      font-size: .875rem; font-weight: 500; transition: all .15s;
+    }
+    .check-item input { display: none; }
+    .check-item:has(input:checked) { border-color: var(--teal); background: rgba(13,115,119,.06); color: var(--teal); }
+
+    /* Submit */
+    .btn-submit { width: 100%; padding: 15px; border-radius: 10px; background: var(--amber); color: var(--navy); font-size: 1rem; font-weight: 700; border: none; cursor: pointer; transition: all .15s; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit:hover { background: #E07D3C; }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+    .form-error { background: #FEF2F2; border: 1px solid #FECACA; color: var(--red); border-radius: 10px; padding: 14px 18px; font-size: .9rem; margin-bottom: 16px; display: none; }
+
+    /* Success screen */
+    #success-screen { display: none; text-align: center; padding: 60px 20px; }
+    .success-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+    .success-title { font-size: 1.75rem; font-weight: 800; color: var(--navy); margin-bottom: 10px; }
+    .success-sub { font-size: 1rem; color: var(--slate); line-height: 1.65; }
+
+    @media (max-width: 540px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: span 1; }
+      .foto-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h12"/></svg>
+    </div>
+    LimpaJá
+  </div>
+</div>
+
+<div class="wrapper">
+  <div id="form-screen">
+    <div class="hero-label">Seja parte da equipe</div>
+    <h1 class="hero-title">Cadastro de Profissional</h1>
+    <p class="hero-sub">Preencha todos os campos abaixo. Após o envio, nossa equipe analisará seu perfil em até 48 horas e entrará em contato pelo seu WhatsApp.</p>
+
+    <div class="form-error" id="form-error"></div>
+
+    <form id="cadastro-form" novalidate>
+
+      <!-- Dados pessoais -->
+      <div class="card">
+        <div class="card-title">
+          <svg width="20" height="20" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Dados Pessoais
+        </div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Nome completo <span class="req">*</span></label>
+            <input type="text" name="nome_completo" class="form-input" placeholder="Como no documento de identidade" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">CPF <span class="req">*</span></label>
+            <input type="text" name="cpf" class="form-input" placeholder="000.000.000-00" maxlength="14" required oninput="maskCPF(this)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">RG</label>
+            <input type="text" name="rg" class="form-input" placeholder="00.000.000-0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de nascimento <span class="req">*</span></label>
+            <input type="date" name="data_nascimento" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">WhatsApp <span class="req">*</span></label>
+            <input type="tel" name="telefone" class="form-input" placeholder="(11) 99999-9999" maxlength="15" required oninput="maskPhone(this)">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" placeholder="seu@email.com">
+          </div>
+        </div>
+      </div>
+
+      <!-- Endereço -->
+      <div class="card">
+        <div class="card-title">
+          <svg width="20" height="20" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Endereço
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">CEP <span class="req">*</span></label>
+            <input type="text" name="cep" class="form-input" placeholder="00000-000" maxlength="9" required oninput="maskCEP(this); fetchCEP(this)">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Logradouro <span class="req">*</span></label>
+            <input type="text" name="endereco" class="form-input" placeholder="Rua, Avenida…" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Número <span class="req">*</span></label>
+            <input type="text" name="numero" class="form-input" placeholder="123" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Complemento</label>
+            <input type="text" name="complemento" class="form-input" placeholder="Apto, bloco…">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bairro <span class="req">*</span></label>
+            <input type="text" name="bairro" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cidade <span class="req">*</span></label>
+            <input type="text" name="cidade" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estado <span class="req">*</span></label>
+            <select name="estado" class="form-select" required>
+              <option value="">Selecione</option>
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+              <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+              <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>SE</option><option>TO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experiência -->
+      <div class="card">
+        <div class="card-title">
+          <svg width="20" height="20" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Experiência e Disponibilidade
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Anos de experiência <span class="req">*</span></label>
+            <select name="experiencia_anos" class="form-select" required>
+              <option value="">Selecione</option>
+              <option value="0">Iniciante (menos de 1 ano)</option>
+              <option value="1">1 ano</option>
+              <option value="2">2 anos</option>
+              <option value="3">3 anos</option>
+              <option value="5">4–5 anos</option>
+              <option value="7">6–10 anos</option>
+              <option value="11">Mais de 10 anos</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Tipos de limpeza que realiza <span class="req">*</span></label>
+            <div class="check-grid" id="tipos-limpeza">
+              <label class="check-item"><input type="checkbox" name="tipos_limpeza" value="Limpeza Leve"> Limpeza Leve</label>
+              <label class="check-item"><input type="checkbox" name="tipos_limpeza" value="Limpeza Completa"> Limpeza Completa</label>
+              <label class="check-item"><input type="checkbox" name="tipos_limpeza" value="Limpeza Pesada"> Limpeza Pesada</label>
+              <label class="check-item"><input type="checkbox" name="tipos_limpeza" value="Pós-Obra"> Pós-Obra</label>
+              <label class="check-item"><input type="checkbox" name="tipos_limpeza" value="Passadoria"> Passadoria</label>
+              <label class="check-item"><input type="checkbox" name="tipos_limpeza" value="Comercial"> Comercial</label>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Disponibilidade</label>
+            <div class="check-grid">
+              <label class="check-item"><input type="checkbox" name="disponibilidade" value="Segunda"> Segunda</label>
+              <label class="check-item"><input type="checkbox" name="disponibilidade" value="Terça"> Terça</label>
+              <label class="check-item"><input type="checkbox" name="disponibilidade" value="Quarta"> Quarta</label>
+              <label class="check-item"><input type="checkbox" name="disponibilidade" value="Quinta"> Quinta</label>
+              <label class="check-item"><input type="checkbox" name="disponibilidade" value="Sexta"> Sexta</label>
+              <label class="check-item"><input type="checkbox" name="disponibilidade" value="Sábado"> Sábado</label>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Sobre você</label>
+            <textarea name="sobre" class="form-textarea" placeholder="Conte um pouco sobre sua experiência, diferenciais, cidades que atende…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fotos -->
+      <div class="card">
+        <div class="card-title">
+          <svg width="20" height="20" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Fotos de Verificação
+        </div>
+        <p style="font-size:.9rem;color:var(--slate);margin-bottom:18px;line-height:1.6;">Para sua segurança e dos clientes, precisamos verificar sua identidade. As fotos são armazenadas com criptografia e usadas somente para validação.</p>
+
+        <div class="foto-grid">
+          <div>
+            <div class="foto-upload selfie-wrap" id="selfie-box" onclick="triggerSelfie()">
+              <input type="file" id="selfie-input" name="foto_selfie" accept="image/*" capture="user" onchange="previewFoto(this, 'selfie-preview', 'selfie-box')">
+              <span class="foto-icon">🤳</span>
+              <span class="foto-label">Selfie do Rosto <span style="color:var(--red)">*</span></span>
+              <span class="foto-hint">Foto do seu rosto com expressão clara, boa iluminação</span>
+              <img class="foto-preview" id="selfie-preview" alt="Selfie">
+            </div>
+            <div style="text-align:center;margin-top:8px;">
+              <button type="button" class="btn-camera" onclick="startCamera()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Tirar foto com câmera
+              </button>
+            </div>
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+            <div id="camera-controls" style="display:none;text-align:center;margin-top:8px;gap:8px;display:none;flex-wrap:wrap;justify-content:center;">
+              <button type="button" class="btn-camera" onclick="capturePhoto()">📸 Capturar</button>
+              <button type="button" class="btn-camera" style="background:var(--slate)" onclick="stopCamera()">✕ Cancelar</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="foto-upload" id="doc-box">
+              <input type="file" id="doc-input" name="foto_documento" accept="image/*" onchange="previewFoto(this, 'doc-preview', 'doc-box')">
+              <span class="foto-icon">🪪</span>
+              <span class="foto-label">Documento (RG / CPF) <span style="color:var(--red)">*</span></span>
+              <span class="foto-hint">Foto do seu RG ou CNH com dados visíveis</span>
+              <img class="foto-preview" id="doc-preview" alt="Documento">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        Enviar Cadastro para Análise
+      </button>
+      <p style="font-size:.8rem;color:var(--slate);text-align:center;margin-top:12px;line-height:1.5;">Ao enviar, você concorda que seus dados serão usados exclusivamente para verificação e contratação pela LimpaJá.</p>
+    </form>
+  </div>
+
+  <div id="success-screen">
+    <span class="success-icon">🎉</span>
+    <div class="success-title">Cadastro enviado com sucesso!</div>
+    <p class="success-sub">Nossa equipe vai analisar suas informações em até 48 horas.<br>Você receberá uma resposta pelo seu WhatsApp cadastrado.</p>
+  </div>
+</div>
+
+<script>
+/* ===================== MASKS ===================== */
+function maskCPF(el) {
+  let v = el.value.replace(/\D/g, '').slice(0,11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d+)/, '$1.$2.$3');
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/, '$1.$2');
+  el.value = v;
+}
+function maskPhone(el) {
+  let v = el.value.replace(/\D/g, '').slice(0,11);
+  if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  else if (v.length > 6) v = v.replace(/(\d{2})(\d{4})(\d+)/, '($1) $2-$3');
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d+)/, '($1) $2');
+  el.value = v;
+}
+function maskCEP(el) {
+  let v = el.value.replace(/\D/g, '').slice(0,8);
+  if (v.length > 5) v = v.replace(/(\d{5})(\d+)/, '$1-$2');
+  el.value = v;
+}
+
+/* ===================== CEP API ===================== */
+async function fetchCEP(el) {
+  const cep = el.value.replace(/\D/g, '');
+  if (cep.length !== 8) return;
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d = await r.json();
+    if (d.erro) return;
+    const form = document.getElementById('cadastro-form');
+    if (d.logradouro) form.elements['endereco'].value = d.logradouro;
+    if (d.bairro)     form.elements['bairro'].value   = d.bairro;
+    if (d.localidade) form.elements['cidade'].value   = d.localidade;
+    if (d.uf)         form.elements['estado'].value   = d.uf;
+  } catch {}
+}
+
+/* ===================== FOTO PREVIEW ===================== */
+function previewFoto(input, previewId, boxId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(previewId);
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById(boxId).classList.add('has-file');
+  };
+  reader.readAsDataURL(file);
+}
+
+function triggerSelfie() { document.getElementById('selfie-input').click(); }
+
+/* ===================== CAMERA ===================== */
+let stream = null;
+async function startCamera() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+    const video = document.getElementById('video');
+    video.srcObject = stream; video.style.display = 'block';
+    document.getElementById('camera-controls').style.display = 'flex';
+  } catch { alert('Não foi possível acessar a câmera. Use o botão de upload.'); }
+}
+function capturePhoto() {
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  canvas.toBlob(blob => {
+    const file = new File([blob], 'selfie.jpg', { type: 'image/jpeg' });
+    const dt = new DataTransfer(); dt.items.add(file);
+    const input = document.getElementById('selfie-input');
+    input.files = dt.files;
+    const img = document.getElementById('selfie-preview');
+    img.src = canvas.toDataURL(); img.style.display = 'block';
+    document.getElementById('selfie-box').classList.add('has-file');
+  }, 'image/jpeg', 0.9);
+  stopCamera();
+}
+function stopCamera() {
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  document.getElementById('video').style.display = 'none';
+  document.getElementById('camera-controls').style.display = 'none';
+}
+
+/* ===================== SUBMIT ===================== */
+document.getElementById('cadastro-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const errorEl = document.getElementById('form-error');
+  errorEl.style.display = 'none';
+
+  // Validação tipos_limpeza
+  const tipos = [...form.querySelectorAll('[name="tipos_limpeza"]:checked')].map(c => c.value);
+  if (!tipos.length) {
+    errorEl.textContent = 'Selecione ao menos um tipo de limpeza.';
+    errorEl.style.display = 'block'; return;
+  }
+  if (!document.getElementById('selfie-input').files[0]) {
+    errorEl.textContent = 'A selfie do rosto é obrigatória.';
+    errorEl.style.display = 'block'; return;
+  }
+  if (!document.getElementById('doc-input').files[0]) {
+    errorEl.textContent = 'A foto do documento é obrigatória.';
+    errorEl.style.display = 'block'; return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+
+  const fd = new FormData();
+  const fields = ['nome_completo','cpf','rg','data_nascimento','telefone','email','cep','endereco','numero','complemento','bairro','cidade','estado','experiencia_anos','sobre'];
+  for (const f of fields) fd.append(f, form.elements[f]?.value || '');
+  tipos.forEach(t => fd.append('tipos_limpeza', t));
+  const disp = [...form.querySelectorAll('[name="disponibilidade"]:checked')].map(c => c.value);
+  disp.forEach(d => fd.append('disponibilidade', d));
+  fd.append('foto_selfie', document.getElementById('selfie-input').files[0]);
+  fd.append('foto_documento', document.getElementById('doc-input').files[0]);
+
+  try {
+    const r = await fetch('/api/cadastro', { method: 'POST', body: fd });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.erro || 'Erro ao enviar.');
+    document.getElementById('form-screen').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  } catch(err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Enviar Cadastro para Análise';
+  }
+});
+</script>
+</body>
+</html>

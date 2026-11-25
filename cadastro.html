@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seja um Profissional Limpei | Cadastre-se</title>
+<meta name="description" content="Trabalhe com a Limpei. Cadastre-se como profissional de limpeza, ganhe mais e tenha flexibilidade de horários. Atendemos São Paulo e região.">
+<meta property="og:title" content="Trabalhe com a Limpei">
+<meta property="og:description" content="Flexibilidade, renda extra e clientes garantidos. Cadastre-se como profissional.">
+<meta property="og:type" content="website">
+  <meta property="og:image" content="https://limpei.com.br/img/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#1A2B4A;--teal:#0D7377;--teal2:#14A085;--amber:#F4A261;--bg:#F8FAFB;--border:#E2E8F0;--muted:#6B7A95}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--navy)}
+
+  /* NAV */
+  nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;z-index:100}
+  .logo{ display:flex; align-items:center; gap:8px; font-size:22px;font-weight:800;color:#fff;text-decoration:none}.logo span{color:var(--teal2)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:#fff}.nav-links a.active{color:var(--teal2)}
+  .nav-cta{background:var(--teal);color:#fff!important;padding:9px 20px;border-radius:8px;font-weight:700!important}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%);padding:72px 5% 56px;color:#fff;text-align:center}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:600;margin-bottom:24px}
+  .hero h1{font-size:clamp(28px,5vw,46px);font-weight:800;line-height:1.15;margin-bottom:16px}
+  .hero h1 span{color:var(--amber)}
+  .hero p{font-size:17px;color:rgba(255,255,255,.8);max-width:540px;margin:0 auto 40px;line-height:1.6}
+  .hero-stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+  .hstat{text-align:center}
+  .hstat-val{font-size:34px;font-weight:800;color:var(--amber)}
+  .hstat-label{font-size:13px;color:rgba(255,255,255,.65);margin-top:4px}
+
+  /* BENEFITS */
+  .benefits{padding:72px 5%;max-width:1100px;margin:0 auto}
+  .section-title{font-size:26px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:12px}
+  .section-sub{text-align:center;color:var(--muted);font-size:15px;margin-bottom:48px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6}
+  .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+  .benefit-card{background:#fff;border-radius:16px;padding:28px 24px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .benefit-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+  .benefit-card h4{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px}
+  .benefit-card p{font-size:14px;color:var(--muted);line-height:1.6}
+
+  /* HOW IT WORKS */
+  .how{background:var(--navy);padding:72px 5%}
+  .how .section-title{color:#fff}
+  .how .section-sub{color:rgba(255,255,255,.6)}
+  .steps-row{display:flex;justify-content:center;gap:0;flex-wrap:wrap;max-width:900px;margin:0 auto;position:relative}
+  .step{flex:1;min-width:180px;max-width:220px;text-align:center;padding:0 20px;position:relative}
+  .step:not(:last-child)::after{content:'';position:absolute;top:28px;right:-1px;width:40px;height:2px;background:rgba(255,255,255,.2)}
+  .step-num{width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+  .step h4{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+  .step p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+
+  /* FORM SECTION */
+  .form-section{padding:72px 5%;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+  .form-side h2{font-size:26px;font-weight:800;color:var(--navy);margin-bottom:12px}
+  .form-side p{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:28px}
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+  .checklist li{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--navy);line-height:1.5}
+  .check-icon{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .testimonial{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:24px;border-left:4px solid var(--teal)}
+  .testimonial p{font-size:14px;color:var(--navy);line-height:1.6;margin-bottom:12px;font-style:italic}
+  .test-author{display:flex;align-items:center;gap:4px}
+  .test-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .test-info strong{font-size:14px;font-weight:700;color:var(--navy);display:block}
+  .test-info span{font-size:12px;color:var(--muted)}
+
+  /* THE FORM */
+  .cadastro-form{background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.07);overflow:hidden}
+  .form-header{background:linear-gradient(135deg,var(--teal),var(--teal2));padding:28px 32px;color:#fff}
+  .form-header h3{font-size:20px;font-weight:800;margin-bottom:4px}
+  .form-header p{font-size:14px;color:rgba(255,255,255,.8)}
+  .form-body{padding:32px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+  .field:last-child{margin-bottom:0}
+  .field label{font-size:13px;font-weight:600;color:var(--navy)}
+  .field input,.field select,.field textarea{font-family:inherit;font-size:14px;color:var(--navy);background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;outline:none;transition:border-color .2s;width:100%}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal)}
+  .field textarea{resize:vertical;min-height:88px}
+  .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A95' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+  .field-hint{font-size:12px;color:var(--muted);margin-top:2px}
+  .file-label{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s;display:block}
+  .file-label:hover{border-color:var(--teal)}
+  .file-label span{font-size:14px;color:var(--muted)}
+  .file-label strong{font-size:13px;color:var(--teal);display:block;margin-top:4px}
+  #cv-input{display:none}
+  #cv-name{font-size:13px;color:var(--teal2);margin-top:6px;display:none}
+  .checkbox-row{display:flex;align-items:flex-start;gap:4px;margin-top:4px}
+  .checkbox-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--teal);flex-shrink:0;margin-top:2px}
+  .checkbox-row label{font-size:13px;color:var(--muted);line-height:1.5}
+  .checkbox-row a{color:var(--teal);text-decoration:none}
+  .btn-submit{width:100%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;font-family:inherit;font-size:16px;font-weight:700;border:none;border-radius:12px;padding:16px;cursor:pointer;transition:opacity .2s;margin-top:24px;display:flex;align-items:center;justify-content:center;gap:4px}
+  .btn-submit:hover{opacity:.9}
+  .btn-submit svg{width:20px;height:20px;fill:currentColor}
+  .form-footer-note{text-align:center;font-size:12px;color:var(--muted);margin-top:16px}
+
+  /* SUCCESS STATE */
+  .success-state{display:none;text-align:center;padding:48px 32px}
+  .success-icon{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}
+  .success-state h3{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:12px}
+  .success-state p{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:28px}
+  .btn-wa{display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;text-decoration:none;border-radius:12px;padding:14px 28px;font-size:15px;font-weight:700;font-family:inherit;transition:opacity .2s}
+  .btn-wa:hover{opacity:.9}
+
+  /* FOOTER */
+  footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:28px 5%;font-size:13px}
+  footer a{color:var(--teal2);text-decoration:none}
+
+  @media(max-width:768px){
+    .nav-links{display:none}
+    .form-section{grid-template-columns:1fr;gap:40px}
+    .form-row{grid-template-columns:1fr}
+    .hero-stats{gap:28px}
+    .steps-row{gap:32px}
+    .step::after{display:none}
+    .form-body{padding:24px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_cadastro_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_cadastro_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <div class="nav-links">
+    <a href="servicos.html">Serviços</a>
+    <a href="como-funciona.html">Como funciona</a>
+    <a href="sobre.html">Sobre nós</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contato.html">Contato</a>
+    <a href="orcamento.html" class="nav-cta">Orçamento grátis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span>🧹</span>
+    Vagas abertas em São Paulo
+  </div>
+  <h1>Trabalhe com a Limpei<br>e <span>ganhe mais</span></h1>
+  <p>Flexibilidade de horários, pagamento pontual e clientes selecionados. Você cuida da limpeza, nós cuidamos de todo o resto.</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-val">R$&nbsp;2.800+</div><div class="hstat-label">Renda média/mês</div></div>
+    <div class="hstat"><div class="hstat-val">48h</div><div class="hstat-label">Para 1º agendamento</div></div>
+    <div class="hstat"><div class="hstat-val">100%</div><div class="hstat-label">Pagamento pontual</div></div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section style="padding:72px 5% 0">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2 class="section-title">Por que trabalhar com a gente?</h2>
+    <p class="section-sub">Somos parceiros, não apenas uma plataforma. Sua carreira importa tanto quanto a satisfação do cliente.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">💰</div>
+        <h4>Pagamento todo dia 10</h4>
+        <p>Receba via Pix sem atraso. Nenhuma surpresa, nenhuma espera. O que você combinou, é o que entra.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🗓️</div>
+        <h4>Horários flexíveis</h4>
+        <p>Você decide quando trabalhar. Aceite ou recuse agendamentos conforme sua disponibilidade, sem pressão.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🛡️</div>
+        <h4>Suporte e segurança</h4>
+        <p>Nossa equipe está disponível para te apoiar em qualquer situação antes, durante e após o serviço.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⭐</div>
+        <h4>Clientes selecionados</h4>
+        <p>Clientes são avaliados tanto quanto profissionais. Você trabalha com quem respeita seu trabalho.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📱</div>
+        <h4>App simples</h4>
+        <p>Veja seus agendamentos, rotas e pagamentos em um só lugar. Sem papel, sem ligação, sem burocracia.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🎓</div>
+        <h4>Treinamento gratuito</h4>
+        <p>Capacitação online antes do primeiro atendimento. Você chega preparado e confiante.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" style="margin-top:72px">
+  <h2 class="section-title">Como funciona o cadastro</h2>
+  <p class="section-sub">Da inscrição ao primeiro serviço em menos de uma semana.</p>
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Preencha o formulário</h4>
+      <p>Dados básicos, experiência e disponibilidade. Leva menos de 5 minutos.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Entrevista pelo WhatsApp</h4>
+      <p>Nossa equipe entra em contato em até 48 horas para conhecer você melhor.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Treinamento online</h4>
+      <p>Módulo rápido com nossos padrões de qualidade e uso do aplicativo.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Comece a receber serviços</h4>
+      <p>Perfil ativo, agendamentos chegam diretamente para você aceitar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FORM + SIDE -->
+<section class="form-section">
+  <!-- LEFT: pitch -->
+  <div class="form-side">
+    <h2>Pré-requisitos para se cadastrar</h2>
+    <p>Queremos profissionais comprometidos e confiáveis. Se você tem essas características, seu lugar está aqui.</p>
+    <ul class="checklist">
+      <li><div class="check-icon">✓</div> Experiência mínima de 6 meses em limpeza residencial ou comercial</li>
+      <li><div class="check-icon">✓</div> Documento de identidade (RG ou CNH) válido</li>
+      <li><div class="check-icon">✓</div> CPF regular na Receita Federal</li>
+      <li><div class="check-icon">✓</div> Smartphone com acesso à internet</li>
+      <li><div class="check-icon">✓</div> Disponibilidade de pelo menos 3 dias por semana</li>
+      <li><div class="check-icon">✓</div> Residir em São Paulo ou Grande SP</li>
+    </ul>
+
+    <div class="testimonial">
+      <p>"Entrei na Limpei há 8 meses. Hoje tenho clientes fixos, horário que eu escolho e ganho mais do que no emprego anterior. O suporte deles é de verdade."</p>
+      <div class="test-author">
+        <div class="test-avatar">MF</div>
+        <div class="test-info">
+          <strong>Maria Ferreira</strong>
+          <span>Profissional Limpei desde 2024 · São Paulo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: form -->
+  <div>
+    <div class="cadastro-form" id="cadastro-form">
+      <div class="form-header">
+        <h3>Cadastro de Profissional</h3>
+        <p>Gratuito · Sem compromisso · Resposta em até 48h</p>
+      </div>
+
+      <div class="form-body" id="form-body">
+        <!-- Dados pessoais -->
+        <div class="form-row">
+          <div class="field">
+            <label>Nome completo *</label>
+            <input type="text" id="f-nome" placeholder="Seu nome completo" required>
+          </div>
+          <div class="field">
+            <label>WhatsApp *</label>
+            <input type="tel" id="f-tel" placeholder="(11) 99999-9999" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" id="f-email" placeholder="seu@email.com">
+          </div>
+          <div class="field">
+            <label>Data de nascimento *</label>
+            <input type="date" id="f-nasc" required>
+          </div>
+        </div>
+
+        <!-- Localização -->
+        <div class="form-row">
+          <div class="field">
+            <label>Cidade *</label>
+            <select id="f-cidade" required>
+              <option value="">Selecione...</option>
+              <option>São Paulo - Capital</option>
+              <option>Guarulhos</option>
+              <option>Santo André</option>
+              <option>São Bernardo do Campo</option>
+              <option>São Caetano do Sul</option>
+              <option>Mauá</option>
+              <option>Diadema</option>
+              <option>Osasco</option>
+              <option>Barueri</option>
+              <option>Outra cidade da Grande SP</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Bairro / Região</label>
+            <input type="text" id="f-bairro" placeholder="Ex: Vila Madalena">
+          </div>
+        </div>
+
+        <!-- Experiência -->
+        <div class="field">
+          <label>Tempo de experiência em limpeza *</label>
+          <select id="f-exp" required>
+            <option value="">Selecione...</option>
+            <option>6 meses a 1 ano</option>
+            <option>1 a 2 anos</option>
+            <option>2 a 5 anos</option>
+            <option>Mais de 5 anos</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Tipos de serviço que você já realizou *</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:400;color:var(--navy);cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Limpeza residencial</label>
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:400;color:var(--navy);cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Limpeza comercial</label>
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:400;color:var(--navy);cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Limpeza pós-obra</label>
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:400;color:var(--navy);cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Passadoria</label>
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:400;color:var(--navy);cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Montagem de móveis</label>
+            <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:400;color:var(--navy);cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Organização</label>
+          </div>
+        </div>
+
+        <!-- Disponibilidade -->
+        <div class="field">
+          <label>Disponibilidade semanal *</label>
+          <select id="f-disp" required>
+            <option value="">Selecione...</option>
+            <option>3 a 4 dias por semana</option>
+            <option>5 a 6 dias por semana</option>
+            <option>Apenas fins de semana</option>
+            <option>Período integral (todos os dias)</option>
+          </select>
+        </div>
+
+        <!-- CV opcional -->
+        <div class="field">
+          <label>Currículo (opcional)</label>
+          <label class="file-label" for="cv-input">
+            <span>📄 Clique para anexar ou arraste aqui</span>
+            <strong>PDF ou Word — até 5 MB</strong>
+          </label>
+          <input type="file" id="cv-input" accept=".pdf,.doc,.docx" onchange="showFileName(this)">
+          <span id="cv-name"></span>
+        </div>
+
+        <!-- Msg adicional -->
+        <div class="field">
+          <label>Conte um pouco sobre você</label>
+          <textarea id="f-msg" placeholder="Experiências anteriores, diferenciais, por que quer trabalhar com a Limpei..."></textarea>
+        </div>
+
+        <!-- Termos -->
+        <div class="checkbox-row">
+          <input type="checkbox" id="f-termos" required>
+          <label for="f-termos">Li e concordo com os <a href="termos.html" target="_blank">Termos de Uso</a> e a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a> da Limpei. *</label>
+        </div>
+
+        <button class="btn-submit" onclick="enviarCadastro()">
+          <svg viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+          Enviar cadastro pelo WhatsApp
+        </button>
+        <p class="form-footer-note">* Campos obrigatórios. Seus dados são protegidos pela LGPD e não serão compartilhados com terceiros.</p>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success-state" id="success-state">
+        <div class="success-icon">🎉</div>
+        <h3>Cadastro enviado!</h3>
+        <p>Sua mensagem já foi encaminhada para o nosso WhatsApp. Nossa equipe de RH vai entrar em contato em até 48 horas úteis para dar continuidade ao processo.</p>
+        <a id="wa-link" class="btn-wa" href="#" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Falar com o RH agora
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:12px">
+    <strong style="color:#fff;font-size:16px">Limpa<span style="color:#14A085">Já</span></strong>
+  </div>
+  <div style="display:flex;justify-content:center;gap:20px;margin-bottom:14px;flex-wrap:wrap">
+    <a href="index.html">Início</a>
+    <a href="servicos.html">Serviços</a>
+    <a href="sobre.html">Sobre</a>
+    <a href="contato.html">Contato</a>
+    <a href="termos.html">Termos</a>
+    <a href="politica-privacidade.html">Privacidade</a>
+  </div>
+  <p>© 2024 Limpei. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+function showFileName(input) {
+  if (input.files && input.files[0]) {
+    const el = document.getElementById('cv-name');
+    el.textContent = '✓ ' + input.files[0].name;
+    el.style.display = 'block';
+  }
+}
+
+function getCheckboxValues(selector) {
+  const checked = [];
+  document.querySelectorAll(selector).forEach(cb => {
+    if (cb.checked) {
+      const label = cb.parentElement.textContent.trim();
+      if (label) checked.push(label);
+    }
+  });
+  return checked.join(', ') || 'Não informado';
+}
+
+function enviarCadastro() {
+  const nome  = document.getElementById('f-nome').value.trim();
+  const tel   = document.getElementById('f-tel').value.trim();
+  const nasc  = document.getElementById('f-nasc').value;
+  const cidade= document.getElementById('f-cidade').value;
+  const exp   = document.getElementById('f-exp').value;
+  const disp  = document.getElementById('f-disp').value;
+  const termos= document.getElementById('f-termos').checked;
+
+  if (!nome)   { alert('Por favor, informe seu nome completo.'); return; }
+  if (!tel)    { alert('Por favor, informe seu WhatsApp.'); return; }
+  if (!nasc)   { alert('Por favor, informe sua data de nascimento.'); return; }
+  if (!cidade) { alert('Por favor, selecione sua cidade.'); return; }
+  if (!exp)    { alert('Por favor, informe seu tempo de experiência.'); return; }
+  if (!disp)   { alert('Por favor, informe sua disponibilidade.'); return; }
+  if (!termos) { alert('Você precisa concordar com os Termos de Uso para continuar.'); return; }
+
+  const servicos = getCheckboxValues('input[type="checkbox"]:not(#f-termos)');
+  const email    = document.getElementById('f-email').value.trim();
+  const bairro   = document.getElementById('f-bairro').value.trim();
+  const msg      = document.getElementById('f-msg').value.trim();
+
+  const texto =
+    `🧹 *NOVO CADASTRO DE PROFISSIONAL*\n\n` +
+    `*Nome:* ${nome}\n` +
+    `*WhatsApp:* ${tel}\n` +
+    (email ? `*E-mail:* ${email}\n` : '') +
+    `*Data de nascimento:* ${nasc}\n` +
+    `*Cidade:* ${cidade}\n` +
+    (bairro ? `*Bairro:* ${bairro}\n` : '') +
+    `*Experiência:* ${exp}\n` +
+    `*Serviços:* ${servicos}\n` +
+    `*Disponibilidade:* ${disp}\n` +
+    (msg ? `\n*Sobre o profissional:* ${msg}` : '');
+
+  const waNum = '5511999999999';
+  const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(texto)}`;
+
+  document.getElementById('wa-link').href = waUrl;
+  document.getElementById('form-body').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+
+  setTimeout(() => window.open(waUrl, '_blank'), 400);
+}
+</script>
+
+</body>
+</html>

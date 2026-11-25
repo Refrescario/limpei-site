@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perguntas Frequentes | Limpei – Limpeza em São Paulo</title>
+<meta name="description" content="Tire suas dúvidas sobre os serviços da Limpei: como funciona, preços, cancelamento, profissionais e garantia de qualidade.">
+<meta property="og:title" content="Perguntas Frequentes – Limpei">
+<meta property="og:description" content="Respostas para as dúvidas mais comuns sobre nossos serviços de limpeza em São Paulo.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://limpei.com.br/faq.html">
+<meta property="og:image" content="https://limpei.com.br/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://limpei.com.br/faq.html">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#1A2B4A; --teal:#0D7377; --teal2:#14A085; --amber:#F4A261; --bg:#F8FAFB; --border:#E2E8F0; --muted:#6B7A95; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--navy)}
+  nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;z-index:100}
+  .logo{ display:flex; align-items:center; gap:4px; font-size:22px;font-weight:800;color:#fff;text-decoration:none}.logo span{color:var(--teal2)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500}
+  .nav-links a:hover{color:#fff}.nav-links a.active{color:var(--teal2)}
+  .nav-cta{background:var(--teal);color:#fff!important;padding:9px 20px;border-radius:8px;font-weight:700!important}
+
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%);padding:72px 5% 56px;text-align:center;color:#fff}
+  .hero h1{font-size:clamp(28px,4vw,44px);font-weight:800;margin-bottom:16px}
+  .hero p{font-size:17px;opacity:.85;max-width:560px;margin:0 auto}
+
+  .container{max-width:800px;margin:0 auto;padding:48px 5%}
+
+  /* CATEGORIES */
+  .cat-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:32px}
+  .cat-tab{padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);font-size:14px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:all .2s}
+  .cat-tab:hover{border-color:var(--teal);color:var(--teal)}
+  .cat-tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+  /* SEARCH */
+  .search-wrap{position:relative;margin-bottom:32px}
+  .faq-search{width:100%;padding:14px 18px 14px 46px;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:15px;outline:none;background:#fff;transition:border .2s}
+  .faq-search:focus{border-color:var(--teal)}
+  .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
+
+  /* FAQ */
+  .faq-cat-title{font-size:18px;font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--teal);display:flex;align-items:center;gap:4px}
+  .faq-group{margin-bottom:32px}
+  .faq-block{margin-bottom:8px}
+  .faq-q{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:all .2s}
+  .faq-q:hover{border-color:var(--teal);box-shadow:0 2px 8px rgba(13,115,119,.1)}
+  .faq-q.open{border-color:var(--teal);border-radius:12px 12px 0 0;background:linear-gradient(135deg,rgba(13,115,119,.03),rgba(20,160,133,.03))}
+  .faq-toggle{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;flex-shrink:0;transition:background .2s}
+  .faq-q.open .faq-toggle{background:var(--teal);color:#fff}
+  .faq-a{background:#fff;border:1px solid var(--teal);border-top:none;border-radius:0 0 12px 12px;padding:16px 20px;font-size:14px;line-height:1.75;color:var(--muted);display:none}
+  .faq-a.open{display:block}
+  .faq-a a{color:var(--teal);text-decoration:none;font-weight:600}
+
+  .hidden{display:none!important}
+
+  /* CTA */
+  .cta-box{background:var(--navy);border-radius:16px;padding:40px;text-align:center;margin-top:48px}
+  .cta-box h3{font-size:22px;font-weight:800;color:#fff;margin-bottom:8px}
+  .cta-box p{color:rgba(255,255,255,.7);font-size:15px;margin-bottom:24px}
+  .btn-wa{display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;padding:14px 28px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;text-decoration:none;transition:background .2s}
+  .btn-wa:hover{background:#1ebe5d}
+
+  footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:28px 5%;font-size:13px;margin-top:48px}
+  footer a{color:var(--teal2);text-decoration:none}
+  @media(max-width:768px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_faq_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_faq_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <div class="nav-links">
+    <a href="index.html">Início</a>
+    <a href="servicos.html">Serviços</a>
+    <a href="como-funciona.html">Como funciona</a>
+    <a href="sobre.html">Sobre nós</a>
+    <a href="contato.html">Contato</a>
+    <a href="orcamento.html" class="nav-cta">Orçamento grátis</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Perguntas frequentes</h1>
+  <p>Tudo que você precisa saber antes de contratar. Não encontrou sua dúvida? Fala com a gente no WhatsApp.</p>
+</div>
+
+<div class="container">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="faq-search" placeholder="Buscar pergunta..." id="faq-search" oninput="filterFaq()">
+  </div>
+
+  <div class="cat-tabs">
+    <div class="cat-tab active" onclick="filterCat('todas',this)">Todas</div>
+    <div class="cat-tab" onclick="filterCat('agendamento',this)">Agendamento</div>
+    <div class="cat-tab" onclick="filterCat('servico',this)">Serviço</div>
+    <div class="cat-tab" onclick="filterCat('pagamento',this)">Pagamento</div>
+    <div class="cat-tab" onclick="filterCat('profissional',this)">Profissionais</div>
+    <div class="cat-tab" onclick="filterCat('cancelamento',this)">Cancelamento</div>
+  </div>
+
+  <div id="faq-list">
+
+    <div class="faq-group" data-cat="agendamento">
+      <div class="faq-cat-title">📅 Agendamento</div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Com quanto tempo de antecedência devo agendar?</span><div class="faq-toggle">+</div></div><div class="faq-a">Recomendamos agendar com pelo menos 24h de antecedência. Para finais de semana e feriados, 48h garantem sua preferência de horário. Em alguns casos conseguimos encaixar no mesmo dia — pergunte no WhatsApp.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Como faço para agendar?</span><div class="faq-toggle">+</div></div><div class="faq-a">Faça seu <a href="orcamento.html">orçamento online</a>, veja o preço na hora e confirme pelo WhatsApp. Nossa equipe valida os detalhes em minutos.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Posso escolher o horário exato do serviço?</span><div class="faq-toggle">+</div></div><div class="faq-a">Sim! Atendemos das 07h às 18h de segunda a sexta, e das 08h às 14h no sábado. Na confirmação pelo WhatsApp você escolhe o horário disponível que preferir.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Posso agendar serviços recorrentes (semanal, quinzenal)?</span><div class="faq-toggle">+</div></div><div class="faq-a">Sim e é muito mais prático! Clientes com frequência garantida têm prioridade de horário e desconto progressivo. Mencione isso na hora de confirmar pelo WhatsApp.</div></div>
+    </div>
+
+    <div class="faq-group" data-cat="servico">
+      <div class="faq-cat-title">🧹 Sobre o serviço</div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Preciso fornecer os materiais de limpeza?</span><div class="faq-toggle">+</div></div><div class="faq-a">Não! O profissional traz todos os produtos e equipamentos inclusos no preço. Você não precisa ter nada em casa.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Preciso estar em casa durante o serviço?</span><div class="faq-toggle">+</div></div><div class="faq-a">Não é obrigatório. Muitos clientes deixam a chave na portaria ou usam cofre de chave. Combinamos o acesso antes pelo WhatsApp.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Tenho pets. Isso é problema?</span><div class="faq-toggle">+</div></div><div class="faq-a">Nenhum problema! Avise na hora do agendamento. Recomendamos manter os pets em um cômodo separado durante o serviço para o conforto deles e do profissional.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Qual a diferença entre Limpeza Padrão e Pesada?</span><div class="faq-toggle">+</div></div><div class="faq-a">A <strong>Padrão</strong> mantém a rotina: varrer, passar pano, banheiro, cozinha, tirar pó. A <strong>Pesada</strong> vai além: dentro de armários, forno, geladeira, gordura acumulada, rejunte — ideal para quem não limpa há algum tempo ou quer uma limpeza anual completa.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>O serviço inclui lavar roupa?</span><div class="faq-toggle">+</div></div><div class="faq-a">Lavagem de roupas não está incluída. Oferecemos passadoria de roupas como serviço separado. Se quiser lavanderia também, avise — podemos combinar.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>E se algo quebrar durante o serviço?</span><div class="faq-toggle">+</div></div><div class="faq-a">Avise nossa equipe imediatamente pelo WhatsApp. Todos os serviços têm cobertura para danos acidentais. Resolvemos com rapidez e transparência.</div></div>
+    </div>
+
+    <div class="faq-group" data-cat="pagamento">
+      <div class="faq-cat-title">💳 Pagamento</div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Quais formas de pagamento são aceitas?</span><div class="faq-toggle">+</div></div><div class="faq-a">Aceitamos Pix (pagamento imediato) e cartão de crédito em até 3x sem juros.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Quando faço o pagamento?</span><div class="faq-toggle">+</div></div><div class="faq-a">Após a conclusão do serviço, quando você já pode ver o resultado. Nunca cobramos antes.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>O preço do orçamento é o valor final?</span><div class="faq-toggle">+</div></div><div class="faq-a">Sim! O valor que aparece no orçamento é o valor final, sem taxas escondidas. Se surgir alguma necessidade extra, comunicamos antes de executar.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Emitem nota fiscal?</span><div class="faq-toggle">+</div></div><div class="faq-a">Sim! Emitimos NFS-e (nota de serviço eletrônica) para todos os serviços mediante solicitação. Peça no momento do agendamento.</div></div>
+    </div>
+
+    <div class="faq-group" data-cat="profissional">
+      <div class="faq-cat-title">👩 Profissionais</div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Como os profissionais são selecionados?</span><div class="faq-toggle">+</div></div><div class="faq-a">Todo profissional passa por: verificação de documentos, checagem de antecedentes, conferência de referências pessoais e treinamento técnico presencial antes do primeiro serviço. Profissionais abaixo de 4.5 estrelas são desativados.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>O mesmo profissional sempre vai na minha casa?</span><div class="faq-toggle">+</div></div><div class="faq-a">Fazemos o máximo para manter o mesmo profissional, especialmente em serviços recorrentes. Se tiver preferência após a primeira limpeza, mencione no WhatsApp.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Posso solicitar um profissional específico?</span><div class="faq-toggle">+</div></div><div class="faq-a">Sim! Após a primeira limpeza, se você gostou do profissional, pode solicitar o mesmo nas próximas. Sujeito à disponibilidade.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Quero trabalhar como profissional. Como faço?</span><div class="faq-toggle">+</div></div><div class="faq-a">Envie uma mensagem pelo <a href="contato.html">formulário de contato</a> ou WhatsApp com assunto "Quero trabalhar na Limpei". Nossa equipe de profissionais entrará em contato.</div></div>
+    </div>
+
+    <div class="faq-group" data-cat="cancelamento">
+      <div class="faq-cat-title">🔄 Cancelamento e remarcação</div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>Posso cancelar ou remarcar?</span><div class="faq-toggle">+</div></div><div class="faq-a">Sim! Cancelamentos ou remarcações com até 24h de antecedência são gratuitos. Com menos de 24h, cobra-se uma taxa de R$50 para cobrir a reserva do profissional.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>E se eu precisar cancelar no mesmo dia?</span><div class="faq-toggle">+</div></div><div class="faq-a">Avise o mais rápido possível pelo WhatsApp. A taxa de R$50 se aplica. Em emergências (doença, etc.), analisamos caso a caso.</div></div>
+      <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)"><span>E se o profissional não aparecer?</span><div class="faq-toggle">+</div></div><div class="faq-a">Isso não deve acontecer, mas se ocorrer, remarcamos sem custo para a próxima data disponível e você recebe um crédito de R$50 para o próximo serviço.</div></div>
+    </div>
+
+  </div>
+
+  <div class="cta-box">
+    <h3>Ainda tem dúvidas?</h3>
+    <p>Nossa equipe responde em minutos pelo WhatsApp durante o horário comercial.</p>
+    <a href="https://wa.me/5511999999999" target="_blank" class="btn-wa">
+      💬 Chamar no WhatsApp
+    </a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Limpei · <a href="politica-privacidade.html">Privacidade</a> · <a href="termos.html">Termos</a> · <a href="contato.html">Contato</a></p>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+  el.querySelector('.faq-toggle').textContent = el.classList.contains('open') ? '−' : '+';
+}
+
+function filterCat(cat, el) {
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.faq-group').forEach(g=>{
+    g.classList.toggle('hidden', cat !== 'todas' && g.dataset.cat !== cat);
+  });
+}
+
+function filterFaq() {
+  const q = document.getElementById('faq-search').value.toLowerCase();
+  document.querySelectorAll('.faq-block').forEach(b=>{
+    const text = b.querySelector('.faq-q span').textContent.toLowerCase() + b.querySelector('.faq-a').textContent.toLowerCase();
+    b.classList.toggle('hidden', q && !text.includes(q));
+  });
+  // show all groups when searching
+  if (q) document.querySelectorAll('.faq-group').forEach(g=>g.classList.remove('hidden'));
+}
+</script>
+</body>
+</html>

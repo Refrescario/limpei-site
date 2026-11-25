@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre a Limpei | Empresa de Limpeza em São Paulo</title>
+<meta name="description" content="Conheça a Limpei: nossa história, missão e os valores que guiam nosso trabalho. Profissionais verificados para limpeza residencial em São Paulo desde 2020.">
+<meta property="og:title" content="Sobre a Limpei">
+<meta property="og:description" content="Nossa missão é conectar famílias a profissionais de limpeza confiáveis em São Paulo.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://limpei.com.br/sobre.html">
+<meta property="og:image" content="https://limpei.com.br/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://limpei.com.br/sobre.html">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#1A2B4A; --teal:#0D7377; --teal2:#14A085; --amber:#F4A261; --bg:#F8FAFB; --border:#E2E8F0; --muted:#6B7A95; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--navy)}
+  nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;z-index:100}
+  .logo{ display:flex; align-items:center; gap:4px; font-size:22px;font-weight:800;color:#fff;text-decoration:none}.logo span{color:var(--teal2)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:#fff}.nav-links a.active{color:var(--teal2)}
+  .nav-cta{background:var(--teal);color:#fff!important;padding:9px 20px;border-radius:8px;font-weight:700!important}
+
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%);padding:80px 5%;color:#fff;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;max-width:100%}
+  .hero h1{font-size:clamp(28px,4vw,44px);font-weight:800;margin-bottom:16px}
+  .hero p{font-size:17px;opacity:.85;line-height:1.7}
+  .hero-visual{border-radius:20px;height:280px;overflow:hidden}
+  .hero-visual img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .container{max-width:1000px;margin:0 auto;padding:0 5%}
+
+  /* STATS */
+  .stats-band{background:#fff;padding:48px 5%}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:900px;margin:0 auto;text-align:center}
+  .stat-val{font-size:40px;font-weight:800;color:var(--teal);line-height:1}
+  .stat-label{font-size:14px;color:var(--muted);font-weight:500;margin-top:4px}
+
+  /* STORY */
+  .story{padding:72px 0}
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .story-visual{border-radius:20px;height:320px;overflow:hidden}
+  .story-visual img{width:100%;height:100%;object-fit:cover;display:block}
+  .story-body h2{font-size:28px;font-weight:800;margin-bottom:16px}
+  .story-body p{font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:16px}
+
+  /* VALUES */
+  .values{background:var(--navy);padding:72px 5%}
+  .values h2{font-size:28px;font-weight:800;color:#fff;text-align:center;margin-bottom:40px}
+  .val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto}
+  .val-card{background:rgba(255,255,255,.07);border-radius:14px;padding:28px 24px}
+  .val-icon{font-size:32px;margin-bottom:16px}
+  .val-card h4{font-size:17px;font-weight:800;color:#fff;margin-bottom:8px}
+  .val-card p{font-size:14px;line-height:1.6;color:rgba(255,255,255,.65)}
+
+  /* TEAM */
+  .team{padding:72px 0}
+  .team h2{font-size:28px;font-weight:800;text-align:center;margin-bottom:8px}
+  .team-sub{text-align:center;color:var(--muted);font-size:16px;margin-bottom:40px}
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+  .team-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center}
+  .team-avatar{width:72px;height:72px;border-radius:50%;overflow:hidden;margin:0 auto 16px}
+  .team-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .team-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+  .team-card span{font-size:13px;color:var(--muted)}
+
+  /* CTA */
+  .cta-section{background:linear-gradient(135deg,rgba(13,115,119,.06),rgba(20,160,133,.06));padding:72px 5%;text-align:center}
+  .cta-section h2{font-size:32px;font-weight:800;margin-bottom:16px}
+  .cta-section p{font-size:16px;color:var(--muted);margin-bottom:32px}
+  .btn-primary{background:var(--teal);color:#fff;padding:16px 32px;border-radius:12px;font-family:inherit;font-size:16px;font-weight:700;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:background .2s}
+  .btn-primary:hover{background:var(--navy)}
+
+  footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:28px 5%;font-size:13px}
+  footer a{color:var(--teal2);text-decoration:none}
+
+  @media(max-width:768px){
+    .hero,.story-grid{grid-template-columns:1fr}
+    .hero-visual,.story-visual{display:none}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .val-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_sobre_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_sobre_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <div class="nav-links">
+    <a href="index.html">Início</a>
+    <a href="servicos.html">Serviços</a>
+    <a href="como-funciona.html">Como funciona</a>
+    <a href="sobre.html" class="active">Sobre nós</a>
+    <a href="contato.html">Contato</a>
+    <a href="orcamento.html" class="nav-cta">Orçamento grátis</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div>
+    <h1>Limpeza com propósito, resultado com carinho</h1>
+    <p>A Limpei nasceu da convicção de que todo lar merece cuidado profissional — e que todo profissional merece trabalho digno e valorizado.</p>
+  </div>
+  <div class="hero-visual"><img src="img/sobre-hero.jpg" alt="Limpei — Nossa história"></div>
+</div>
+
+<div class="stats-band">
+  <div class="stats">
+    <div><div class="stat-val">2.400+</div><div class="stat-label">Lares atendidos</div></div>
+    <div><div class="stat-val">4.8★</div><div class="stat-label">Avaliação média</div></div>
+    <div><div class="stat-val">32</div><div class="stat-label">Profissionais ativos</div></div>
+    <div><div class="stat-val">98%</div><div class="stat-label">Clientes satisfeitos</div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="story">
+    <div class="story-grid">
+      <div class="story-visual"><img src="img/sobre-historia.jpg" alt="A história da Limpei"></div>
+      <div class="story-body">
+        <h2>Nossa história</h2>
+        <p>A Limpei começou em 2022 quando percebemos um problema duplo em São Paulo: famílias que precisavam de limpeza confiável sem saber onde encontrar, e profissionais excelentes sem acesso a clientes constantes.</p>
+        <p>Decidimos construir uma ponte — um serviço que trata os dois lados com respeito. Clientes com preço transparente e resultado garantido. Profissionais com remuneração justa, horários previsíveis e suporte real.</p>
+        <p>Hoje, atendemos em toda São Paulo e seguimos crescendo com a mesma mentalidade do primeiro dia: limpeza de qualidade, sem complicação.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="values">
+  <div class="container">
+    <h2>O que nos move</h2>
+    <div class="val-grid">
+      <div class="val-card">
+        <div class="val-icon">🤝</div>
+        <h4>Confiança acima de tudo</h4>
+        <p>Profissionais verificados, contratos claros e comunicação honesta. Nunca prometemos o que não podemos cumprir.</p>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">💚</div>
+        <h4>Respeito às pessoas</h4>
+        <p>Profissionais bem remunerados fazem serviço melhor. Valorizamos quem trabalha com a gente como parte da família.</p>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">⚡</div>
+        <h4>Simplicidade que funciona</h4>
+        <p>Orçamento em segundos, agendamento pelo WhatsApp, pagamento fácil. Sem burocracia, sem surpresa.</p>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">🌱</div>
+        <h4>Responsabilidade ambiental</h4>
+        <p>Priorizamos produtos biodegradáveis e orientamos nossos profissionais sobre uso consciente da água.</p>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">🎯</div>
+        <h4>Resultado que você vê</h4>
+        <p>Não medimos sucesso em número de serviços. Medimos na cara de satisfação de quem chega em casa depois.</p>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">🔄</div>
+        <h4>Melhoria constante</h4>
+        <p>Cada avaliação é lida pela equipe. Reclamação vira aprendizado. Elogio vira padrão.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="team">
+    <h2>Time fundador</h2>
+    <div class="team-sub">As pessoas por trás da Limpei</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar"><img src="img/team-avatar-MR.jpg" alt="Mariana Rocha"></div>
+        <h4>Mariana Rodrigues</h4>
+        <span>CEO & Co-fundadora</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="img/team-avatar-TS.jpg" alt="Thiago Santos"></div>
+        <h4>Thiago Souza</h4>
+        <span>CTO & Co-fundador</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><img src="img/team-avatar-CF.jpg" alt="Camila Ferreira"></div>
+        <h4>Camila Ferreira</h4>
+        <span>Head de Operações</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">RL</div>
+        <h4>Rafael Lima</h4>
+        <span>Head de Profissionais</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-section">
+  <h2>Faça parte dessa história</h2>
+  <p>Como cliente ou profissional, bem-vindo à Limpei.</p>
+  <a href="orcamento.html" class="btn-primary">Fazer orçamento grátis →</a>
+</div>
+
+<footer>
+  <p>© 2026 Limpei · <a href="politica-privacidade.html">Privacidade</a> · <a href="termos.html">Termos</a> · <a href="contato.html">Contato</a></p>
+</footer>
+</body>
+</html>

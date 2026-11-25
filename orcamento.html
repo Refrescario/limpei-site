@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orçamento – Limpei</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:  #1A2B4A;
+    --teal:  #0D7377;
+    --teal2: #14A085;
+    --amber: #F4A261;
+    --bg:    #F7F8FA;
+    --white: #FFFFFF;
+    --gray1: #F0F2F5;
+    --gray2: #E2E6EC;
+    --gray3: #9AA5B4;
+    --text:  #1A2B4A;
+    --rad:   12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display:flex; align-items:center; gap:4px;  font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; }
+  .logo span { color: var(--teal2); }
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.875rem; font-weight: 500;
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .back-btn:hover { color: #fff; }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .page-wrap { grid-template-columns: 1fr; padding: 24px 16px 64px; }
+    .sidebar { order: -1; }
+  }
+
+  /* ── STEP HEADER ── */
+  .step-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--gray3);
+    margin-bottom: 24px;
+  }
+  .step-label strong { color: var(--teal); }
+
+  /* ── SERVICE PICKER ── */
+  .section-title { font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+  /* ── SERVICE SCROLL ROW ── */
+  .service-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+  .service-grid::-webkit-scrollbar { display: none; }
+
+  /* photo card buttons */
+  .service-btn {
+    position: relative;
+    flex: 0 0 auto;
+    width: 110px;
+    border: 2.5px solid var(--gray2);
+    border-radius: 14px;
+    background: var(--white);
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+    font-family: inherit;
+    text-align: center;
+    padding: 0;
+    overflow: hidden;
+  }
+  .service-btn:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(13,115,119,.15); }
+  .service-btn.active {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 1px var(--teal), 0 6px 20px rgba(13,115,119,.2);
+  }
+  .service-btn.active .svc-label { background: var(--teal); color: #fff; }
+  .svc-photo {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px 10px 0 0;
+  }
+  .svc-label {
+    padding: 7px 8px 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--navy);
+    background: var(--white);
+    transition: background .2s, color .2s;
+    line-height: 1.25;
+  }
+  .svc-badge {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--teal2);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .svc-badge.amber { background: var(--amber); color: #fff; }
+
+  /* ── SERVICE DESC ── */
+  .service-desc {
+    background: #EBF8F8;
+    border: 1px solid #B2DFDF;
+    border-radius: var(--rad);
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    color: var(--navy);
+    margin-bottom: 28px;
+    display: none;
+  }
+  .service-desc.visible { display: block; }
+
+  /* ── HOME TYPE ── */
+  .home-type-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-bottom: 24px;
+  }
+  .type-btn {
+    padding: 11px;
+    border: 2px solid var(--gray2);
+    border-radius: var(--rad);
+    background: var(--white);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--navy);
+    transition: border-color .2s;
+  }
+  .type-btn:hover { border-color: var(--teal); }
+  .type-btn.active {
+    border-color: var(--teal);
+    background: var(--teal);
+    color: #fff;
+  }
+
+  /* ── COUNTER ── */
+  .counters-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .counter-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--white);
+    border: 1.5px solid var(--gray2);
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+  .counter-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--teal);
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s;
+  }
+  .counter-btn:hover { background: var(--teal); color: #fff; }
+  .counter-btn:disabled { border-color: var(--gray2); color: var(--gray3); cursor: not-allowed; }
+  .counter-btn:disabled:hover { background: none; color: var(--gray3); }
+  .counter-val { font-size: 1rem; font-weight: 700; color: var(--navy); min-width: 80px; text-align: center; }
+  .counter-hint {
+    font-size: 0.8rem;
+    color: var(--gray3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  /* ── HOURS SLIDER (passadoria / montagem) ── */
+  .hours-block { margin-bottom: 24px; }
+  .hours-counter {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .hours-counter .counter-btn { width: 36px; height: 36px; font-size: 1.3rem; }
+  .hours-val { font-size: 1.1rem; font-weight: 700; color: var(--navy); min-width: 80px; text-align: center; }
+  .piece-hint {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--teal);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .piece-subhint { font-size: 0.8rem; color: var(--gray3); }
+
+  /* ── CTA BUTTON ── */
+  .cta-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: var(--rad);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 8px;
+  }
+  .cta-btn:hover { background: #0A5F62; }
+  .cta-btn:active { transform: scale(.98); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {}
+  .price-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    position: sticky;
+    top: 80px;
+  }
+  .price-card-header {
+    background: var(--teal);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .price-card-header .icon { font-size: 1.3rem; }
+  .price-card-body { padding: 20px; }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray1);
+    font-size: 0.95rem;
+  }
+  .price-row:last-child { border-bottom: none; }
+  .price-row .label { color: var(--gray3); }
+  .price-row .value { font-weight: 700; color: var(--navy); }
+  .price-row .value.big { font-size: 1.5rem; color: var(--teal); }
+  .hours-display { font-size: 0.95rem; color: var(--navy); font-weight: 600; }
+  .divider { height: 1px; background: var(--gray2); margin: 12px 0; }
+  .trust-items { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
+  .trust-item { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; color: var(--navy); }
+  .trust-item .check { color: var(--teal); font-size: 1rem; }
+
+  /* ── CARDS WRAPPER ── */
+  .main-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  }
+
+  /* ── HIDDEN ── */
+  .rooms-block, .hours-block { display: none; }
+  .rooms-block.visible, .hours-block.visible { display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_orcamento_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_orcamento_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <a href="index.html" class="back-btn">← Voltar ao início</a>
+</header>
+
+<div class="page-wrap">
+
+  <!-- MAIN CONTENT -->
+  <div class="main-card">
+    <div class="step-label"><strong>1/5</strong> &nbsp;Escolha um serviço</div>
+
+    <p class="section-title">Escolha um serviço</p>
+    <div class="service-grid">
+      <button class="service-btn active" data-service="padrao" onclick="selectService('padrao',this)">
+        <img class="svc-photo" src="img/svc-padrao.jpg" alt="Limpeza Padrão">
+        <div class="svc-label">Limpeza Padrão</div>
+      </button>
+      <button class="service-btn" data-service="pesada" onclick="selectService('pesada',this)">
+        <img class="svc-photo" src="img/svc-pesada.jpg" alt="Limpeza Pesada">
+        <div class="svc-label">Limpeza Pesada</div>
+      </button>
+      <button class="service-btn" data-service="premudanca" onclick="selectService('premudanca',this)">
+        <span class="svc-badge">Inclui produtos</span>
+        <img class="svc-photo" src="img/svc-premudanca.jpg" alt="Pré-mudança">
+        <div class="svc-label">Pré-mudança</div>
+      </button>
+      <button class="service-btn" data-service="posmudanca" onclick="selectService('posmudanca',this)">
+        <span class="svc-badge">Inclui produtos</span>
+        <img class="svc-photo" src="img/svc-posobra.jpg" alt="Pós-obra">
+        <div class="svc-label">Limpeza Pós-obra</div>
+      </button>
+      <button class="service-btn" data-service="passadoria" onclick="selectService('passadoria',this)">
+        <img class="svc-photo" src="img/svc-passadoria.jpg" alt="Passadoria">
+        <div class="svc-label">Passadoria</div>
+      </button>
+      <button class="service-btn" data-service="montagem" onclick="selectService('montagem',this)">
+        <img class="svc-photo" src="img/svc-montagem.jpg" alt="Montagem de Móveis">
+        <div class="svc-label">Montagem de Móveis</div>
+      </button>
+    </div>
+
+    <div id="desc-padrao"    class="service-desc visible">A <strong>Limpeza Padrão</strong> é o serviço com a quantidade de horas e tarefas ideais para manter a sua rotina em ordem.</div>
+    <div id="desc-pesada"    class="service-desc">A <strong>Limpeza Pesada</strong> é o serviço ideal para remover sujeira acumulada e detalhes que a limpeza do dia a dia não alcança.</div>
+    <div id="desc-premudanca"class="service-desc">A <strong>Limpeza Pré-Mudança</strong> é o serviço ideal para você preparar o seu novo lar antes de mudar. Com tranquilidade e organização.</div>
+    <div id="desc-posmudanca"class="service-desc">A <strong>Limpeza Pós-Obra</strong> é o serviço ideal para remover poeira fina, pingos de tinta e marcas e resíduos típicos de obra.</div>
+    <div id="desc-passadoria"class="service-desc">Roupas bem passadas e prontas para usar. Ideal para quem tem rotina corrida e quer manter o guarda-roupa sempre em dia.</div>
+    <div id="desc-montagem"  class="service-desc">Profissionais especializados para montar seus móveis com segurança, cuidado e agilidade.</div>
+
+    <!-- ROOMS BLOCK (padrão, pesada, pré, pós) -->
+    <div class="rooms-block visible" id="rooms-block">
+      <p class="section-title">Como é seu lar?</p>
+      <div class="home-type-row">
+        <button class="type-btn active" onclick="selectType('casa',this)">Casa</button>
+        <button class="type-btn" onclick="selectType('apartamento',this)">Apartamento</button>
+        <button class="type-btn" onclick="selectType('studio',this)">Studio</button>
+      </div>
+      <div class="counters-row">
+        <div class="counter-group">
+          <button class="counter-btn" onclick="changeCount('quartos',-1)" id="btn-q-minus">−</button>
+          <span class="counter-val" id="val-quartos">1 quarto</span>
+          <button class="counter-btn" onclick="changeCount('quartos',1)" id="btn-q-plus">+</button>
+        </div>
+        <div class="counter-group">
+          <button class="counter-btn" onclick="changeCount('banheiros',-1)" id="btn-b-minus">−</button>
+          <span class="counter-val" id="val-banheiros">1 banheiro</span>
+          <button class="counter-btn" onclick="changeCount('banheiros',1)" id="btn-b-plus">+</button>
+        </div>
+      </div>
+      <p class="counter-hint">✅ <span>Cozinha e sala já estão inclusos. Para lavabo, adicione banheiros.</span></p>
+    </div>
+
+    <!-- HOURS BLOCK (passadoria, montagem) -->
+    <div class="hours-block" id="hours-block">
+      <p class="section-title">Quantas horas você precisa?</p>
+      <div class="hours-counter">
+        <button class="counter-btn" onclick="changeHours(-1)" id="btn-h-minus" disabled>−</button>
+        <span class="hours-val" id="val-horas">3 horas</span>
+        <button class="counter-btn" onclick="changeHours(1)" id="btn-h-plus">+</button>
+      </div>
+      <div id="piece-hint" class="piece-hint">Sugestão para 20 – 25 peças</div>
+      <p class="piece-subhint" id="piece-sub" style="display:none;">Cálculo com base em peças comuns (calças jeans, camisetas). Para peças mais delicadas, aumente o número de horas.</p>
+    </div>
+
+    <a id="agendar-btn" href="agendar.html" class="cta-btn">
+      Continuar agendamento →
+    </a>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="price-card">
+      <div class="price-card-header">
+        <span class="icon">🧹</span>
+        <span id="sidebar-title">Limpeza Padrão</span>
+      </div>
+      <div class="price-card-body">
+        <div class="price-row" style="flex-direction:column; align-items:flex-start; gap:2px;">
+          <span class="label" style="font-size:0.8rem;" id="sidebar-price-label">Valor do serviço</span>
+          <span class="value big" id="sidebar-price">R$165</span>
+        </div>
+        <div class="price-row">
+          <span class="label">Duração estimada</span>
+          <span class="value hours-display" id="sidebar-hours">3h por diária</span>
+        </div>
+        <div id="hours-warning" style="display:none; background:#fff8e1; border:1px solid #f9a825; border-radius:8px; padding:8px 10px; margin:4px 0; font-size:0.78rem; color:#5d4037; line-height:1.4;"></div>
+        <div class="divider"></div>
+        <div class="trust-items">
+          <div class="trust-item"><span class="check">✅</span> Profissionais verificados</div>
+          <div class="trust-item"><span class="check">✅</span> Garantia de satisfação</div>
+          <div class="trust-item"><span class="check">✅</span> Pagamento seguro</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let state = {
+  service:   'padrao',
+  homeType:  'casa',
+  quartos:   1,
+  banheiros: 1,
+  horas:     3,   // passadoria default; sempre múltiplo de 0.5
+};
+
+const WA_NUMBER = '5511999999999'; // substituir pelo número real
+
+// ─────────────────────────────────────────────
+//  PRICING TABLES — extraídos diretamente da API Parafuzo (window.Pricing)
+//  Chave: [bedrooms][bathrooms] → preço em R$ (arredondado)
+//  homeType: HOUSE | APARTMENT | STUDIO
+// ─────────────────────────────────────────────
+
+// Tabela de horas exata [svc][homeType][bedrooms][bathrooms]
+const HOURS = {
+  CLEANING:{HOUSE:{"1":{"1":3.5,"2":4.5,"3":5,"4":6,"5":6.5},"2":{"1":4.5,"2":5,"3":6,"4":6.5,"5":7.5},"3":{"1":5,"2":6,"3":6.5,"4":7.5,"5":8},"4":{"1":6,"2":6.5,"3":7.5,"4":8,"5":9},"5":{"1":6.5,"2":7.5,"3":8,"4":9,"5":9.5},"6":{"1":7.5,"2":8,"3":9,"4":9.5,"5":10.5},"7":{"1":8,"2":9,"3":9.5,"4":10.5,"5":11}},APARTMENT:{"1":{"1":3,"2":4,"3":4.5,"4":5.5,"5":6},"2":{"1":4,"2":4.5,"3":5.5,"4":6,"5":6.5},"3":{"1":4.5,"2":5.5,"3":6,"4":6.5,"5":7.5},"4":{"1":5.5,"2":6,"3":6.5,"4":7.5,"5":8},"5":{"1":6,"2":6.5,"3":7.5,"4":8,"5":9},"6":{"1":6.5,"2":7.5,"3":8,"4":9,"5":9.5},"7":{"1":7.5,"2":8,"3":9,"4":9.5,"5":10}},STUDIO:{"1":{"1":3,"2":4,"3":4.5,"4":5,"5":6},"2":{"1":4,"2":4.5,"3":5,"4":6,"5":6.5},"3":{"1":4.5,"2":5,"3":6,"4":6.5,"5":7},"4":{"1":5,"2":6,"3":6.5,"4":7,"5":8},"5":{"1":6,"2":6.5,"3":7,"4":8,"5":8.5},"6":{"1":6.5,"2":7,"3":8,"4":8.5,"5":9},"7":{"1":7,"2":8,"3":8.5,"4":9,"5":9.5}}},
+  HEAVY_CLEANING:{HOUSE:{"1":{"1":8.5,"2":10,"3":12,"4":13.5,"5":15},"2":{"1":10,"2":12,"3":13.5,"4":15,"5":16.5},"3":{"1":12,"2":13.5,"3":15,"4":16.5,"5":18.5},"4":{"1":13.5,"2":15,"3":16.5,"4":18.5,"5":20},"5":{"1":15,"2":16.5,"3":18.5,"4":20,"5":21.5},"6":{"1":16.5,"2":18.5,"3":20,"4":21.5,"5":23.5},"7":{"1":18.5,"2":20,"3":21.5,"4":23.5,"5":25}},APARTMENT:{"1":{"1":7.5,"2":9,"3":10.5,"4":12,"5":13.5},"2":{"1":9,"2":10.5,"3":12,"4":13.5,"5":15},"3":{"1":10.5,"2":12,"3":13.5,"4":15,"5":16.5},"4":{"1":12,"2":13.5,"3":15,"4":16.5,"5":18},"5":{"1":13.5,"2":15,"3":16.5,"4":18,"5":19.5},"6":{"1":15,"2":16.5,"3":18,"4":19.5,"5":21},"7":{"1":16.5,"2":18,"3":19.5,"4":21,"5":22.5}},STUDIO:{"1":{"1":7.5,"2":9,"3":10,"4":11.5,"5":13},"2":{"1":9,"2":10,"3":11.5,"4":13,"5":14.5},"3":{"1":10,"2":11.5,"3":13,"4":14.5,"5":16},"4":{"1":11.5,"2":13,"3":14.5,"4":16,"5":17.5},"5":{"1":13,"2":14.5,"3":16,"4":17.5,"5":19},"6":{"1":14.5,"2":16,"3":17.5,"4":19,"5":20},"7":{"1":16,"2":17.5,"3":19,"4":20,"5":21.5}}},
+  PRE_MOVING_CLEANING:{HOUSE:{"1":{"1":9.5,"2":11.5,"3":13.5,"4":15.5,"5":17.5},"2":{"1":11.5,"2":13.5,"3":15.5,"4":17.5,"5":19},"3":{"1":13.5,"2":15.5,"3":17.5,"4":19,"5":21},"4":{"1":15.5,"2":17.5,"3":19,"4":21,"5":23},"5":{"1":17.5,"2":19,"3":21,"4":23,"5":25},"6":{"1":19,"2":21,"3":23,"4":25,"5":27},"7":{"1":21,"2":23,"3":25,"4":27,"5":29}},APARTMENT:{"1":{"1":8.5,"2":10.5,"3":12,"4":14,"5":15.5},"2":{"1":10.5,"2":12,"3":14,"4":15.5,"5":17.5},"3":{"1":12,"2":14,"3":15.5,"4":17.5,"5":19},"4":{"1":14,"2":15.5,"3":17.5,"4":19,"5":21},"5":{"1":15.5,"2":17.5,"3":19,"4":21,"5":22.5},"6":{"1":17.5,"2":19,"3":21,"4":22.5,"5":24.5},"7":{"1":19,"2":21,"3":22.5,"4":24.5,"5":26}},STUDIO:{"1":{"1":8.5,"2":10,"3":11.5,"4":13.5,"5":15},"2":{"1":10,"2":11.5,"3":13.5,"4":15,"5":16.5},"3":{"1":11.5,"2":13.5,"3":15,"4":16.5,"5":18.5},"4":{"1":13.5,"2":15,"3":16.5,"4":18.5,"5":20},"5":{"1":15,"2":16.5,"3":18.5,"4":20,"5":21.5},"6":{"1":16.5,"2":18.5,"3":20,"4":21.5,"5":23.5},"7":{"1":18.5,"2":20,"3":21.5,"4":23.5,"5":25}}},
+  REMODELING_CLEANING:{HOUSE:{"1":{"1":13.5,"2":15.5,"3":18,"4":20,"5":22},"2":{"1":15.5,"2":18,"3":20,"4":22,"5":24.5},"3":{"1":18,"2":20,"3":22,"4":24.5,"5":26.5},"4":{"1":20,"2":22,"3":24.5,"4":26.5,"5":29},"5":{"1":22,"2":24.5,"3":26.5,"4":29,"5":31},"6":{"1":24.5,"2":26.5,"3":29,"4":31,"5":33},"7":{"1":26.5,"2":29,"3":31,"4":33,"5":35.5}},APARTMENT:{"1":{"1":12,"2":14,"3":16,"4":18,"5":20},"2":{"1":14,"2":16,"3":18,"4":20,"5":22},"3":{"1":16,"2":18,"3":20,"4":22,"5":24},"4":{"1":18,"2":20,"3":22,"4":24,"5":26},"5":{"1":20,"2":22,"3":24,"4":26,"5":28},"6":{"1":22,"2":24,"3":26,"4":28,"5":30},"7":{"1":24,"2":26,"3":28,"4":30,"5":32}},STUDIO:{"1":{"1":11.5,"2":13.5,"3":15.5,"4":17.5,"5":19},"2":{"1":13.5,"2":15.5,"3":17.5,"4":19,"5":21},"3":{"1":15.5,"2":17.5,"3":19,"4":21,"5":23},"4":{"1":17.5,"2":19,"3":21,"4":23,"5":25},"5":{"1":19,"2":21,"3":23,"4":25,"5":27},"6":{"1":21,"2":23,"3":25,"4":27,"5":28.5},"7":{"1":23,"2":25,"3":27,"4":28.5,"5":30.5}}}
+};
+
+// Tabela de preços exata [svc][homeType][bedrooms][bathrooms] → R$ (arredondado)
+// Soma de TODOS os slots (pode ser 2 diárias para serviços longos)
+const PRICES = {
+  CLEANING:{HOUSE:{"1":{"1":134,"2":159,"3":174,"4":193,"5":200},"2":{"1":159,"2":174,"3":193,"4":200,"5":221},"3":{"1":174,"2":193,"3":200,"4":221,"5":231},"4":{"1":193,"2":200,"3":221,"4":231,"5":242},"5":{"1":200,"2":221,"3":231,"4":242,"5":254},"6":{"1":221,"2":231,"3":242,"4":254,"5":314},"7":{"1":231,"2":242,"3":254,"4":314,"5":327}},APARTMENT:{"1":{"1":122,"2":144,"3":159,"4":183,"5":193},"2":{"1":144,"2":159,"3":183,"4":193,"5":200},"3":{"1":159,"2":183,"3":193,"4":200,"5":221},"4":{"1":183,"2":193,"3":200,"4":221,"5":231},"5":{"1":193,"2":200,"3":221,"4":231,"5":242},"6":{"1":200,"2":221,"3":231,"4":242,"5":254},"7":{"1":221,"2":231,"3":242,"4":254,"5":301}},STUDIO:{"1":{"1":122,"2":144,"3":159,"4":174,"5":193},"2":{"1":144,"2":159,"3":174,"4":193,"5":200},"3":{"1":159,"2":174,"3":193,"4":200,"5":217},"4":{"1":174,"2":193,"3":200,"4":217,"5":231},"5":{"1":193,"2":200,"3":217,"4":231,"5":235},"6":{"1":200,"2":217,"3":231,"4":235,"5":242},"7":{"1":217,"2":231,"3":235,"4":242,"5":254}}},
+  HEAVY_CLEANING:{HOUSE:{"1":{"1":263,"2":330,"3":399,"4":450,"5":500},"2":{"1":330,"2":399,"3":450,"4":500,"5":552},"3":{"1":399,"2":450,"3":500,"4":552,"5":619},"4":{"1":450,"2":500,"3":552,"4":619,"5":674},"5":{"1":500,"2":552,"3":619,"4":674,"5":723},"6":{"1":552,"2":619,"3":674,"4":723,"5":794},"7":{"1":619,"2":674,"3":723,"4":794,"5":843}},APARTMENT:{"1":{"1":245,"2":270,"3":348,"4":399,"5":450},"2":{"1":270,"2":348,"3":399,"4":450,"5":500},"3":{"1":348,"2":399,"3":450,"4":500,"5":552},"4":{"1":399,"2":450,"3":500,"4":552,"5":603},"5":{"1":450,"2":500,"3":552,"4":603,"5":655},"6":{"1":500,"2":552,"3":603,"4":655,"5":707},"7":{"1":552,"2":603,"3":655,"4":707,"5":759}},STUDIO:{"1":{"1":245,"2":270,"3":330,"4":380,"5":432},"2":{"1":270,"2":330,"3":380,"4":432,"5":485},"3":{"1":330,"2":380,"3":432,"4":485,"5":538},"4":{"1":380,"2":432,"3":485,"4":538,"5":589},"5":{"1":432,"2":485,"3":538,"4":589,"5":639},"6":{"1":485,"2":538,"3":589,"4":639,"5":674},"7":{"1":538,"2":589,"3":639,"4":674,"5":723}}},
+  PRE_MOVING_CLEANING:{HOUSE:{"1":{"1":414,"2":514,"3":604,"4":697,"5":786},"2":{"1":514,"2":604,"3":697,"4":786,"5":849},"3":{"1":604,"2":697,"3":786,"4":849,"5":940},"4":{"1":697,"2":786,"3":849,"4":940,"5":1031},"5":{"1":786,"2":849,"3":940,"4":1031,"5":1122},"6":{"1":849,"2":940,"3":1031,"4":1122,"5":1210},"7":{"1":940,"2":1031,"3":1122,"4":1210,"5":1299}},APARTMENT:{"1":{"1":387,"2":471,"3":539,"4":625,"5":697},"2":{"1":471,"2":539,"3":625,"4":697,"5":786},"3":{"1":539,"2":625,"3":697,"4":786,"5":849},"4":{"1":625,"2":697,"3":786,"4":849,"5":940},"5":{"1":697,"2":786,"3":849,"4":940,"5":1010},"6":{"1":786,"2":849,"3":940,"4":1010,"5":1100},"7":{"1":849,"2":940,"3":1010,"4":1100,"5":1164}},STUDIO:{"1":{"1":387,"2":449,"3":514,"4":604,"5":674},"2":{"1":449,"2":514,"3":604,"4":674,"5":736},"3":{"1":514,"2":604,"3":674,"4":736,"5":829},"4":{"1":604,"2":674,"3":736,"4":829,"5":899},"5":{"1":674,"2":736,"3":829,"4":899,"5":962},"6":{"1":736,"2":829,"3":899,"4":962,"5":1053},"7":{"1":829,"2":899,"3":962,"4":1053,"5":1122}}},
+  REMODELING_CLEANING:{HOUSE:{"1":{"1":598,"2":690,"3":800,"4":889,"5":974},"2":{"1":690,"2":800,"3":889,"4":974,"5":1088},"3":{"1":800,"2":889,"3":974,"4":1088,"5":1174},"4":{"1":889,"2":974,"3":1088,"4":1174,"5":1286},"5":{"1":974,"2":1088,"3":1174,"4":1286,"5":1377},"6":{"1":1088,"2":1174,"3":1286,"4":1377,"5":1470},"7":{"1":1174,"2":1286,"3":1377,"4":1470,"5":1583}},APARTMENT:{"1":{"1":533,"2":619,"3":711,"4":800,"5":889},"2":{"1":619,"2":711,"3":800,"4":889,"5":974},"3":{"1":711,"2":800,"3":889,"4":974,"5":1063},"4":{"1":800,"2":889,"3":974,"4":1063,"5":1152},"5":{"1":889,"2":974,"3":1063,"4":1152,"5":1243},"6":{"1":974,"2":1063,"3":1152,"4":1243,"5":1333},"7":{"1":1063,"2":1152,"3":1243,"4":1333,"5":1423}},STUDIO:{"1":{"1":509,"2":598,"3":690,"4":778,"5":840},"2":{"1":598,"2":690,"3":778,"4":840,"5":931},"3":{"1":690,"2":778,"3":840,"4":931,"5":1021},"4":{"1":778,"2":840,"3":931,"4":1021,"5":1111},"5":{"1":840,"2":931,"3":1021,"4":1111,"5":1197},"6":{"1":931,"2":1021,"3":1111,"4":1197,"5":1265},"7":{"1":1021,"2":1111,"3":1197,"4":1265,"5":1357}}}
+};
+
+// Passadoria (IRONING) — extraído do bundle Parafuzo, step 0.5h, mínimo 1.5h
+const IRONING_PRICES = {"1.5":88,"2":103,"2.5":108,"3":122,"3.5":134,"4":141,"4.5":159,"5":174,"5.5":182,"6":193,"6.5":200,"7":217,"7.5":221,"8":231,"8.5":235,"9":242,"9.5":248,"10":281,"10.5":298,"11":312,"11.5":325,"12":341};
+
+// Montagem de Móveis — sem tabela exata (API usa itens específicos)
+// Usando estimativa baseada na taxa por hora da passadoria × 1.3
+function calcMontagem(h) {
+  const baseRate = 146; // ~valor de 3h passadoria como referência
+  if (h <= 2) return 150;
+  return Math.round(150 + (h - 2) * 65);
+}
+
+// Helpers para lookup com clamp no máximo disponível
+function getHomeTypeKey(ht) {
+  if (ht === 'casa') return 'HOUSE';
+  if (ht === 'apartamento') return 'APARTMENT';
+  return 'STUDIO';
+}
+
+function getSvcKey(service) {
+  if (service === 'padrao')     return 'CLEANING';
+  if (service === 'pesada')     return 'HEAVY_CLEANING';
+  if (service === 'premudanca') return 'PRE_MOVING_CLEANING';
+  if (service === 'posmudanca') return 'REMODELING_CLEANING';
+  return null;
+}
+
+function lookupPrice(service, homeType, q, b) {
+  const svc = getSvcKey(service);
+  const ht  = getHomeTypeKey(homeType);
+  if (!svc) return null;
+  const bd = Math.min(q, 7).toString();
+  const bt = Math.min(b, 5).toString();
+  return (PRICES[svc][ht][bd] || {})[bt] || null;
+}
+
+function lookupHours(service, homeType, q, b) {
+  const svc = getSvcKey(service);
+  const ht  = getHomeTypeKey(homeType);
+  if (!svc) return null;
+  const bd = Math.min(q, 7).toString();
+  const bt = Math.min(b, 5).toString();
+  return (HOURS[svc][ht][bd] || {})[bt] || null;
+}
+
+function calcPadrao(q, b)     { return lookupPrice('padrao',     state.homeType, q, b); }
+function calcPesada(q, b)     { return lookupPrice('pesada',     state.homeType, q, b); }
+function calcPreMudanca(q, b) { return lookupPrice('premudanca', state.homeType, q, b); }
+function calcPosObra(q, b)    { return lookupPrice('posmudanca', state.homeType, q, b); }
+function calcPassadoria(h) {
+  const key = String(Math.min(h, 12));
+  return IRONING_PRICES[key] || IRONING_PRICES['12'];
+}
+
+// Horas estimadas (para display) — agora direto da tabela
+function estimateHours(service, q, b) {
+  const h = lookupHours(service, state.homeType, q, b);
+  if (!h) return null;
+  return fmtHours(h);
+}
+
+function fmtHours(decimalHours) {
+  const totalMins = Math.round(decimalHours * 60);
+  const h = Math.floor(totalMins / 60);
+  const m = totalMins % 60;
+  return m === 0 ? `${h}h por diária` : `${h}h${m < 10 ? '0'+m : m} por diária`;
+}
+
+// Formata horas para o contador do slider (sem "por diária")
+function fmtHorasLabel(h) {
+  const mins = Math.round(h * 60);
+  const hh = Math.floor(mins / 60), mm = mins % 60;
+  if (mm === 0) return `${hh} ${hh === 1 ? 'hora' : 'horas'}`;
+  return `${hh}h${mm < 10 ? '0'+mm : mm}`;
+}
+
+function piecesHint(h) {
+  const low  = Math.round(h * 6.5);
+  const high = Math.round(h * 7.5);
+  return `Sugestão para ${low} – ${high} peças`;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────────
+function render() {
+  const { service, homeType, quartos, banheiros, horas } = state;
+  let price, hours, title, icon;
+
+  const isRooms = ['padrao','pesada','premudanca','posmudanca'].includes(service);
+  const isHours = ['passadoria','montagem'].includes(service);
+
+  document.getElementById('rooms-block').classList.toggle('visible', isRooms);
+  document.getElementById('hours-block').classList.toggle('visible', isHours);
+
+  const pieceHint = document.getElementById('piece-hint');
+  const pieceSub  = document.getElementById('piece-sub');
+
+  if (service === 'padrao') {
+    price = calcPadrao(quartos, banheiros); hours = estimateHours('padrao',quartos,banheiros); title='Limpeza Padrão'; icon='🧹';
+  } else if (service === 'pesada') {
+    price = calcPesada(quartos, banheiros); hours = estimateHours('pesada',quartos,banheiros); title='Limpeza Pesada'; icon='🧽';
+  } else if (service === 'premudanca') {
+    price = calcPreMudanca(quartos, banheiros); hours = estimateHours('premudanca',quartos,banheiros); title='Pré-mudança'; icon='📦';
+  } else if (service === 'posmudanca') {
+    price = calcPosObra(quartos, banheiros); hours = estimateHours('posmudanca',quartos,banheiros); title='Pós-obra'; icon='🏗️';
+  } else if (service === 'passadoria') {
+    price = calcPassadoria(horas);
+    hours = fmtHorasLabel(horas) + ' por diária';
+    title = 'Passadoria';
+    icon  = '👕';
+    pieceHint.textContent = piecesHint(horas);
+    pieceSub.style.display = 'block';
+  } else if (service === 'montagem') {
+    price = calcMontagem(horas);
+    hours = fmtHorasLabel(horas) + ' por diária';
+    title = 'Montagem de Móveis';
+    icon  = '🔧';
+    pieceHint.textContent = '';
+    pieceHint.style.display = 'none';
+    pieceSub.style.display = 'none';
+  }
+
+  // sidebar
+  document.getElementById('sidebar-title').textContent = title;
+  document.getElementById('sidebar-price').textContent = price != null ? `R$${price}` : 'R$ —';
+  document.getElementById('sidebar-price-label').textContent = isRooms ? 'Valor do serviço' : 'Valor total estimado';
+  document.getElementById('sidebar-hours').textContent = hours || '';
+  document.querySelector('.price-card-header .icon').textContent = icon;
+
+  // counter labels — always update state to avoid stale disabled buttons
+  document.getElementById('val-quartos').textContent   = `${quartos} ${quartos === 1 ? 'quarto' : 'quartos'}`;
+  document.getElementById('val-banheiros').textContent = `${banheiros} ${banheiros === 1 ? 'banheiro' : 'banheiros'}`;
+  document.getElementById('btn-q-minus').disabled  = quartos <= 1;
+  document.getElementById('btn-q-plus').disabled   = quartos >= 7;
+  document.getElementById('btn-b-minus').disabled  = banheiros <= 1;
+  document.getElementById('btn-b-plus').disabled   = banheiros >= 5;
+
+  document.getElementById('val-horas').textContent = fmtHorasLabel(horas);
+  const minH = service === 'montagem' ? 2 : 1.5;  // passadoria mínimo 1.5h
+  document.getElementById('btn-h-minus').disabled = horas <= minH;
+  document.getElementById('btn-h-plus').disabled  = horas >= 12;
+
+  // Warning badge para serviços com horas no mínimo recomendado
+  const warnEl = document.getElementById('hours-warning');
+  // thresholds: se horas calculadas ficarem abaixo da sugestão Parafuzo, mostra aviso
+  const MIN_RECOMMENDED = {
+    pesada:     { suggestH: 8.5, suggestLabel: '8h30', note: 'com 1 profissional' },
+    premudanca: { suggestH: 9.5, suggestLabel: '9h30', note: 'com 2 profissionais (4h45 cada)' },
+    posmudanca: { suggestH: 10.5, suggestLabel: '10h30', note: 'com 2 profissionais (5h15 cada)' },
+  };
+  let warnMsg = '';
+  if (isRooms && MIN_RECOMMENDED[service]) {
+    const rec = MIN_RECOMMENDED[service];
+    const calcH = lookupHours(service, state.homeType, quartos, banheiros);
+    if (calcH !== null && calcH < rec.suggestH) {
+      warnMsg = `⚠️ Parafuzo recomenda pelo menos <strong>${rec.suggestLabel} ${rec.note}</strong> para melhor resultado neste serviço.`;
+    }
+  }
+  if (warnMsg) {
+    warnEl.innerHTML = warnMsg;
+    warnEl.style.display = 'block';
+  } else {
+    warnEl.style.display = 'none';
+  }
+
+  // build agendar link with params
+  const params = new URLSearchParams({ servico: service });
+  if (isRooms) {
+    params.set('tipo', homeType);
+    params.set('quartos', quartos);
+    params.set('banheiros', banheiros);
+  } else {
+    params.set('horas', horas);
+  }
+  document.getElementById('agendar-btn').href = `agendar.html?${params.toString()}`;
+}
+
+// ─────────────────────────────────────────────
+//  HANDLERS
+// ─────────────────────────────────────────────
+function selectService(service, btn) {
+  state.service = service;
+  document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('.service-desc').forEach(d => d.classList.remove('visible'));
+  document.getElementById('desc-' + service).classList.add('visible');
+
+  // reset piece hint visibility
+  const ph = document.getElementById('piece-hint');
+  ph.style.display = '';
+
+  // reset min hours when switching to slider services
+  if (service === 'montagem'   && state.horas < 2)   state.horas = 2;
+  if (service === 'passadoria' && state.horas < 1.5) state.horas = 1.5;
+
+  render();
+}
+
+function selectType(type, btn) {
+  state.homeType = type;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function changeCount(field, delta) {
+  const min = 1, max = field === 'quartos' ? 7 : 5;
+  state[field] = Math.min(max, Math.max(min, state[field] + delta));
+  render();
+}
+
+function changeHours(delta) {
+  const isPassadoria = state.service === 'passadoria';
+  const step  = isPassadoria ? 0.5 : 1;
+  const minH  = state.service === 'montagem' ? 2 : (isPassadoria ? 1.5 : 1.5);
+  const maxH  = 12;
+  state.horas = Math.min(maxH, Math.max(minH, state.horas + delta * step));
+  // Round to nearest step to avoid floating-point drift
+  state.horas = Math.round(state.horas * 2) / 2;
+  render();
+}
+
+// ─────────────────────────────────────────────
+//  URL PARAM → pré-selecionar serviço
+// ─────────────────────────────────────────────
+(function init() {
+  const params  = new URLSearchParams(location.search);
+  const service = params.get('servico');
+  const map = {
+    'padrao': 'padrao', 'pesada': 'pesada',
+    'premudanca': 'premudanca', 'posmudanca': 'posmudanca',
+    'passadoria': 'passadoria', 'montagem': 'montagem',
+  };
+  if (service && map[service]) {
+    state.service = map[service];
+    const btn = document.querySelector(`[data-service="${map[service]}"]`);
+    if (btn) {
+      document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.service-desc').forEach(d => d.classList.remove('visible'));
+      document.getElementById('desc-' + map[service]).classList.add('visible');
+    }
+    if (service === 'montagem')   state.horas = 2;
+    if (service === 'passadoria') state.horas = Math.max(1.5, state.horas);
+  }
+  render();
+})();
+</script>
+
+</body>
+</html>

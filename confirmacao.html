@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agendamento Confirmado | Limpei</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A2B4A;
+  --teal: #0D7377;
+  --teal2: #14A085;
+  --amber: #F4A261;
+  --bg: #F0F4F8;
+  --border: #DDE3EC;
+  --muted: #64748B;
+  --white: #fff;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--navy);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--navy);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+}
+.logo { display:flex; align-items:center; gap:4px;  font-size: 20px; font-weight: 800; color: #fff; text-decoration: none; }
+.logo span { color: #14A49A; }
+
+/* MAIN */
+.main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* SUCCESS BANNER */
+.success-banner {
+  background: linear-gradient(145deg, #07192B, #0A3A4A);
+  border-radius: 24px;
+  padding: 48px 40px;
+  text-align: center;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.success-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(13,195,180,.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+.success-glow {
+  position: absolute;
+  top: -60px; left: 50%; transform: translateX(-50%);
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,195,180,.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+.check-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(13,195,180,.15);
+  border: 2px solid rgba(13,195,180,.4);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  position: relative; z-index: 1;
+}
+.check-circle svg {
+  opacity: 0;
+  animation: checkDraw .5s .3s ease forwards;
+}
+@keyframes checkDraw {
+  from { opacity: 0; transform: scale(.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.success-code {
+  font-size: 11px; font-weight: 700; color: rgba(13,195,180,.7);
+  letter-spacing: .1em; margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.success-title {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 800; color: #fff;
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+  position: relative; z-index: 1;
+}
+.success-sub {
+  font-size: 15px; color: rgba(255,255,255,.55);
+  line-height: 1.6; max-width: 400px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+
+/* ORDER CARD */
+.order-card {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 20px;
+  animation: slideUp .4s .2s ease both;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.order-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.order-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .07em; }
+.order-code { font-size: 13px; font-weight: 700; color: var(--teal); font-variant-numeric: tabular-nums; }
+.order-body { padding: 4px 0; }
+.order-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 14px 24px;
+  border-bottom: 1px solid #F5F7FA;
+}
+.order-row:last-child { border-bottom: none; }
+.or-key { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.or-ic { font-size: 16px; }
+.or-val { font-size: 14px; font-weight: 600; color: var(--navy); text-align: right; max-width: 260px; }
+.order-total {
+  background: linear-gradient(135deg, var(--teal), var(--teal2));
+  padding: 16px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.ot-label { font-size: 13px; color: rgba(255,255,255,.75); }
+.ot-val { font-size: 24px; font-weight: 800; color: #fff; }
+
+/* WHAT NEXT */
+.next-card {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 20px;
+  animation: slideUp .4s .35s ease both;
+}
+.next-title { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 20px; }
+.next-steps { display: flex; flex-direction: column; gap: 0; }
+.next-step { display: flex; gap: 16px; position: relative; }
+.next-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px; top: 36px; bottom: -4px;
+  width: 2px; background: var(--border);
+}
+.ns-ic {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(13,115,119,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0; position: relative; z-index: 1;
+}
+.ns-body { padding-bottom: 20px; }
+.ns-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.ns-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* EMAIL NOTICE */
+.email-notice {
+  background: rgba(13,115,119,.06);
+  border: 1.5px solid rgba(13,115,119,.2);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px;
+  animation: slideUp .4s .45s ease both;
+}
+.email-ic { font-size: 24px; flex-shrink: 0; }
+.email-text { font-size: 14px; color: var(--navy); line-height: 1.5; }
+.email-text strong { color: var(--teal); }
+
+/* ACTIONS */
+.actions {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  animation: slideUp .4s .55s ease both;
+}
+.btn-primary {
+  background: var(--teal); color: #fff;
+  padding: 14px 28px; border-radius: 12px;
+  font-size: 15px; font-weight: 700; text-decoration: none;
+  transition: background .2s;
+}
+.btn-primary:hover { background: var(--teal2); }
+.btn-ghost {
+  border: 2px solid var(--border); color: var(--navy);
+  padding: 12px 24px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: border-color .2s;
+}
+.btn-ghost:hover { border-color: var(--navy); }
+
+/* confetti canvas */
+#confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+
+@media (max-width: 600px) {
+  .main { padding: 24px 16px 60px; }
+  .success-banner { padding: 32px 24px; }
+  .order-row { flex-direction: column; gap: 4px; }
+  .or-val { text-align: left; }
+  .actions { flex-direction: column; }
+  .btn-primary, .btn-ghost { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="topbar">
+  <a href="index.html" class="logo"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_confirmacao_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_confirmacao_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+</div>
+
+<div class="main">
+
+  <!-- SUCCESS BANNER -->
+  <div class="success-banner">
+    <div class="success-glow"></div>
+    <div class="check-circle">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <path d="M8 18L15 25L28 11" stroke="#0DC3B4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="success-code" id="order-code-top">PEDIDO #LJ000000</div>
+    <div class="success-title">Agendamento confirmado!</div>
+    <div class="success-sub">Sua limpeza está agendada. Um profissional verificado será designado em breve.</div>
+  </div>
+
+  <!-- ORDER DETAILS -->
+  <div class="order-card">
+    <div class="order-header">
+      <span class="order-label">DETALHES DO PEDIDO</span>
+      <span class="order-code" id="order-code-side">—</span>
+    </div>
+    <div class="order-body">
+      <div class="order-row">
+        <span class="or-key"><span class="or-ic">🧹</span> Serviço</span>
+        <span class="or-val" id="det-svc">—</span>
+      </div>
+      <div class="order-row">
+        <span class="or-key"><span class="or-ic">📅</span> Data</span>
+        <span class="or-val" id="det-date">—</span>
+      </div>
+      <div class="order-row">
+        <span class="or-key"><span class="or-ic">🕐</span> Horário</span>
+        <span class="or-val" id="det-time">—</span>
+      </div>
+      <div class="order-row">
+        <span class="or-key"><span class="or-ic">📍</span> Endereço</span>
+        <span class="or-val" id="det-addr">—</span>
+      </div>
+      <div class="order-row">
+        <span class="or-key"><span class="or-ic">💳</span> Pagamento</span>
+        <span class="or-val" id="det-pay">—</span>
+      </div>
+    </div>
+    <div class="order-total">
+      <span class="ot-label">Total do serviço</span>
+      <span class="ot-val" id="det-total">R$ —</span>
+    </div>
+  </div>
+
+  <!-- EMAIL NOTICE -->
+  <div class="email-notice">
+    <div class="email-ic">📩</div>
+    <div class="email-text">
+      Enviamos uma confirmação para <strong id="det-email">seu e-mail</strong>.
+      Você também receberá um aviso quando o profissional for designado.
+    </div>
+  </div>
+
+  <!-- WHAT HAPPENS NEXT -->
+  <div class="next-card">
+    <div class="next-title">O que acontece agora</div>
+    <div class="next-steps">
+      <div class="next-step">
+        <div class="ns-ic">✉️</div>
+        <div class="ns-body">
+          <div class="ns-title">Confirmação por e-mail</div>
+          <div class="ns-sub">Você já recebeu todos os detalhes do agendamento no seu e-mail.</div>
+        </div>
+      </div>
+      <div class="next-step">
+        <div class="ns-ic">👤</div>
+        <div class="ns-body">
+          <div class="ns-title">Profissional designado em até 2h</div>
+          <div class="ns-sub">Vamos confirmar a disponibilidade de um profissional na sua região e avisar por e-mail.</div>
+        </div>
+      </div>
+      <div class="next-step">
+        <div class="ns-ic">🔔</div>
+        <div class="ns-body">
+          <div class="ns-title">Lembrete no dia anterior</div>
+          <div class="ns-sub">Você receberá um e-mail de lembrete com os dados do profissional e horário confirmado.</div>
+        </div>
+      </div>
+      <div class="next-step">
+        <div class="ns-ic">✨</div>
+        <div class="ns-body">
+          <div class="ns-title">Serviço realizado</div>
+          <div class="ns-sub">Após o serviço, você receberá um link para avaliar o profissional.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <a href="index.html" class="btn-primary">Voltar ao início</a>
+    <a href="agendar.html" class="btn-ghost">Agendar outro serviço</a>
+  </div>
+
+</div>
+
+<script>
+// load order from localStorage
+var order = {};
+try {
+  order = JSON.parse(localStorage.getItem('lj_order') || '{}');
+} catch(e) {}
+
+var payLabels = { cartao: 'Cartão de crédito/débito', pix: 'Pix', dinheiro: 'Dinheiro na hora' };
+
+if (order.code) {
+  document.getElementById('order-code-top').textContent = 'PEDIDO #' + order.code;
+  document.getElementById('order-code-side').textContent = '#' + order.code;
+}
+if (order.svc) {
+  var svcDetail = order.svc;
+  if (order.hours) svcDetail += ' — ' + order.hours + 'h';
+  if (order.pros) svcDetail += ' · ' + order.pros + ' profissional' + (order.pros > 1 ? 'is' : '');
+  document.getElementById('det-svc').textContent = svcDetail;
+}
+if (order.date) document.getElementById('det-date').textContent = order.date;
+if (order.time) document.getElementById('det-time').textContent = order.time;
+if (order.addr) document.getElementById('det-addr').textContent = order.addr;
+if (order.pay) document.getElementById('det-pay').textContent = payLabels[order.pay] || order.pay;
+if (order.total) document.getElementById('det-total').textContent = 'R$ ' + order.total;
+if (order.email) document.getElementById('det-email').textContent = order.email;
+
+// ── CONFETTI ──
+(function() {
+  var canvas = document.getElementById('confetti');
+  var ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  var colors = ['#0D7377','#14A085','#F4A261','#1A2B4A','#0DC3B4','#FFF','#E07D3C'];
+  var pieces = [];
+  for (var i = 0; i < 120; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * .5,
+      r: 4 + Math.random() * 6,
+      d: 2 + Math.random() * 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      tilt: Math.random() * 10 - 5,
+      tiltAngle: 0,
+      tiltSpeed: .05 + Math.random() * .05,
+      shape: Math.random() > .5 ? 'rect' : 'circle'
+    });
+  }
+
+  var frame = 0;
+  var maxFrames = 180;
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (frame > maxFrames) {
+      canvas.style.display = 'none';
+      return;
+    }
+    pieces.forEach(function(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.tiltAngle);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, 1 - frame / maxFrames);
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.r, -p.r * .4, p.r * 2, p.r * .8);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r * .6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      p.y += p.d + (frame < 30 ? frame / 10 : 3);
+      p.tiltAngle += p.tiltSpeed;
+      p.x += Math.sin(p.tiltAngle) * 1.5;
+    });
+    frame++;
+    requestAnimationFrame(draw);
+  }
+
+  setTimeout(draw, 400);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviços de Limpeza em São Paulo | Limpei</title>
+<meta name="description" content="Limpeza padrão, limpeza pesada, pré e pós mudança, passadoria e montagem de móveis. Profissionais verificados em São Paulo e Grande SP.">
+<meta property="og:title" content="Serviços de Limpeza – Limpei">
+<meta property="og:description" content="Profissionais verificados para limpeza residencial e comercial em São Paulo. Orçamento grátis em minutos.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://limpei.com.br/servicos.html">
+<meta property="og:image" content="https://limpei.com.br/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Serviços de Limpeza – Limpei">
+<meta name="twitter:description" content="Profissionais verificados em São Paulo. Orçamento grátis.">
+<link rel="canonical" href="https://limpei.com.br/servicos.html">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#1A2B4A; --teal:#0D7377; --teal2:#14A085; --amber:#F4A261; --bg:#F8FAFB; --border:#E2E8F0; --muted:#6B7A95; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--navy)}
+
+  /* NAV */
+  nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;z-index:100}
+  .logo{ display:flex; align-items:center; gap:8px; font-size:22px;font-weight:800;color:#fff;text-decoration:none}.logo span{color:var(--teal2)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:#fff}
+  .nav-links a.active{color:var(--teal2)}
+  .nav-cta{background:var(--teal);color:#fff!important;padding:9px 20px;border-radius:8px;font-weight:700!important}
+  .nav-cta:hover{background:var(--teal2)!important}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%);padding:72px 5% 56px;text-align:center;color:#fff}
+  .hero h1{font-size:clamp(28px,4vw,44px);font-weight:800;margin-bottom:16px}
+  .hero p{font-size:17px;opacity:.85;max-width:560px;margin:0 auto}
+
+  /* TABS */
+  .tabs-wrap{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:68px;z-index:90}
+  .tabs{display:flex;overflow-x:auto;padding:0 5%;gap:0;max-width:1200px;margin:0 auto}
+  .tab{padding:16px 20px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+  .tab:hover{color:var(--navy)}
+  .tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+
+  /* CONTENT */
+  .container{max-width:1100px;margin:0 auto;padding:0 5%}
+  .section{padding:56px 0;display:none}
+  .section.active{display:block}
+
+  /* SERVICE CARD */
+  .svc-hero{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:48px}
+  .svc-badge{display:inline-block;padding:6px 14px;background:rgba(13,115,119,.1);color:var(--teal);border-radius:20px;font-size:13px;font-weight:700;margin-bottom:16px}
+  .svc-title{font-size:36px;font-weight:800;margin-bottom:16px;line-height:1.2}
+  .svc-desc{font-size:16px;line-height:1.7;color:var(--muted);margin-bottom:24px}
+  .svc-price-box{background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:16px;padding:24px;color:#fff}
+  .svc-price-label{font-size:13px;opacity:.8;margin-bottom:4px}
+  .svc-price-val{font-size:32px;font-weight:800}
+  .svc-price-sub{font-size:12px;opacity:.75;margin-top:4px}
+  .svc-visual{border-radius:20px;height:280px;overflow:hidden}
+  .svc-visual img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* INCLUDES */
+  .includes-title{font-size:20px;font-weight:800;margin-bottom:20px}
+  .includes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:40px}
+  .include-item{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:4px;font-size:14px;font-weight:500}
+  .include-item .check{width:22px;height:22px;border-radius:50%;background:rgba(13,115,119,.12);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+
+  /* NOT INCLUDES */
+  .not-includes{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:40px}
+  .not-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+  .not-item{font-size:14px;color:var(--muted);padding:4px 0;display:flex;align-items:center;gap:8px}
+  .not-item::before{content:'✗';color:#E53E3E;font-weight:700}
+
+  /* FAQ INLINE */
+  .faq-block{margin-bottom:8px}
+  .faq-q{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;transition:border-color .2s}
+  .faq-q:hover{border-color:var(--teal)}
+  .faq-q.open{border-color:var(--teal);border-bottom-left-radius:0;border-bottom-right-radius:0}
+  .faq-a{background:#fff;border:1px solid var(--teal);border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;padding:14px 18px;font-size:14px;line-height:1.6;color:var(--muted);display:none}
+  .faq-a.open{display:block}
+
+  /* CTA */
+  .cta-bar{background:var(--navy);border-radius:16px;padding:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:40px;flex-wrap:wrap}
+  .cta-bar h3{font-size:22px;font-weight:800;color:#fff}
+  .cta-bar p{font-size:14px;color:rgba(255,255,255,.7);margin-top:4px}
+  .btn-cta{background:var(--teal2);color:#fff;padding:14px 28px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:background .2s}
+  .btn-cta:hover{background:var(--teal)}
+
+  /* FOOTER */
+  footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:28px 5%;font-size:13px;margin-top:72px}
+  footer a{color:var(--teal2);text-decoration:none}
+
+  @media(max-width:768px){
+    .svc-hero{grid-template-columns:1fr}
+    .svc-visual{display:none}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_servicos_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_servicos_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <div class="nav-links">
+    <a href="index.html">Início</a>
+    <a href="servicos.html" class="active">Serviços</a>
+    <a href="como-funciona.html">Como funciona</a>
+    <a href="sobre.html">Sobre nós</a>
+    <a href="contato.html">Contato</a>
+    <a href="agendar.html" class="nav-cta">Agendar agora</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Nossos serviços de limpeza</h1>
+  <p>Soluções completas para cada momento da sua vida, com profissionais verificados e resultado garantido.</p>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs">
+    <div class="tab active" onclick="showSvc('padrao',this)">Limpeza Padrão</div>
+    <div class="tab" onclick="showSvc('pesada',this)">Limpeza Pesada</div>
+    <div class="tab" onclick="showSvc('premudanca',this)">Pré-mudança</div>
+    <div class="tab" onclick="showSvc('posobra',this)">Pós-obra</div>
+    <div class="tab" onclick="showSvc('passadoria',this)">Passadoria</div>
+    <div class="tab" onclick="showSvc('montagem',this)">Montagem de Móveis</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PADRÃO -->
+  <div class="section active" id="svc-padrao">
+    <div class="svc-hero">
+      <div>
+        <div class="svc-badge">Mais popular</div>
+        <div class="svc-title">Limpeza Padrão</div>
+        <div class="svc-desc">O serviço ideal para manter a rotina do seu lar em ordem. Limpeza completa dos ambientes com produtos de qualidade e profissional dedicado.</div>
+        <div class="svc-price-box">
+          <div class="svc-price-label">A partir de</div>
+          <div class="svc-price-val">R$ 161</div>
+          <div class="svc-price-sub">Casa 1 quarto · 1 banheiro · ~3h30 de serviço</div>
+        </div>
+      </div>
+      <div class="svc-visual"><img src="img/svc-padrao-hero.jpg" alt="Limpeza Padrão"></div>
+    </div>
+    <div class="includes-title">O que está incluído</div>
+    <div class="includes-grid">
+      <div class="include-item"><div class="check">✓</div>Varrer e passar pano em todos os cômodos</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza completa do banheiro</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza da cozinha (pia, fogão, bancadas)</div>
+      <div class="include-item"><div class="check">✓</div>Tirar o pó de móveis e superfícies</div>
+      <div class="include-item"><div class="check">✓</div>Limpar espelhos e vidros internos</div>
+      <div class="include-item"><div class="check">✓</div>Trocar lixo de todos os cômodos</div>
+      <div class="include-item"><div class="check">✓</div>Organização básica dos ambientes</div>
+      <div class="include-item"><div class="check">✓</div>Sala e cozinha sempre incluídas</div>
+    </div>
+    <div class="not-includes">
+      <div class="not-title">Não incluso neste serviço</div>
+      <div class="not-item">Limpeza de dentro de armários</div>
+      <div class="not-item">Lavar louça acumulada</div>
+      <div class="not-item">Passar roupa</div>
+      <div class="not-item">Limpeza de forno e geladeira por dentro</div>
+    </div>
+    <div class="includes-title">Perguntas frequentes</div>
+    <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)">Preciso fornecer os materiais de limpeza? <span>+</span></div><div class="faq-a">Não! O profissional traz todos os materiais necessários inclusos no preço do serviço.</div></div>
+    <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)">Preciso estar em casa durante o serviço? <span>+</span></div><div class="faq-a">Não é obrigatório. Muitos clientes deixam a chave na portaria. Combinamos os detalhes pelo WhatsApp antes.</div></div>
+    <div class="faq-block"><div class="faq-q" onclick="toggleFaq(this)">Quanto tempo dura o serviço? <span>+</span></div><div class="faq-a">Depende do tamanho do imóvel. Um apartamento de 2 quartos leva em média 4h30. O tempo exato aparece no orçamento.</div></div>
+    <div class="cta-bar">
+      <div><h3>Pronto para ter sua casa limpa?</h3><p>Orçamento instantâneo, sem compromisso.</p></div>
+      <a href="agendar.html?servico=padrao" class="btn-cta">Agendar Limpeza Padrão →</a>
+    </div>
+  </div>
+
+  <!-- PESADA -->
+  <div class="section" id="svc-pesada">
+    <div class="svc-hero">
+      <div>
+        <div class="svc-badge">Limpeza profunda</div>
+        <div class="svc-title">Limpeza Pesada</div>
+        <div class="svc-desc">Remove sujeira acumulada que a limpeza do dia a dia não alcança. Ideal para imóveis que não são limpos há algum tempo ou para uma limpeza anual completa.</div>
+        <div class="svc-price-box">
+          <div class="svc-price-label">A partir de</div>
+          <div class="svc-price-val">R$ 316</div>
+          <div class="svc-price-sub">Casa 1 quarto · 1 banheiro · ~5h de serviço</div>
+        </div>
+      </div>
+      <div class="svc-visual"><img src="img/svc-pesada-hero.jpg" alt="Limpeza Pesada"></div>
+    </div>
+    <div class="includes-title">O que está incluído</div>
+    <div class="includes-grid">
+      <div class="include-item"><div class="check">✓</div>Tudo da Limpeza Padrão</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza interna de armários</div>
+      <div class="include-item"><div class="check">✓</div>Forno e geladeira por dentro</div>
+      <div class="include-item"><div class="check">✓</div>Remoção de gordura acumulada</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de rodapés e cantos</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de box e rejunte do banheiro</div>
+      <div class="include-item"><div class="check">✓</div>Organização completa dos cômodos</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de janelas e vidros externos</div>
+    </div>
+    <div class="cta-bar">
+      <div><h3>Dê uma virada no seu lar</h3><p>Resultado visível desde a primeira diária.</p></div>
+      <a href="agendar.html?servico=pesada" class="btn-cta">Agendar Limpeza Pesada →</a>
+    </div>
+  </div>
+
+  <!-- PRÉ-MUDANÇA -->
+  <div class="section" id="svc-premudanca">
+    <div class="svc-hero">
+      <div>
+        <div class="svc-badge">Inclui produtos</div>
+        <div class="svc-title">Limpeza Pré-mudança</div>
+        <div class="svc-desc">Prepare seu novo lar antes de se mudar. Limpeza profunda de um imóvel vazio para que tudo esteja impecável quando seus móveis chegarem.</div>
+        <div class="svc-price-box">
+          <div class="svc-price-label">A partir de</div>
+          <div class="svc-price-val">R$ 456</div>
+          <div class="svc-price-sub">Casa 1 quarto · 1 banheiro · Diária única</div>
+        </div>
+      </div>
+      <div class="svc-visual"><img src="img/svc-premudanca-hero.jpg" alt="Pré-mudança"></div>
+    </div>
+    <div class="includes-title">O que está incluído</div>
+    <div class="includes-grid">
+      <div class="include-item"><div class="check">✓</div>Limpeza completa de todos os cômodos</div>
+      <div class="include-item"><div class="check">✓</div>Lavagem de banheiros e azulejos</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza interna de armários embutidos</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de janelas, trilhos e basculantes</div>
+      <div class="include-item"><div class="check">✓</div>Remoção de poeira e resíduos de obra</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de piso, rodapés e cantos</div>
+      <div class="include-item"><div class="check">✓</div>Forno e geladeira (se houver)</div>
+      <div class="include-item"><div class="check">✓</div>Produtos inclusos no serviço</div>
+    </div>
+    <div class="cta-bar">
+      <div><h3>Comece bem no novo lar</h3><p>Entre em casa com tudo limpo e cheiroso.</p></div>
+      <a href="agendar.html?servico=mudanca" class="btn-cta">Agendar Pré-Mudança →</a>
+    </div>
+  </div>
+
+  <!-- PÓS-OBRA -->
+  <div class="section" id="svc-posobra">
+    <div class="svc-hero">
+      <div>
+        <div class="svc-badge">Inclui produtos</div>
+        <div class="svc-title">Limpeza Pós-obra</div>
+        <div class="svc-desc">Remove poeira fina de cimento, pingos de tinta e resíduos de obra. Profissionais treinados para esse tipo específico de sujeira.</div>
+        <div class="svc-price-box">
+          <div class="svc-price-label">A partir de</div>
+          <div class="svc-price-val">R$ 659</div>
+          <div class="svc-price-sub">Casa 1 quarto · 1 banheiro · Diária única</div>
+        </div>
+      </div>
+      <div class="svc-visual"><img src="img/svc-posobra-hero.jpg" alt="Pós-obra"></div>
+    </div>
+    <div class="includes-title">O que está incluído</div>
+    <div class="includes-grid">
+      <div class="include-item"><div class="check">✓</div>Remoção de poeira de cimento e reboco</div>
+      <div class="include-item"><div class="check">✓</div>Remoção de pingo de tinta de pisos e vidros</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de rejunte e cerâmica</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de janelas e caixilhos</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de banheiros e louças</div>
+      <div class="include-item"><div class="check">✓</div>Limpeza de pisos e rodapés</div>
+      <div class="include-item"><div class="check">✓</div>Produtos profissionais inclusos</div>
+      <div class="include-item"><div class="check">✓</div>Remoção de etiquetas e adesivos</div>
+    </div>
+    <div class="cta-bar">
+      <div><h3>Obra pronta, casa reluzente</h3><p>Da construção para a vida. Sem rastro de obra.</p></div>
+      <a href="agendar.html?servico=mudanca" class="btn-cta">Agendar Pós-Mudança →</a>
+    </div>
+  </div>
+
+  <!-- PASSADORIA -->
+  <div class="section" id="svc-passadoria">
+    <div class="svc-hero">
+      <div>
+        <div class="svc-badge">Por horas</div>
+        <div class="svc-title">Passadoria de Roupas</div>
+        <div class="svc-desc">Roupas bem passadas e prontas para usar. Ideal para quem tem rotina corrida e quer manter o guarda-roupa sempre em dia.</div>
+        <div class="svc-price-box">
+          <div class="svc-price-label">A partir de</div>
+          <div class="svc-price-val">R$ 90</div>
+          <div class="svc-price-sub">1 hora · ~6 a 8 peças simples</div>
+        </div>
+      </div>
+      <div class="svc-visual"><img src="img/svc-passadoria-hero.jpg" alt="Passadoria"></div>
+    </div>
+    <div class="includes-title">O que está incluído</div>
+    <div class="includes-grid">
+      <div class="include-item"><div class="check">✓</div>Passadoria de camisas e blusas</div>
+      <div class="include-item"><div class="check">✓</div>Calças jeans e sociais</div>
+      <div class="include-item"><div class="check">✓</div>Vestidos e saias</div>
+      <div class="include-item"><div class="check">✓</div>Roupas de cama e toalhas</div>
+      <div class="include-item"><div class="check">✓</div>Dobrar e organizar no guarda-roupa</div>
+      <div class="include-item"><div class="check">✓</div>Vaporizador e ferro profissional</div>
+    </div>
+    <div style="background:#FFF8E1;border:1px solid #F4A261;border-radius:12px;padding:16px 20px;margin-bottom:32px;font-size:14px;color:#7B4F00">
+      <strong>💡 Dica:</strong> Para 45–50 peças simples (camisetas, calças jeans), escolha 8 horas. Para peças mais delicadas, considere mais tempo.
+    </div>
+    <div class="cta-bar">
+      <div><h3>Guarda-roupa sempre em ordem</h3><p>Escolha quantas horas precisa.</p></div>
+      <a href="agendar.html?servico=passadoria" class="btn-cta">Agendar Passadoria →</a>
+    </div>
+  </div>
+
+  <!-- MONTAGEM -->
+  <div class="section" id="svc-montagem">
+    <div class="svc-hero">
+      <div>
+        <div class="svc-badge">Por itens</div>
+        <div class="svc-title">Montagem de Móveis</div>
+        <div class="svc-desc">Profissional experiente para montar qualquer tipo de móvel — IKEA, Tok&Stok, MadeiraMadeira e outros. Sem estresse, sem peças sobrando.</div>
+        <div class="svc-price-box">
+          <div class="svc-price-label">A partir de</div>
+          <div class="svc-price-val">R$ 90</div>
+          <div class="svc-price-sub">Por hora · valor final por itens</div>
+        </div>
+      </div>
+      <div class="svc-visual"><img src="img/svc-montagem.jpg" alt="Montagem de Móveis"></div>
+    </div>
+    <div class="includes-title">O que está incluído</div>
+    <div class="includes-grid">
+      <div class="include-item"><div class="check">✓</div>Montagem de estantes e armários</div>
+      <div class="include-item"><div class="check">✓</div>Camas e cabeceiras</div>
+      <div class="include-item"><div class="check">✓</div>Mesas e cadeiras</div>
+      <div class="include-item"><div class="check">✓</div>Escritório (mesa, cadeira, estante)</div>
+      <div class="include-item"><div class="check">✓</div>Ferramentas fornecidas pelo profissional</div>
+      <div class="include-item"><div class="check">✓</div>Descarte de embalagens incluído</div>
+    </div>
+    <div class="cta-bar">
+      <div><h3>Móvel novo, montado na hora</h3><p>Sem dor de cabeça com manual e parafusos.</p></div>
+      <a href="agendar.html" class="btn-cta">Agendar Serviço →</a>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>© 2026 Limpei · <a href="politica-privacidade.html">Privacidade</a> · <a href="termos.html">Termos</a> · <a href="contato.html">Contato</a></p>
+</footer>
+
+<script>
+function showSvc(id, el) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('svc-'+id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  const ans = el.nextElementSibling;
+  ans.classList.toggle('open');
+  el.querySelector('span').textContent = el.classList.contains('open') ? '−' : '+';
+}
+// URL param
+const p = new URLSearchParams(location.search).get('servico');
+const map = {padrao:'padrao',pesada:'pesada',premudanca:'premudanca',posmudanca:'posobra',passadoria:'passadoria',montagem:'montagem'};
+if (p && map[p]) {
+  const tab = [...document.querySelectorAll('.tab')].find(t=>t.getAttribute('onclick').includes(map[p]));
+  if (tab) showSvc(map[p], tab);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trabalhe com a Limpei | Para Profissionais de Limpeza</title>
+<meta name="description" content="Seja um profissional parceiro da Limpei. Receba serviços pelo app, ganhe mais de R$ 2.800 por mês e tenha flexibilidade total de horários.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1A2B4A;
+    --teal: #0D7377;
+    --teal2: #14A085;
+    --amber: #F4A261;
+    --amber-dark: #E07D3C;
+    --bg: #F8FAFB;
+    --border: #E2E8F0;
+    --muted: #64748B;
+    --white: #fff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--navy); -webkit-font-smoothing: antialiased; }
+  a { text-decoration: none; color: inherit; }
+  img { max-width: 100%; }
+
+  /* ---- NAV ---- */
+  nav {
+    background: var(--navy);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display:flex; align-items:center; gap:4px;  font-size: 22px; font-weight: 800; color: #fff; }
+  .logo span { color: var(--teal2); }
+  .nav-cta { background: var(--amber); color: var(--navy); padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 700; transition: background .2s; }
+  .nav-cta:hover { background: var(--amber-dark); }
+  .nav-back { font-size: 14px; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: 6px; transition: color .2s; }
+  .nav-back:hover { color: #fff; }
+
+  /* ---- HERO ---- */
+  .hero {
+    background: linear-gradient(145deg, #07192B 0%, #0A2F3A 55%, #0A5260 100%);
+    padding: 88px 5% 72px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(13,195,180,.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute; top: -100px; right: -60px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(13,195,180,.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 400px;
+    gap: 64px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(13,195,180,.12); border: 1px solid rgba(13,195,180,.25);
+    border-radius: 100px; padding: 6px 16px; margin-bottom: 24px; width: fit-content;
+  }
+  .hero-pill-dot { width: 7px; height: 7px; border-radius: 50%; background: #0DC3B4; box-shadow: 0 0 6px #0DC3B4; }
+  .hero-pill span { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.85); }
+
+  .hero h1 { font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -.03em; margin-bottom: 20px; }
+  .hero h1 .hl { color: var(--amber); }
+  .hero p { font-size: 17px; color: rgba(255,255,255,.65); line-height: 1.65; max-width: 480px; margin-bottom: 40px; }
+
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+  .btn-hero-primary {
+    background: var(--amber); color: var(--navy);
+    padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 800;
+    box-shadow: 0 4px 20px rgba(244,162,97,.4);
+    transition: background .2s, box-shadow .2s;
+  }
+  .btn-hero-primary:hover { background: var(--amber-dark); box-shadow: 0 6px 28px rgba(244,162,97,.5); }
+  .btn-hero-ghost {
+    border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.85);
+    padding: 13px 24px; border-radius: 12px; font-size: 15px; font-weight: 600;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-hero-ghost:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+
+  .hero-stats { display: flex; gap: 32px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.08); }
+  .hstat-val { font-size: 1.75rem; font-weight: 800; color: #fff; line-height: 1; }
+  .hstat-lbl { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 4px; }
+
+  /* Hero right — earnings card */
+  .hero-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 24px 72px rgba(0,0,0,.35);
+  }
+  .hcard-top {
+    background: linear-gradient(135deg, var(--teal), var(--teal2));
+    padding: 20px 22px;
+  }
+  .hcard-label { font-size: 11px; color: rgba(255,255,255,.65); font-weight: 500; margin-bottom: 4px; }
+  .hcard-val { font-size: 28px; font-weight: 800; color: #fff; }
+  .hcard-week { font-size: 12px; color: rgba(255,255,255,.7); margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+  .hcard-badge { background: rgba(255,255,255,.2); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .hcard-body { padding: 16px 18px; }
+  .hcard-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F1F5F9; }
+  .hcard-row:last-child { border-bottom: none; }
+  .hcard-name { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .hcard-addr { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .hcard-amount { font-size: 14px; font-weight: 800; color: var(--teal); }
+  .hcard-status { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+  .hs-done { background: #DCFCE7; color: #15803D; }
+  .hs-next { background: #FFF7ED; color: #C2410C; }
+
+  /* ---- SECTION BASE ---- */
+  .section { padding: 80px 5%; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-title { font-size: 2rem; font-weight: 800; color: var(--navy); margin-bottom: 12px; letter-spacing: -.02em; }
+  .section-sub { font-size: 16px; color: var(--muted); line-height: 1.65; max-width: 520px; }
+  .text-center { text-align: center; }
+  .text-center .section-sub { margin: 0 auto; }
+
+  /* ---- BENEFITS ---- */
+  .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px; }
+  .benefit-card {
+    background: #fff; border-radius: 18px; padding: 28px 24px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(0,0,0,.04);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .benefit-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.08); }
+  .benefit-ic { font-size: 2rem; margin-bottom: 16px; }
+  .benefit-card h4 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .benefit-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+  .benefit-highlight { background: linear-gradient(135deg, #0A2F3A, #0D7377); color: #fff; border-color: transparent; }
+  .benefit-highlight h4, .benefit-highlight p { color: rgba(255,255,255,.9); }
+  .benefit-highlight .benefit-ic-val { font-size: 2rem; font-weight: 800; color: var(--amber); }
+
+  /* ---- HOW IT WORKS ---- */
+  .how { background: var(--navy); }
+  .how .section-title { color: #fff; }
+  .how .section-sub { color: rgba(255,255,255,.55); }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; position: relative; }
+  .steps::before {
+    content: '';
+    position: absolute; top: 28px; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(13,195,180,.4), transparent);
+    pointer-events: none;
+  }
+  .step { text-align: center; position: relative; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(13,195,180,.12); border: 2px solid rgba(13,195,180,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; color: #0DC3B4;
+    margin: 0 auto 20px; position: relative; z-index: 1;
+  }
+  .step h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .step p { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+  /* ---- EARNINGS TABLE ---- */
+  .earnings { background: #fff; }
+  .earn-table { width: 100%; border-collapse: collapse; margin-top: 48px; }
+  .earn-table th { text-align: left; font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .05em; padding: 12px 16px; border-bottom: 2px solid var(--border); }
+  .earn-table td { padding: 16px; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--navy); }
+  .earn-table tr:last-child td { border-bottom: none; }
+  .earn-table td:last-child { font-weight: 700; color: var(--teal); }
+  .earn-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .et-popular { background: #FFF7ED; color: #C2410C; }
+  .et-top { background: #DCFCE7; color: #15803D; }
+
+  /* ---- TESTIMONIALS ---- */
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px; }
+  .testi-card { background: #fff; border-radius: 18px; padding: 28px 24px; border: 1px solid var(--border); }
+  .testi-stars { color: #F59E0B; font-size: 14px; margin-bottom: 14px; }
+  .testi-text { font-size: 15px; color: var(--navy); line-height: 1.65; margin-bottom: 20px; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-av { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--teal2)); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .testi-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+  .testi-city { font-size: 12px; color: var(--muted); }
+
+  /* ---- FINAL CTA ---- */
+  .final-cta {
+    background: linear-gradient(145deg, var(--navy) 0%, #0A3A4A 100%);
+    text-align: center; padding: 96px 5%;
+    position: relative; overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 28px 28px; pointer-events: none;
+  }
+  .final-cta h2 { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; color: #fff; margin-bottom: 16px; letter-spacing: -.02em; }
+  .final-cta h2 .hl { color: var(--amber); }
+  .final-cta p { font-size: 17px; color: rgba(255,255,255,.6); max-width: 480px; margin: 0 auto 40px; line-height: 1.65; }
+  .final-cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-cta-main { background: var(--amber); color: var(--navy); padding: 16px 36px; border-radius: 14px; font-size: 17px; font-weight: 800; box-shadow: 0 6px 28px rgba(244,162,97,.4); transition: all .2s; }
+  .btn-cta-main:hover { background: var(--amber-dark); transform: translateY(-1px); }
+  .btn-cta-ghost { border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.85); padding: 15px 24px; border-radius: 14px; font-size: 15px; font-weight: 600; transition: all .2s; }
+  .btn-cta-ghost:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+
+  /* ---- FOOTER MINI ---- */
+  .footer-mini {
+    background: #07111E; padding: 24px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-mini a { font-size: 13px; color: rgba(255,255,255,.35); transition: color .2s; }
+  .footer-mini a:hover { color: rgba(255,255,255,.7); }
+  .footer-mini span { font-size: 13px; color: rgba(255,255,255,.25); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-card { display: none; }
+    .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .steps::before { display: none; }
+    .testi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .benefits-grid { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo"><svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="38" height="38" rx="10" fill="#1A2B4A"/><path d="M19 9C19 9 11 15 11 21.5C11 25.6 14.7 29 19 29C23.3 29 27 25.6 27 21.5C27 15 19 9 19 9Z" fill="url(#dg_profissionais_html)"/><ellipse cx="16" cy="17" rx="2" ry="3" fill="white" fill-opacity="0.25" transform="rotate(-20 16 17)"/><defs><linearGradient id="dg_profissionais_html" x1="19" y1="9" x2="19" y2="29" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#14A49A"/><stop offset="100%" stop-color="#0D7377"/></linearGradient></defs></svg>Limp<span>ei</span></a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="/" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Voltar ao site
+    </a>
+    <a href="cadastro.html" class="nav-cta">Quero me cadastrar</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-pill">
+        <div class="hero-pill-dot"></div>
+        <span>Vagas abertas em São Paulo e região</span>
+      </div>
+      <h1>Ganhe mais fazendo o<br>que você já faz — só <span class="hl">melhor pago</span></h1>
+      <p>A Limpei conecta você a clientes selecionados, te paga no mesmo dia via Pix e cuida de toda a burocracia. Você foca no serviço.</p>
+      <div class="hero-actions">
+        <a href="cadastro.html" class="btn-hero-primary">Cadastrar agora — é grátis</a>
+        <a href="#como-funciona" class="btn-hero-ghost">Como funciona</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hstat-val">R$ 2.800</div>
+          <div class="hstat-lbl">Média mensal das profissionais</div>
+        </div>
+        <div>
+          <div class="hstat-val">500+</div>
+          <div class="hstat-lbl">Profissionais ativas</div>
+        </div>
+        <div>
+          <div class="hstat-val">48h</div>
+          <div class="hstat-lbl">Para o primeiro serviço</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings card -->
+    <div class="hero-card">
+      <div class="hcard-top">
+        <div class="hcard-label">Ganhos da semana</div>
+        <div class="hcard-val">R$ 1.240</div>
+        <div class="hcard-week">
+          6 serviços realizados
+          <span class="hcard-badge">+18% vs anterior</span>
+        </div>
+      </div>
+      <div class="hcard-body">
+        <div class="hcard-row">
+          <div>
+            <div class="hcard-name">Limpeza Padrão</div>
+            <div class="hcard-addr">📍 Pinheiros · 3 cômodos</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="hcard-amount">R$ 165</div>
+            <div class="hcard-status hs-done">✓ Pago</div>
+          </div>
+        </div>
+        <div class="hcard-row">
+          <div>
+            <div class="hcard-name">Limpeza Pesada</div>
+            <div class="hcard-addr">📍 Itaim Bibi · 5 cômodos</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="hcard-amount">R$ 290</div>
+            <div class="hcard-status hs-done">✓ Pago</div>
+          </div>
+        </div>
+        <div class="hcard-row">
+          <div>
+            <div class="hcard-name">Limpeza Padrão</div>
+            <div class="hcard-addr">📍 Vila Madalena · amanhã 9h</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="hcard-amount">R$ 145</div>
+            <div class="hcard-status hs-next">Amanhã</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section" style="background:#fff;">
+  <div class="container">
+    <div class="text-center">
+      <span style="font-size:13px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;">Por que a Limpei?</span>
+      <h2 class="section-title" style="margin-top:8px;">Tudo o que você precisa<br>para trabalhar bem</h2>
+      <p class="section-sub">Sem mensalidade, sem taxa de inscrição. Você começa a ganhar em até 48 horas.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card benefit-highlight">
+        <div class="benefit-ic-val">R$ 2.800</div>
+        <h4 style="color:#fff;margin-top:8px;">Média mensal das profissionais</h4>
+        <p>As melhores avaliadas chegam a R$ 4.500 por mês trabalhando em horários que escolhem.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-ic">⚡</div>
+        <h4>Pix no mesmo dia</h4>
+        <p>Assim que o cliente confirma o serviço concluído, o pagamento cai na sua conta — sem esperar dias.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-ic">📅</div>
+        <h4>Horários flexíveis</h4>
+        <p>Você define quantos dias por semana quer trabalhar e os horários. Aceita só o que faz sentido para você.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-ic">🛡️</div>
+        <h4>Seguro de acidentes</h4>
+        <p>Cobertura de acidentes pessoais durante o trabalho, sem nenhum custo adicional para você.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-ic">📱</div>
+        <h4>App simples e fácil</h4>
+        <p>Receba o pedido, veja o endereço, aceite com um toque. Tudo pelo celular, sem complicação.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-ic">⭐</div>
+        <h4>Clientes selecionados</h4>
+        <p>Todos os clientes são avaliados. Você trabalha com quem valoriza seu serviço e trata bem os profissionais.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="como-funciona">
+  <div class="container">
+    <div class="text-center">
+      <span style="font-size:13px;font-weight:700;color:rgba(13,195,180,.8);letter-spacing:.08em;text-transform:uppercase;">Processo</span>
+      <h2 class="section-title" style="margin-top:8px;">Do cadastro ao primeiro pagamento</h2>
+      <p class="section-sub">Em 4 passos simples você já está recebendo serviços no seu bairro.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Preenche o formulário</h4>
+        <p>5 minutos. Seus dados básicos, disponibilidade e região de atendimento.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Entrevista pelo WhatsApp</h4>
+        <p>Nosso time entra em contato em até 24h para uma conversa rápida de boas-vindas.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Treinamento online</h4>
+        <p>Vídeos curtos sobre padrão de qualidade Limpei. Leva menos de 1 hora.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Receba seu primeiro serviço</h4>
+        <p>Em até 48h você já pode estar atendendo e recebendo. Pagamento via Pix no mesmo dia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARNINGS TABLE -->
+<section class="section earnings">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+      <div>
+        <span style="font-size:13px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;">Quanto você pode ganhar</span>
+        <h2 class="section-title" style="margin-top:8px;">Preços transparentes,<br>sem surpresas</h2>
+        <p class="section-sub">Veja quanto recebe por tipo de serviço. Os valores são pagos integralmente — sem desconto misterioso.</p>
+        <a href="cadastro.html" class="btn-hero-primary" style="display:inline-block;margin-top:32px;font-size:15px;">Começar agora</a>
+      </div>
+      <div>
+        <table class="earn-table">
+          <thead>
+            <tr>
+              <th>Serviço</th>
+              <th>Duração média</th>
+              <th>Você recebe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="font-weight:600;">Limpeza Padrão</div>
+                <span class="earn-tag et-popular">Mais pedido</span>
+              </td>
+              <td style="color:var(--muted);">2–4h</td>
+              <td>R$ 120–165</td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;">Limpeza Pesada</div>
+              </td>
+              <td style="color:var(--muted);">4–6h</td>
+              <td>R$ 220–290</td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;">Pré / Pós-Mudança</div>
+                <span class="earn-tag et-top">Maior valor</span>
+              </td>
+              <td style="color:var(--muted);">5–8h</td>
+              <td>R$ 300–480</td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;">Passadoria</div>
+              </td>
+              <td style="color:var(--muted);">1–3h</td>
+              <td>R$ 70–120</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px;color:var(--muted);margin-top:12px;">* Valores variam conforme tamanho do imóvel e localização.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background:var(--bg);">
+  <div class="container">
+    <div class="text-center">
+      <span style="font-size:13px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;">Depoimentos</span>
+      <h2 class="section-title" style="margin-top:8px;">Profissionais que já trabalham com a gente</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Comecei há 8 meses e já tenho clientes fixos toda semana. O app é fácil e o pagamento sempre cai no mesmo dia. Nunca mais trabalhei sem receber na hora."</p>
+        <div class="testi-author">
+          <div class="testi-av">M</div>
+          <div>
+            <div class="testi-name">Maria Santos</div>
+            <div class="testi-city">Pinheiros, SP · 8 meses na Limpei</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Consigo trabalhar nos meus horários e ganhar mais do que quando tinha emprego fixo. A liberdade de aceitar só o que quero fez toda diferença pra minha família."</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:linear-gradient(135deg,#E07D3C,#F4A261);">R</div>
+          <div>
+            <div class="testi-name">Rosana Alves</div>
+            <div class="testi-city">Moema, SP · 1 ano e 4 meses</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Os clientes são ótimos, nada parecido com outras plataformas. E quando tive um problema no serviço o suporte resolveu na hora pelo WhatsApp."</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);">C</div>
+          <div>
+            <div class="testi-name">Cleide Ferreira</div>
+            <div class="testi-city">Vila Madalena, SP · 11 meses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div style="position:relative;z-index:1;">
+    <span style="font-size:13px;font-weight:700;color:rgba(13,195,180,.8);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:16px;">Comece hoje</span>
+    <h2>Pronta para <span class="hl">ganhar mais?</span></h2>
+    <p>Cadastro gratuito, sem mensalidade. Em até 48h você já pode estar atendendo seu primeiro cliente.</p>
+    <div class="final-cta-actions">
+      <a href="cadastro.html" class="btn-cta-main">Cadastrar agora — é grátis</a>
+      <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="btn-cta-ghost">Tirar dúvidas pelo WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER MINI -->
+<div class="footer-mini">
+  <a href="/">← Voltar ao site principal</a>
+  <span>© 2025 Limpei</span>
+  <div style="display:flex;gap:20px;">
+    <a href="termos.html">Termos</a>
+    <a href="politica-privacidade.html">Privacidade</a>
+  </div>
+</div>
+
+</body>
+</html>

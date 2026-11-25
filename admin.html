@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limpei – Painel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1A2B4A;--teal:#0D7377;--teal2:#14A085;--amber:#F4A261;--amber-d:#E07D3C;
+  --bg:#F0F2F5;--white:#fff;--text:#1A2B4A;--muted:#6B7A95;--border:#E2E8F0;
+  --danger:#E53E3E;--success:#38A169;--warn:#D69E2E;--info:#3182CE;
+  --sidebar-w:240px;--topbar-h:60px;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text)}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+input,select,textarea,button{font-family:inherit}
+
+/* ═══ LOGIN ═══ */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 100%)}
+.login-box{background:var(--white);border-radius:20px;padding:48px 44px;width:400px;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.login-brand{display:flex;align-items:center;gap:4px;margin-bottom:28px}
+.login-brand .logotipo{font-size:26px;font-weight:800;color:var(--teal)}
+.login-brand .logotipo span{color:var(--navy)}
+.login-brand .chip{font-size:11px;font-weight:700;background:#EEF2FF;color:#4338CA;border-radius:20px;padding:3px 10px}
+.login-box h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.login-box p{font-size:14px;color:var(--muted);margin-bottom:28px}
+.lbl{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.inp{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:15px;outline:none;transition:border .2s;color:var(--text)}
+.inp:focus{border-color:var(--teal)}
+.mg{margin-bottom:16px}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--teal),var(--teal2));color:white;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;transition:opacity .2s}
+.login-btn:hover{opacity:.9}
+.login-err{color:var(--danger);font-size:13px;margin-top:12px;display:none;text-align:center}
+.login-hint{margin-top:20px;text-align:center;font-size:12px;color:var(--muted);background:#F8FAFC;border-radius:8px;padding:10px}
+
+/* ═══ APP SHELL ═══ */
+#app{display:none;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100;overflow:hidden}
+.sidebar-logo{padding:0 20px;height:var(--topbar-h);display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo .brand{font-size:20px;font-weight:800;color:white}
+.sidebar-logo .brand span{color:var(--teal2)}
+.sidebar-logo .env-tag{margin-left:auto;font-size:9px;font-weight:700;background:rgba(244,162,97,.2);color:var(--amber);border-radius:4px;padding:2px 7px;letter-spacing:.06em}
+.sidebar-nav{flex:1;padding:12px 0;overflow-y:auto}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+.nav-section{padding:14px 20px 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.2px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:4px;padding:9px 20px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;font-size:13.5px;font-weight:500;border-left:3px solid transparent;user-select:none}
+.nav-item:hover{background:rgba(255,255,255,.07);color:white}
+.nav-item.active{background:rgba(13,115,119,.35);color:white;border-left-color:var(--teal2)}
+.nav-item .ni{width:18px;text-align:center;font-size:15px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--amber);color:var(--navy);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:800}
+.nav-badge.red{background:var(--danger);color:white}
+.sidebar-user{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:4px}
+.sidebar-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;flex-shrink:0}
+.sidebar-user-info strong{font-size:12px;color:white;display:block}
+.sidebar-user-info span{font-size:11px;color:rgba(255,255,255,.45)}
+.sidebar-logout{margin-left:auto;color:rgba(255,255,255,.4);cursor:pointer;font-size:14px;transition:color .2s}
+.sidebar-logout:hover{color:white}
+
+/* ═══ MAIN ═══ */
+.main{margin-left:var(--sidebar-w);min-height:100vh}
+.topbar{background:white;padding:0 28px;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-title{font-size:17px;font-weight:700}
+.topbar-breadcrumb{font-size:12px;color:var(--muted)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-btn{width:36px;height:36px;border-radius:var(--r);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);font-size:16px;position:relative;transition:background .15s}
+.topbar-btn:hover{background:var(--border)}
+.notif-dot{position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid white}
+.topbar-time{font-size:12px;color:var(--muted);font-weight:600}
+.content{padding:24px 28px 40px}
+
+/* ═══ PAGES ═══ */
+.page{display:none}
+.page.active{display:block}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.page-header h2{font-size:20px;font-weight:800}
+.page-header p{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* ═══ KPI GRID ═══ */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:white;border-radius:var(--r);padding:18px 20px;border:1px solid var(--border);position:relative;overflow:hidden;cursor:default}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal)}
+.kpi.a1 .kpi-accent{background:var(--teal)}
+.kpi.a2 .kpi-accent{background:var(--success)}
+.kpi.a3 .kpi-accent{background:var(--amber)}
+.kpi.a4 .kpi-accent{background:var(--info)}
+.kpi.a5 .kpi-accent{background:var(--danger)}
+.kpi-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.kpi-value{font-size:26px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:6px}
+.kpi-sub{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.delta{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px}
+.delta.up{background:#E6F4EA;color:var(--success)}
+.delta.dn{background:#FEEBEB;color:var(--danger)}
+.kpi-icon{position:absolute;bottom:14px;right:16px;font-size:28px;opacity:.1}
+.kpi-mini-chart{margin-top:10px;height:28px;display:flex;align-items:flex-end;gap:2px}
+.kpi-mini-bar{flex:1;border-radius:2px 2px 0 0;min-height:3px;background:var(--teal);opacity:.4}
+.kpi.a2 .kpi-mini-bar{background:var(--success)}
+.kpi.a3 .kpi-mini-bar{background:var(--amber)}
+.kpi.a4 .kpi-mini-bar{background:var(--info)}
+.kpi-mini-bar.cur{opacity:1}
+
+/* ═══ CHARTS ═══ */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
+.chart-card{background:white;border-radius:var(--r);border:1px solid var(--border);padding:20px}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.chart-title{font-size:14px;font-weight:700}
+.chart-tabs{display:flex;gap:4px}
+.chart-tab{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .15s}
+.chart-tab.on{background:var(--teal);color:white}
+.bar-chart-wrap{position:relative}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:140px;padding-bottom:20px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+.bar-col .bar{width:100%;border-radius:4px 4px 0 0;min-height:4px;transition:height .4s cubic-bezier(.4,0,.2,1);position:relative;cursor:pointer}
+.bar-col .bar::after{content:attr(data-val);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:var(--navy);white-space:nowrap;opacity:0;transition:opacity .2s}
+.bar-col .bar:hover::after{opacity:1}
+.bar-col .bar:hover{opacity:.85}
+.bar-col .blabel{position:absolute;bottom:-18px;font-size:9px;font-weight:600;color:var(--muted);white-space:nowrap}
+.bar-axis{position:absolute;left:0;right:0;bottom:20px;height:1px;background:var(--border)}
+.chart-legend-row{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+.cleg{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted)}
+.cleg-dot{width:8px;height:8px;border-radius:50%}
+
+/* SVG Donut */
+.donut-container{display:flex;flex-direction:column;align-items:center}
+.donut-center{text-align:center;position:relative}
+.donut-total{font-size:20px;font-weight:800;fill:var(--navy)}
+.donut-sub{font-size:9px;fill:var(--muted);font-weight:600}
+.donut-legend{margin-top:14px;width:100%;display:flex;flex-direction:column;gap:7px}
+.dl-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.dl-label{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.dl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dl-val{font-weight:700;color:var(--navy)}
+.dl-pct{font-size:11px;color:var(--muted)}
+
+/* ═══ TABLES ═══ */
+.tc{background:white;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
+.tc-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
+.tc-title{font-size:14px;font-weight:700;white-space:nowrap}
+.tc-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;background:#FAFBFC;border-bottom:1px solid var(--border);white-space:nowrap}
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--navy)}
+td{padding:11px 14px;font-size:13.5px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFBFC}
+.td-name{font-weight:700}
+.td-muted{font-size:12px;color:var(--muted)}
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-state .es-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:14px}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+.pg-btns{display:flex;gap:4px}
+.pg-btn{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;transition:all .15s}
+.pg-btn:hover{border-color:var(--teal);color:var(--teal)}
+.pg-btn.on{background:var(--teal);color:white;border-color:var(--teal)}
+.pg-btn:disabled{opacity:.4;cursor:default}
+
+/* ═══ BADGES ═══ */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.bs{background:#E6F4EA;color:var(--success)}
+.bw{background:#FFF8E1;color:var(--warn)}
+.bd{background:#FEEBEB;color:var(--danger)}
+.bi{background:#E3F2FD;color:var(--info)}
+.bm{background:#F1F3F5;color:var(--muted)}
+.ba{background:#FFF3E0;color:var(--amber-d)}
+
+/* ═══ BUTTONS ═══ */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--teal);color:white}
+.btn-primary:hover{background:var(--navy)}
+.btn-outline{background:white;color:var(--navy);border:1.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-danger{background:var(--danger);color:white}
+.btn-danger:hover{opacity:.9}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-icon{width:30px;height:30px;padding:0;border-radius:7px;justify-content:center;font-size:14px}
+
+/* ═══ FILTERS ═══ */
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.si{flex:1;min-width:180px;padding:8px 12px 8px 32px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7A95' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center;color:var(--text)}
+.si:focus{border-color:var(--teal)}
+.fs{padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;background:white;cursor:pointer;color:var(--text)}
+.fs:focus{border-color:var(--teal)}
+
+/* ═══ MODALS ═══ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:white;border-radius:16px;padding:32px;width:580px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.modal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.modal-h h3{font-size:18px;font-weight:800}
+.mclose{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:background .15s}
+.mclose:hover{background:var(--bg)}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.fg label{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em}
+.fg input,.fg select,.fg textarea{padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;outline:none;transition:border .2s;color:var(--text)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--teal)}
+.fg textarea{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-actions{display:flex;gap:4px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+
+/* ═══ CARDS GENÉRICOS ═══ */
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.card{background:white;border-radius:var(--r);border:1px solid var(--border);padding:20px}
+.card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+.card-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:800;flex-shrink:0}
+.card-avatar.amber{background:linear-gradient(135deg,var(--amber),var(--amber-d))}
+.card-info strong{font-size:14px;font-weight:700;display:block}
+.card-info span{font-size:12px;color:var(--muted)}
+.card-stats{display:flex;gap:16px;padding-top:14px;border-top:1px solid var(--border)}
+.cs{text-align:center}
+.cs-val{font-size:16px;font-weight:800;color:var(--teal);display:block}
+.cs-lbl{font-size:10px;color:var(--muted);font-weight:600}
+.card-actions{display:flex;gap:6px;margin-top:14px}
+.stars{color:#F4A261;font-size:13px}
+
+/* ═══ FINANCEIRO ═══ */
+.fin-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+.fin-box{background:white;border-radius:var(--r);border:1px solid var(--border);padding:20px}
+.fin-box h4{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.fin-big{font-size:28px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--teal2));transition:width .6s}
+.fin-meta{font-size:11px;color:var(--muted);margin-top:5px}
+
+/* ═══ HEATMAP ═══ */
+.heatmap-wrap{background:white;border-radius:var(--r);border:1px solid var(--border);padding:20px;margin-bottom:16px}
+.heatmap-grid{display:grid;grid-template-columns:60px repeat(7,1fr);gap:4px;margin-top:12px}
+.hm-cell{height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;cursor:default}
+.hm-label{background:transparent!important;color:var(--muted);justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:600}
+.hm-head{background:transparent!important;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;justify-content:center}
+.hm-0{background:#F0FDF4;color:#86EFAC}
+.hm-1{background:#DCFCE7;color:#4ADE80}
+.hm-2{background:#BBF7D0;color:#16A34A}
+.hm-3{background:#86EFAC;color:#15803D}
+.hm-4{background:#4ADE80;color:#166534}
+.hm-5{background:#22C55E;color:white}
+
+/* ═══ AVALIACOES ═══ */
+.rating-overview{display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;padding:20px;background:white;border-radius:var(--r);border:1px solid var(--border);margin-bottom:16px}
+.rating-big{text-align:center}
+.rb-num{font-size:52px;font-weight:800;color:var(--navy);line-height:1}
+.rb-stars{font-size:22px;margin:4px 0}
+.rb-count{font-size:12px;color:var(--muted)}
+.rating-bars{display:flex;flex-direction:column;gap:7px}
+.rbar-row{display:flex;align-items:center;gap:4px;font-size:12px}
+.rbar-label{width:20px;text-align:right;color:var(--muted);font-weight:600;flex-shrink:0}
+.rbar-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--amber),var(--amber-d))}
+.rbar-num{width:30px;color:var(--muted);font-weight:600}
+.review-card{background:white;border-radius:var(--r);border:1px solid var(--border);padding:18px;margin-bottom:12px}
+.rv-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rv-name{font-weight:700;font-size:14px}
+.rv-date{font-size:11px;color:var(--muted)}
+.rv-service{font-size:11px;color:var(--muted);margin-bottom:6px}
+.rv-text{font-size:13.5px;color:#374151;line-height:1.6}
+.rv-reply{margin-top:10px;padding:10px 14px;background:#F0FDF4;border-radius:8px;font-size:12.5px;color:#166534;border-left:3px solid var(--success)}
+.rv-reply strong{display:block;font-size:11px;margin-bottom:3px}
+
+/* ═══ CONFIGURAÇÕES ═══ */
+.cs-block{background:white;border-radius:var(--r);border:1px solid var(--border);padding:22px;margin-bottom:14px}
+.cs-block h3{font-size:14px;font-weight:700;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.tr-info strong{font-size:13.5px;font-weight:600;display:block}
+.tr-info span{font-size:12px;color:var(--muted)}
+.tog{width:44px;height:24px;background:var(--border);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--teal)}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.tog.on::after{left:23px}
+
+/* ═══ TOAST ═══ */
+#toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast-item{background:var(--navy);color:white;padding:12px 20px;border-radius:var(--r);font-size:13.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateX(120%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:4px}
+.toast-item.show{transform:translateX(0)}
+.toast-item.success{border-left:4px solid var(--success)}
+.toast-item.error{border-left:4px solid var(--danger)}
+.toast-item.info{border-left:4px solid var(--info)}
+
+/* ═══ MISC ═══ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.mb12{margin-bottom:12px}
+.mb16{margin-bottom:16px}
+.mb20{margin-bottom:20px}
+.section-divider{height:1px;background:var(--border);margin:20px 0}
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-time{width:46px;font-size:11.5px;font-weight:700;color:var(--muted);flex-shrink:0;padding-top:1px}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px}
+.tl-dot.orange{background:var(--amber)}
+.tl-dot.red{background:var(--danger)}
+.tl-dot.green{background:var(--success)}
+.tl-content strong{font-size:12.5px;font-weight:700;display:block}
+.tl-content span{font-size:11.5px;color:var(--muted)}
+
+@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.card-grid{grid-template-columns:repeat(2,1fr)}.fin-row{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LOGIN
+════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-brand">
+      <div class="logotipo">Limp<span>ei</span></div>
+      <div class="chip">ADMIN</div>
+    </div>
+    <h2>Entrar no painel</h2>
+    <p>Acesso restrito à equipe Limpei</p>
+    <div class="mg">
+      <label class="lbl">E-mail</label>
+      <input class="inp" type="email" id="le" placeholder="admin@limpei.com.br" value="admin@limpei.com.br">
+    </div>
+    <div class="mg">
+      <label class="lbl">Senha</label>
+      <input class="inp" type="password" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Entrar no painel →</button>
+    <div class="login-err" id="lerr">Senha incorreta.</div>
+    <div class="login-hint">🔑 Demo: <strong>admin@limpei.com.br</strong> / <strong>admin123</strong></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     APP
+════════════════════════════════════════════ -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="brand">Limp<span>ei</span></div>
+      <div class="env-tag">PROD</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active" data-page="dashboard" onclick="goTo(this)">
+        <span class="ni">📊</span> Dashboard
+      </div>
+      <div class="nav-item" data-page="agendamentos" onclick="goTo(this)">
+        <span class="ni">📅</span> Agendamentos
+        <span class="nav-badge" id="nb-pend">5</span>
+      </div>
+      <div class="nav-section">Cadastros</div>
+      <div class="nav-item" data-page="clientes" onclick="goTo(this)">
+        <span class="ni">👥</span> Clientes
+      </div>
+      <div class="nav-item" data-page="profissionais" onclick="goTo(this)">
+        <span class="ni">🧹</span> Profissionais
+      </div>
+      <div class="nav-section">Gestão</div>
+      <div class="nav-item" data-page="financeiro" onclick="goTo(this)">
+        <span class="ni">💰</span> Financeiro
+      </div>
+      <div class="nav-item" data-page="avaliacoes" onclick="goTo(this)">
+        <span class="ni">⭐</span> Avaliações
+        <span class="nav-badge red" id="nb-aval">2</span>
+      </div>
+      <div class="nav-section">Sistema</div>
+      <div class="nav-item" data-page="relatorios" onclick="goTo(this)">
+        <span class="ni">📈</span> Relatórios
+      </div>
+      <div class="nav-item" data-page="configuracoes" onclick="goTo(this)">
+        <span class="ni">⚙️</span> Configurações
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">MA</div>
+      <div class="sidebar-user-info">
+        <strong>Maria Admin</strong>
+        <span>Gerente Geral</span>
+      </div>
+      <span class="sidebar-logout" onclick="doLogout()" title="Sair">⏻</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="clock"></div>
+        <div class="topbar-btn" title="Busca global" onclick="toast('Busca global em breve','info')">🔍</div>
+        <div class="topbar-btn notif" title="Notificações" onclick="toast('3 notificações pendentes','info')">
+          🔔<div class="notif-dot"></div>
+        </div>
+        <div class="topbar-btn" title="Site público" onclick="window.open('index.html')">🌐</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ════════════════════ DASHBOARD ════════════════════ -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div><h2>Visão Geral</h2><p id="dash-date"></p></div>
+          <div style="display:flex;gap:8px">
+            <select class="fs" id="dash-period" onchange="renderDashboard()">
+              <option value="7">Últimos 7 dias</option>
+              <option value="30" selected>Este mês</option>
+              <option value="90">Trimestre</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="toast('Exportando relatório…','info')">📄 Exportar</button>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-grid" id="kpi-grid"></div>
+
+        <!-- Gráficos -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title">Faturamento</div>
+              <div class="chart-tabs">
+                <button class="chart-tab on" onclick="switchChartTab(this,'fat')">R$</button>
+                <button class="chart-tab" onclick="switchChartTab(this,'qtd')">Qtd</button>
+              </div>
+            </div>
+            <div class="bar-chart-wrap">
+              <div class="bar-chart" id="main-bar-chart"></div>
+              <div class="bar-axis"></div>
+            </div>
+            <div class="chart-legend-row">
+              <div class="cleg"><div class="cleg-dot" style="background:var(--teal)"></div>Faturamento</div>
+              <div class="cleg"><div class="cleg-dot" style="background:var(--amber)"></div>Meta</div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Mix de serviços</div></div>
+            <div class="donut-container">
+              <svg id="donut-svg" viewBox="0 0 140 140" width="140" height="140"></svg>
+              <div class="donut-legend" id="donut-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela + Atividade -->
+        <div class="two-col">
+          <div class="tc">
+            <div class="tc-head">
+              <div class="tc-title">Próximos agendamentos</div>
+              <button class="btn btn-outline btn-sm" onclick="goToPage('agendamentos')">Ver todos →</button>
+            </div>
+            <table>
+              <thead><tr><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Prof.</th><th>Status</th></tr></thead>
+              <tbody id="dash-agenda-tbody"></tbody>
+            </table>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Atividade recente</div></div>
+            <div class="timeline" id="activity-timeline"></div>
+          </div>
+        </div>
+
+        <!-- Heatmap demanda -->
+        <div class="heatmap-wrap mb20">
+          <div class="chart-header"><div class="chart-title">Demanda por horário × dia da semana</div><div style="font-size:11px;color:var(--muted)">Agendamentos históricos</div></div>
+          <div class="heatmap-grid" id="heatmap-grid"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:var(--muted)">
+            <span>Baixo</span>
+            <div style="width:16px;height:10px;border-radius:3px;background:#DCFCE7"></div>
+            <div style="width:16px;height:10px;border-radius:3px;background:#86EFAC"></div>
+            <div style="width:16px;height:10px;border-radius:3px;background:#4ADE80"></div>
+            <div style="width:16px;height:10px;border-radius:3px;background:#22C55E"></div>
+            <span>Alto</span>
+          </div>
+        </div>
+
+        <!-- Profissionais disponíveis -->
+        <div class="tc">
+          <div class="tc-head"><div class="tc-title">Profissionais — status hoje</div></div>
+          <table>
+            <thead><tr><th>Profissional</th><th>Especialidade</th><th>Agendamentos hoje</th><th>Próx. disponível</th><th>Status</th><th></th></tr></thead>
+            <tbody id="prof-status-tbody"></tbody>
+          </table>
+        </div>
+      </div><!-- /dashboard -->
+
+      <!-- ════════════════════ AGENDAMENTOS ════════════════════ -->
+      <div class="page" id="page-agendamentos">
+        <div class="page-header">
+          <div><h2>Agendamentos</h2><p id="agenda-count-label">Carregando…</p></div>
+          <button class="btn btn-primary" onclick="openModal('modal-novo-ag')">＋ Novo agendamento</button>
+        </div>
+        <div class="filter-bar mb16">
+          <input class="si" type="text" placeholder="Buscar cliente, endereço…" oninput="filterAgendamentos(this.value)">
+          <select class="fs" id="ag-filter-status" onchange="filterAgendamentos()">
+            <option value="">Todos os status</option>
+            <option value="Confirmado">Confirmado</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+          <select class="fs" id="ag-filter-tipo" onchange="filterAgendamentos()">
+            <option value="">Todos os tipos</option>
+            <option value="Padrão">Padrão</option>
+            <option value="Pesada">Pesada</option>
+            <option value="Passadoria">Passadoria</option>
+            <option value="Pré-mudança">Pré-mudança</option>
+            <option value="Pós-obra">Pós-obra</option>
+          </select>
+        </div>
+        <div class="tc">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable">Data / Hora</th>
+                <th>Cliente</th>
+                <th>Endereço</th>
+                <th>Serviço</th>
+                <th>Profissional</th>
+                <th>Valor</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="agenda-tbody"></tbody>
+          </table>
+          <div class="pagination">
+            <span id="agenda-pag-info">Mostrando 1–10 de 47</span>
+            <div class="pg-btns" id="agenda-pg-btns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ CLIENTES ════════════════════ -->
+      <div class="page" id="page-clientes">
+        <div class="page-header">
+          <div><h2>Clientes</h2><p id="cli-count-label"></p></div>
+          <button class="btn btn-primary" onclick="openModal('modal-novo-cli')">＋ Novo cliente</button>
+        </div>
+        <div class="filter-bar mb16">
+          <input class="si" type="text" placeholder="Buscar por nome, e-mail, telefone…" oninput="filterClientes(this.value)">
+          <select class="fs" onchange="filterClientes()">
+            <option value="">Todos os bairros</option>
+            <option value="Pinheiros">Pinheiros</option>
+            <option value="Vila Madalena">Vila Madalena</option>
+            <option value="Moema">Moema</option>
+            <option value="Brooklin">Brooklin</option>
+          </select>
+        </div>
+        <div class="tc">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Contato</th>
+                <th>Bairro</th>
+                <th>Desde</th>
+                <th>Serviços</th>
+                <th>Ticket médio</th>
+                <th>Última visita</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="cli-tbody"></tbody>
+          </table>
+          <div class="pagination">
+            <span id="cli-pag-info"></span>
+            <div class="pg-btns" id="cli-pg-btns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ PROFISSIONAIS ════════════════════ -->
+      <div class="page" id="page-profissionais">
+        <div class="page-header">
+          <div><h2>Profissionais</h2><p id="prof-count-label"></p></div>
+          <button class="btn btn-primary" onclick="openModal('modal-novo-prof')">＋ Cadastrar profissional</button>
+        </div>
+        <div class="filter-bar mb16">
+          <input class="si" type="text" placeholder="Buscar por nome, especialidade…" oninput="filterProfs(this.value)">
+          <select class="fs" id="prof-filter-status" onchange="filterProfs()">
+            <option value="">Todos</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Férias">Férias</option>
+          </select>
+        </div>
+        <div class="card-grid" id="prof-cards"></div>
+      </div>
+
+      <!-- ════════════════════ FINANCEIRO ════════════════════ -->
+      <div class="page" id="page-financeiro">
+        <div class="page-header">
+          <div><h2>Financeiro</h2><p>Novembro 2026</p></div>
+          <div style="display:flex;gap:8px">
+            <select class="fs">
+              <option>Novembro 2026</option>
+              <option>Outubro 2026</option>
+              <option>Setembro 2026</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="toast('Exportando planilha…','info')">📊 Exportar</button>
+          </div>
+        </div>
+
+        <div class="fin-row">
+          <div class="fin-box">
+            <h4>Faturamento do mês</h4>
+            <div class="fin-big">R$18.420</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:73.7%"></div></div>
+            <div class="fin-meta">73.7% da meta · Meta: R$25.000</div>
+          </div>
+          <div class="fin-box">
+            <h4>Repasses profissionais</h4>
+            <div class="fin-big" style="color:var(--danger)">R$12.894</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:70%;background:linear-gradient(90deg,var(--danger),#FC8181)"></div></div>
+            <div class="fin-meta">70% do faturamento · 32 repasses</div>
+          </div>
+          <div class="fin-box">
+            <h4>Margem líquida</h4>
+            <div class="fin-big" style="color:var(--success)">R$5.526</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,var(--success),#68D391)"></div></div>
+            <div class="fin-meta">30% de margem · +2.1pp vs mês anterior</div>
+          </div>
+        </div>
+
+        <div class="two-col mb16">
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Faturamento diário — novembro</div></div>
+            <div class="bar-chart" id="fin-bar-chart" style="height:140px"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Formas de pagamento</div></div>
+            <div class="donut-container">
+              <svg id="pag-donut" viewBox="0 0 140 140" width="130" height="130"></svg>
+              <div class="donut-legend" id="pag-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tc">
+          <div class="tc-head">
+            <div class="tc-title">Transações</div>
+            <div class="tc-actions">
+              <input class="si" type="text" placeholder="Buscar…" style="width:200px">
+              <select class="fs"><option>Todos</option><option>Recebido</option><option>Pendente</option><option>Estornado</option></select>
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Valor</th><th>Repasse</th><th>Forma</th><th>Status</th></tr></thead>
+            <tbody id="fin-tbody"></tbody>
+          </table>
+          <div class="pagination">
+            <span id="fin-pag-info">Mostrando 1–10 de 68</span>
+            <div class="pg-btns" id="fin-pg-btns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ AVALIAÇÕES ════════════════════ -->
+      <div class="page" id="page-avaliacoes">
+        <div class="page-header">
+          <div><h2>Avaliações</h2><p>Gestão de NPS e satisfação</p></div>
+          <button class="btn btn-outline btn-sm" onclick="toast('Exportando avaliações…','info')">📄 Exportar</button>
+        </div>
+        <div class="rating-overview">
+          <div class="rating-big">
+            <div class="rb-num">4.8</div>
+            <div class="rb-stars">★★★★★</div>
+            <div class="rb-count">de 487 avaliações</div>
+          </div>
+          <div class="rating-bars" id="rating-bars"></div>
+        </div>
+        <div id="reviews-list"></div>
+      </div>
+
+      <!-- ════════════════════ RELATÓRIOS ════════════════════ -->
+      <div class="page" id="page-relatorios">
+        <div class="page-header">
+          <div><h2>Relatórios</h2><p>Análises e exportações</p></div>
+        </div>
+        <div class="card-grid" id="report-cards"></div>
+      </div>
+
+      <!-- ════════════════════ CONFIGURAÇÕES ════════════════════ -->
+      <div class="page" id="page-configuracoes">
+        <div class="page-header">
+          <div><h2>Configurações</h2><p>Sistema e preferências</p></div>
+          <button class="btn btn-primary" onclick="toast('Configurações salvas!','success')">💾 Salvar</button>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="cs-block">
+              <h3>🏢 Dados da empresa</h3>
+              <div class="fg"><label>Nome fantasia</label><input class="inp" value="Limpei Serviços de Limpeza"></div>
+              <div class="fg"><label>WhatsApp de atendimento</label><input class="inp" value="+55 (11) 9 9999-9999"></div>
+              <div class="fg"><label>E-mail</label><input class="inp" value="contato@limpei.com.br"></div>
+              <div class="fg"><label>Área de atuação (CEP base)</label><input class="inp" value="01310-100 — São Paulo/SP"></div>
+            </div>
+            <div class="cs-block">
+              <h3>💳 Pagamentos</h3>
+              <div class="toggle-row"><div class="tr-info"><strong>Pix</strong><span>Chave cadastrada · desconto 5%</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>Cartão de crédito</strong><span>Até 3x sem juros</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>Cartão de débito</strong><span>À vista</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>Dinheiro</strong><span>Pagamento presencial</span></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="cs-block">
+              <h3>🔔 Notificações</h3>
+              <div class="toggle-row"><div class="tr-info"><strong>WhatsApp ao cliente</strong><span>Confirmação e lembrete 24h antes</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>WhatsApp ao profissional</strong><span>Novo agendamento e endereço</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>E-mail pós-serviço</strong><span>Solicitar avaliação 2h após</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>SMS de confirmação</strong><span>Fallback quando WhatsApp falha</span></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>Alerta de pendentes</strong><span>E-mail diário às 8h para admin</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+            <div class="cs-block">
+              <h3>🛡️ Segurança e acesso</h3>
+              <div class="toggle-row"><div class="tr-info"><strong>Autenticação em dois fatores</strong><span>Recomendado para conta admin</span></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>Expirar sessão em 8h</strong><span>Desconectar automaticamente</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="tr-info"><strong>Log de acesso</strong><span>Registrar todos os logins</span></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════════
+     MODAIS
+════════════════════════════════════════════ -->
+<div class="overlay" id="modal-novo-ag">
+  <div class="modal">
+    <div class="modal-h"><h3>Novo agendamento</h3><button class="mclose" onclick="closeModal('modal-novo-ag')">✕</button></div>
+    <div class="form-row">
+      <div class="fg"><label>Cliente</label><select class="fs" style="width:100%"><option>Ana Souza</option><option>Carlos Lima</option><option>Renata Moreira</option><option>Pedro Henrique</option><option>Novo cliente…</option></select></div>
+      <div class="fg"><label>Profissional</label><select class="fs" style="width:100%"><option>Fernanda Costa</option><option>Marcos Oliveira</option><option>Juliana Santos</option><option>Rafael Mendes</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Tipo de serviço</label><select class="fs" style="width:100%"><option>Limpeza Padrão</option><option>Limpeza Pesada</option><option>Passadoria</option><option>Pré-mudança</option><option>Pós-obra</option></select></div>
+      <div class="fg"><label>Valor (R$)</label><input class="inp" type="number" placeholder="161.00"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Data</label><input class="inp" type="date"></div>
+      <div class="fg"><label>Horário</label><input class="inp" type="time" value="08:00"></div>
+    </div>
+    <div class="fg"><label>Endereço</label><input class="inp" placeholder="Rua, número, complemento, bairro"></div>
+    <div class="fg"><label>Observações</label><textarea class="inp" placeholder="Pets, acesso especial, prioridades…"></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-novo-ag')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveModal('modal-novo-ag','Agendamento criado com sucesso!')">Criar agendamento</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-novo-cli">
+  <div class="modal">
+    <div class="modal-h"><h3>Novo cliente</h3><button class="mclose" onclick="closeModal('modal-novo-cli')">✕</button></div>
+    <div class="form-row">
+      <div class="fg"><label>Nome completo</label><input class="inp" placeholder="Ana Souza"></div>
+      <div class="fg"><label>Telefone / WhatsApp</label><input class="inp" placeholder="(11) 9 9999-9999"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>E-mail</label><input class="inp" type="email" placeholder="ana@email.com"></div>
+      <div class="fg"><label>CPF (opcional)</label><input class="inp" placeholder="000.000.000-00"></div>
+    </div>
+    <div class="fg"><label>Endereço principal</label><input class="inp" placeholder="Rua, número, complemento, bairro, cidade"></div>
+    <div class="form-row">
+      <div class="fg"><label>Tipo de imóvel</label><select class="fs" style="width:100%"><option>Apartamento</option><option>Casa</option><option>Studio</option></select></div>
+      <div class="fg"><label>Metragem (m²)</label><input class="inp" type="number" placeholder="80"></div>
+    </div>
+    <div class="fg"><label>Notas internas</label><textarea class="inp" placeholder="Preferências, restrições, observações…"></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-novo-cli')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveModal('modal-novo-cli','Cliente cadastrado com sucesso!')">Cadastrar cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-novo-prof">
+  <div class="modal">
+    <div class="modal-h"><h3>Cadastrar profissional</h3><button class="mclose" onclick="closeModal('modal-novo-prof')">✕</button></div>
+    <div class="form-row">
+      <div class="fg"><label>Nome completo</label><input class="inp" placeholder="Fernanda Costa"></div>
+      <div class="fg"><label>Telefone / WhatsApp</label><input class="inp" placeholder="(11) 9 9999-9999"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>CPF</label><input class="inp" placeholder="000.000.000-00"></div>
+      <div class="fg"><label>Data de nascimento</label><input class="inp" type="date"></div>
+    </div>
+    <div class="fg"><label>Especialidades</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="spec-checks">
+        <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer"><input type="checkbox" checked> Padrão</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer"><input type="checkbox"> Pesada</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer"><input type="checkbox"> Passadoria</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer"><input type="checkbox"> Pré/Pós-obra</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer"><input type="checkbox"> Montagem</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Zona de atuação</label><select class="fs" style="width:100%"><option>Zona Oeste</option><option>Zona Sul</option><option>Centro</option><option>Zona Norte</option><option>Zona Leste</option></select></div>
+      <div class="fg"><label>Chave Pix</label><input class="inp" placeholder="CPF ou e-mail"></div>
+    </div>
+    <div class="fg"><label>Observações internas</label><textarea class="inp" placeholder="Verificação antecedentes, referências, notas…"></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-novo-prof')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveModal('modal-novo-prof','Profissional cadastrado!')">Cadastrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const AGENDAMENTOS = [
+  {id:1,data:'2026-11-17',hora:'08:00',cliente:'Ana Souza',end:'R. das Flores, 123 – Pinheiros',servico:'Padrão',prof:'Fernanda Costa',valor:209,status:'Confirmado'},
+  {id:2,data:'2026-11-17',hora:'09:30',cliente:'Carlos Lima',end:'Av. Faria Lima, 500 – Itaim',servico:'Pesada',prof:'Marcos Oliveira',valor:396,status:'Pendente'},
+  {id:3,data:'2026-11-17',hora:'13:00',cliente:'Renata Moreira',end:'R. Funchal, 418 – V. Olímpia',servico:'Passadoria',prof:'Juliana Santos',valor:124,status:'Confirmado'},
+  {id:4,data:'2026-11-17',hora:'15:00',cliente:'Pedro Henrique',end:'R. dos Pinheiros, 50 – Pinheiros',servico:'Pré-mudança',prof:'Rafael Mendes',valor:566,status:'Pendente'},
+  {id:5,data:'2026-11-17',hora:'16:30',cliente:'Lucia Ferreira',end:'Av. Morumbi, 1200 – Morumbi',servico:'Padrão',prof:'Fernanda Costa',valor:191,status:'Confirmado'},
+  {id:6,data:'2026-11-18',hora:'08:00',cliente:'Gustavo Alves',end:'R. Teodoro Sampaio, 300 – Pinheiros',servico:'Pós-obra',prof:'Marcos Oliveira',valor:760,status:'Confirmado'},
+  {id:7,data:'2026-11-18',hora:'10:00',cliente:'Marcia Ramos',end:'Av. Indianópolis, 1500 – Moema',servico:'Padrão',prof:'Juliana Santos',valor:161,status:'Pendente'},
+  {id:8,data:'2026-11-18',hora:'14:00',cliente:'Roberto Dias',end:'R. Pamplona, 100 – Jardins',servico:'Pesada',prof:'Carla Nunes',valor:316,status:'Confirmado'},
+  {id:9,data:'2026-11-19',hora:'08:30',cliente:'Fernanda Lopes',end:'R. Girassol, 200 – V. Madalena',servico:'Padrão',prof:'Rafael Mendes',valor:191,status:'Confirmado'},
+  {id:10,data:'2026-11-19',hora:'09:00',cliente:'Thiago Costa',end:'Al. Lorena, 800 – Jardins',servico:'Pré-mudança',prof:'Fernanda Costa',valor:456,status:'Pendente'},
+  {id:11,data:'2026-11-20',hora:'08:00',cliente:'Camila Souza',end:'Av. Pedroso de Morais, 300 – Pinheiros',servico:'Passadoria',prof:'Juliana Santos',valor:90,status:'Cancelado'},
+  {id:12,data:'2026-11-20',hora:'10:30',cliente:'André Martins',end:'R. Funchal, 100 – V. Olímpia',servico:'Padrão',prof:'Carla Nunes',valor:209,status:'Concluído'},
+  {id:13,data:'2026-11-15',hora:'08:00',cliente:'Beatriz Alves',end:'Av. Rebouças, 2000 – Pinheiros',servico:'Pós-obra',prof:'Marcos Oliveira',valor:659,status:'Concluído'},
+  {id:14,data:'2026-11-15',hora:'14:00',cliente:'Hugo Pereira',end:'R. Augusta, 500 – Consolação',servico:'Pesada',prof:'Rafael Mendes',valor:479,status:'Concluído'},
+  {id:15,data:'2026-11-14',hora:'09:00',cliente:'Isabela Castro',end:'R. Cardeal Arcoverde, 100 – Pinheiros',servico:'Padrão',prof:'Juliana Santos',valor:161,status:'Concluído'},
+];
+
+const CLIENTES = [
+  {id:1,nome:'Ana Souza',email:'ana.souza@gmail.com',tel:'(11) 99201-3344',bairro:'Pinheiros',desde:'Jan 2024',servicos:14,ticket:198,ultima:'2026-11-10',status:'Ativo'},
+  {id:2,nome:'Carlos Lima',email:'carloslima@hotmail.com',tel:'(11) 98112-5566',bairro:'Itaim Bibi',desde:'Mar 2024',servicos:7,ticket:312,ultima:'2026-11-05',status:'Ativo'},
+  {id:3,nome:'Renata Moreira',email:'renata.m@gmail.com',tel:'(11) 97433-2211',bairro:'Vila Olímpia',desde:'Jun 2024',servicos:3,ticket:140,ultima:'2026-10-28',status:'Ativo'},
+  {id:4,nome:'Pedro Henrique',email:'ph.dev@gmail.com',tel:'(11) 99900-1122',bairro:'Pinheiros',desde:'Ago 2024',servicos:2,ticket:511,ultima:'2026-10-15',status:'Ativo'},
+  {id:5,nome:'Lucia Ferreira',email:'lu.ferreira@outlook.com',tel:'(11) 95566-7788',bairro:'Morumbi',desde:'Fev 2024',servicos:19,ticket:189,ultima:'2026-11-12',status:'Ativo'},
+  {id:6,nome:'Gustavo Alves',email:'galves@empresa.com',tel:'(11) 93344-5566',bairro:'Pinheiros',desde:'Set 2024',servicos:1,ticket:760,ultima:'2026-11-08',status:'Novo'},
+  {id:7,nome:'Marcia Ramos',email:'marcia.r@gmail.com',tel:'(11) 99888-7766',bairro:'Moema',desde:'Nov 2023',servicos:28,ticket:175,ultima:'2026-11-14',status:'Ativo'},
+  {id:8,nome:'Roberto Dias',email:'roberto@gmail.com',tel:'(11) 97700-4433',bairro:'Jardins',desde:'Mai 2024',servicos:5,ticket:290,ultima:'2026-10-30',status:'Inativo'},
+  {id:9,nome:'Fernanda Lopes',email:'ferlopes@hotmail.com',tel:'(11) 96655-3322',bairro:'Vila Madalena',desde:'Jul 2024',servicos:4,ticket:198,ultima:'2026-11-01',status:'Ativo'},
+  {id:10,nome:'Thiago Costa',email:'thiagoc@gmail.com',tel:'(11) 94433-6677',bairro:'Jardins',desde:'Out 2024',servicos:1,ticket:456,ultima:'2026-11-03',status:'Novo'},
+  {id:11,nome:'Camila Souza',email:'camila.s@gmail.com',tel:'(11) 92211-8899',bairro:'Pinheiros',desde:'Dez 2023',servicos:11,ticket:95,ultima:'2026-10-25',status:'Inativo'},
+  {id:12,nome:'André Martins',email:'andremartins@usp.br',tel:'(11) 98877-5544',bairro:'Vila Olímpia',desde:'Abr 2024',servicos:6,ticket:220,ultima:'2026-11-09',status:'Ativo'},
+];
+
+const PROFISSIONAIS = [
+  {id:1,nome:'Fernanda Costa',esp:'Padrão · Pré-mudança',zona:'Zona Oeste',servicos:187,nota:4.9,status:'Ativo',hoje:3},
+  {id:2,nome:'Marcos Oliveira',esp:'Pesada · Pós-obra',zona:'Zona Sul',servicos:142,nota:4.7,status:'Ativo',hoje:2},
+  {id:3,nome:'Juliana Santos',esp:'Padrão · Passadoria',zona:'Centro',servicos:203,nota:4.8,status:'Ativo',hoje:3},
+  {id:4,nome:'Rafael Mendes',esp:'Padrão · Pré-mudança',zona:'Zona Oeste',servicos:98,nota:4.6,status:'Ativo',hoje:1},
+  {id:5,nome:'Carla Nunes',esp:'Padrão · Pesada',zona:'Zona Sul',servicos:76,nota:4.9,status:'Férias',hoje:0},
+  {id:6,nome:'Lucas Barbosa',esp:'Montagem · Pós-obra',zona:'Zona Leste',servicos:54,nota:4.5,status:'Ativo',hoje:2},
+  {id:7,nome:'Patricia Lima',esp:'Padrão · Passadoria',zona:'Zona Norte',servicos:33,nota:4.8,status:'Inativo',hoje:0},
+  {id:8,nome:'Diego Souza',esp:'Padrão',zona:'Centro',servicos:21,nota:4.7,status:'Ativo',hoje:1},
+];
+
+const FIN_TRANS = [
+  {data:'17/11/2026',cliente:'Ana Souza',servico:'Padrão',valor:209,repasse:146,forma:'Pix',status:'Recebido'},
+  {data:'17/11/2026',cliente:'Carlos Lima',servico:'Pesada',valor:396,repasse:277,forma:'Crédito',status:'Pendente'},
+  {data:'15/11/2026',cliente:'Beatriz Alves',servico:'Pós-obra',valor:659,repasse:461,forma:'Pix',status:'Recebido'},
+  {data:'15/11/2026',cliente:'Hugo Pereira',servico:'Pesada',valor:479,repasse:335,forma:'Crédito',status:'Recebido'},
+  {data:'14/11/2026',cliente:'Isabela Castro',servico:'Padrão',valor:161,repasse:113,forma:'Débito',status:'Recebido'},
+  {data:'14/11/2026',cliente:'Lucia Ferreira',servico:'Padrão',valor:191,repasse:134,forma:'Pix',status:'Recebido'},
+  {data:'13/11/2026',cliente:'Marcia Ramos',servico:'Padrão',valor:161,repasse:113,forma:'Pix',status:'Recebido'},
+  {data:'12/11/2026',cliente:'André Martins',servico:'Padrão',valor:209,repasse:146,forma:'Crédito',status:'Recebido'},
+  {data:'11/11/2026',cliente:'Roberto Dias',servico:'Pesada',valor:316,repasse:221,forma:'Pix',status:'Estornado'},
+  {data:'10/11/2026',cliente:'Fernanda Lopes',servico:'Passadoria',valor:124,repasse:87,forma:'Pix',status:'Recebido'},
+  {data:'09/11/2026',cliente:'Thiago Costa',servico:'Pré-mudança',valor:456,repasse:319,forma:'Crédito',status:'Recebido'},
+  {data:'08/11/2026',cliente:'Gustavo Alves',servico:'Pós-obra',valor:760,repasse:532,forma:'Pix',status:'Recebido'},
+];
+
+const REVIEWS = [
+  {nome:'Ana Souza',servico:'Limpeza Padrão · 10/11/2026',nota:5,texto:'Fernanda é incrível! Casa impecável, cheirou como novo. Com certeza vou recorrente.',resposta:'Obrigada, Ana! A Fernanda ficou muito feliz com seu feedback. Até o próximo!'},
+  {nome:'Carlos Lima',servico:'Limpeza Pesada · 05/11/2026',nota:5,texto:'Marcos chegou pontual, trabalhou muito bem. Levou um pouco mais que o esperado mas resultado ótimo.',resposta:''},
+  {nome:'Marcia Ramos',servico:'Limpeza Padrão · 14/11/2026',nota:4,texto:'Muito bom, só faltou limpar dentro dos armários. Mas no geral muito satisfeita.',resposta:'Olá, Marcia! Obrigada pelo feedback. Para próximos agendamentos podemos incluir limpeza interna dos armários, é só solicitar no momento do orçamento!'},
+  {nome:'Pedro Henrique',servico:'Passadoria · 01/11/2026',nota:5,texto:'Sem palavras. Mais de 40 peças impecavelmente passadas. Vale cada centavo.',resposta:''},
+  {nome:'Roberto Dias',servico:'Limpeza Pesada · 30/10/2026',nota:2,texto:'Profissional atrasou 1h e saiu mais cedo. Algumas áreas não foram limpas adequadamente.','pendente':true,resposta:''},
+  {nome:'Isabela Castro',servico:'Limpeza Padrão · 25/10/2026',nota:5,texto:'Simplesmente perfeito. Contratei pela primeira vez e já agendei a próxima.',resposta:'Que ótimo, Isabela! Ficamos felizes que a experiência foi tão boa. Até breve!'},
+];
+
+const ACTIVITIES = [
+  {time:'09:14',dot:'',text:'Novo orçamento recebido',sub:'Ana Souza — Limpeza Pesada Casa 3q+2b'},
+  {time:'08:52',dot:'orange',text:'Agendamento confirmado',sub:'Pedro Henrique — Pré-mudança 17/11'},
+  {time:'08:30',dot:'green',text:'Serviço concluído',sub:'Isabela Castro — Padrão · R$161'},
+  {time:'08:12',dot:'',text:'Nova avaliação recebida',sub:'Marcia Ramos ★★★★☆ — Limpeza Padrão'},
+  {time:'07:45',dot:'red',text:'Cancelamento solicitado',sub:'Camila Souza — Passadoria 20/11'},
+  {time:'07:00',dot:'green',text:'Repasse processado',sub:'Fernanda Costa — R$1.230 (Pix)'},
+];
+
+// ═══════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════
+function statusBadge(s){
+  const m={
+    'Confirmado':'bs','Concluído':'bs','Recebido':'bs',
+    'Pendente':'bw','Férias':'bw',
+    'Cancelado':'bd','Estornado':'bd','Inativo':'bd',
+    'Novo':'bi','Ativo':'bm'
+  };
+  return `<span class="badge ${m[s]||'bm'}">${s}</span>`;
+}
+function stars(n){return '★'.repeat(n)+'☆'.repeat(5-n)}
+function initials(name){return name.split(' ').slice(0,2).map(w=>w[0]).join('')}
+function fmtMoney(v){return 'R$'+v.toLocaleString('pt-BR',{minimumFractionDigits:0})}
+function el(id){return document.getElementById(id)}
+
+function toast(msg,type='success'){
+  const c=el('toast');
+  const t=document.createElement('div');
+  t.className=`toast-item ${type}`;
+  const icon=type==='success'?'✅':type==='error'?'❌':'ℹ️';
+  t.innerHTML=`${icon} ${msg}`;
+  c.appendChild(t);
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},3200);
+}
+
+function openModal(id){el(id).classList.add('open')}
+function closeModal(id){el(id).classList.remove('open')}
+function saveModal(id,msg){closeModal(id);toast(msg,'success')}
+
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')});
+});
+
+// ═══════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════
+function doLogin(){
+  const e=el('le').value,p=el('lp').value;
+  if(e==='admin@limpei.com.br'&&p==='admin123'){
+    el('login-screen').style.display='none';
+    el('app').style.display='block';
+    initApp();
+  }else{
+    el('lerr').style.display='block';
+    el('lp').value='';
+    el('lp').focus();
+  }
+}
+function doLogout(){
+  el('app').style.display='none';
+  el('login-screen').style.display='flex';
+  el('lp').value='';
+  el('lerr').style.display='none';
+}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function goTo(el_or_page){
+  let page;
+  if(typeof el_or_page==='string'){page=el_or_page;}
+  else{page=el_or_page.dataset.page;}
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const ni=document.querySelector(`.nav-item[data-page="${page}"]`);
+  if(ni)ni.classList.add('active');
+  el('page-'+page).classList.add('active');
+  const titles={dashboard:'Dashboard',agendamentos:'Agendamentos',clientes:'Clientes',profissionais:'Profissionais',financeiro:'Financeiro',avaliacoes:'Avaliações',relatorios:'Relatórios',configuracoes:'Configurações'};
+  el('page-title').textContent=titles[page]||page;
+  if(page==='agendamentos')renderAgendamentos();
+  if(page==='clientes')renderClientes();
+  if(page==='profissionais')renderProfs();
+  if(page==='financeiro')renderFinanceiro();
+  if(page==='avaliacoes')renderAvaliacoes();
+  if(page==='relatorios')renderRelatorios();
+}
+function goToPage(p){goTo(p);}
+
+// ═══════════════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════════════
+function updateClock(){
+  const now=new Date();
+  el('clock').textContent=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+const FAT_DATA={
+  7:[980,1240,870,1560,1120,1890,1340],
+  30:[3200,2800,3900,4100,3600,4800,3300,4200,2900,3700,4500,3800,4100,3400,4600,3200,2700,3800,4200,3600,4900,3100,3500,4100,3800,4600,3200,4100,3700,4300],
+  90:[18200,22400,19800,21600,24300,20100,19500,23800,22100,25400,21800,24600]
+};
+const FAT_LABELS={
+  7:['Ter','Qua','Qui','Sex','Sáb','Dom','Seg'],
+  30:['01','03','05','07','09','11','13','15','17','19','21','23','25','27','29','31'].concat([]),
+  90:['Ago/1','Ago/2','Set/1','Set/2','Out/1','Out/2','Nov/1','Nov/2']
+};
+
+function renderKPIs(){
+  const grid=el('kpi-grid');
+  const kpis=[
+    {label:'Faturamento do mês',value:'R$18.420',sub:'Meta: R$25.000',delta:'+12%',dir:'up',icon:'💰',cls:'a2',bars:[60,45,70,55,80,65,90,75,85,70,88,95]},
+    {label:'Agendamentos hoje',value:'12',sub:'5 pendentes confirmação',delta:'+3',dir:'up',icon:'📅',cls:'a1',bars:[8,10,7,12,9,11,8,13,10,12,11,12]},
+    {label:'Profissionais ativos',value:'8',sub:'2 disponíveis agora',delta:'=0',dir:'',icon:'🧹',cls:'a3',bars:[6,7,7,8,8,8,9,8,8,8,8,8]},
+    {label:'Avaliação média',value:'4.8 ★',sub:'de 487 avaliações',delta:'+0.1',dir:'up',icon:'⭐',cls:'a4',bars:[45,47,46,48,47,49,48,47,49,48,48,48]},
+  ];
+  grid.innerHTML=kpis.map(k=>{
+    const minB=Math.min(...k.bars),maxB=Math.max(...k.bars),rng=maxB-minB||1;
+    const bars=k.bars.map((v,i)=>`<div class="kpi-mini-bar${i===k.bars.length-1?' cur':''}" style="height:${Math.round((v-minB)/rng*100)}%"></div>`).join('');
+    return `<div class="kpi ${k.cls}">
+      <div class="kpi-accent"></div>
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-sub">${k.dir?`<span class="delta ${k.dir}">${k.delta}</span>`:''}${k.sub}</div>
+      <div class="kpi-mini-chart">${bars}</div>
+      <div class="kpi-icon">${k.icon}</div>
+    </div>`;
+  }).join('');
+}
+
+let chartMode='fat';
+function switchChartTab(btn,mode){
+  chartMode=mode;
+  document.querySelectorAll('.chart-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderMainBarChart();
+}
+
+function renderMainBarChart(){
+  const period=parseInt(el('dash-period')?.value||30);
+  const data=FAT_DATA[period]||FAT_DATA[30];
+  const labels=FAT_LABELS[period]||FAT_LABELS[30];
+  // limit to 12 bars max for readability
+  const slice=data.slice(-12);
+  const lslice=labels.slice(-12);
+  const max=Math.max(...slice)||1;
+  const chart=el('main-bar-chart');
+  chart.innerHTML=slice.map((v,i)=>{
+    const h=Math.round((v/max)*110);
+    const disp=chartMode==='fat'?fmtMoney(v):v;
+    const color=i===slice.length-1?'var(--amber)':'var(--teal)';
+    return `<div class="bar-col">
+      <div class="bar" style="height:${h}px;background:${color}" data-val="${disp}"></div>
+      <span class="blabel">${lslice[i]}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderDonut(svgId,legendId,segments){
+  const r=46,cx=70,cy=70,circ=2*Math.PI*r;
+  let offset=0;
+  const svg=el(svgId);
+  svg.innerHTML=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border)" stroke-width="20"/>`;
+  segments.forEach(s=>{
+    const len=circ*(s.pct/100);
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);
+    c.setAttribute('fill','none');c.setAttribute('stroke',s.color);c.setAttribute('stroke-width','20');
+    c.setAttribute('stroke-dasharray',`${len} ${circ}`);
+    c.setAttribute('stroke-dashoffset',`${-offset}`);
+    c.setAttribute('transform',`rotate(-90 ${cx} ${cy})`);
+    svg.appendChild(c);
+    // center total on first segment
+    if(offset===0){
+      svg.innerHTML+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" class="donut-total">Total</text>
+        <text x="${cx}" y="${cy+10}" text-anchor="middle" class="donut-sub">serviços</text>`;
+    }
+    offset+=len;
+  });
+  el(legendId).innerHTML=segments.map(s=>`
+    <div class="dl-row">
+      <span class="dl-label"><span class="dl-dot" style="background:${s.color}"></span>${s.label}</span>
+      <span><span class="dl-val">${s.pct}%</span></span>
+    </div>`).join('');
+}
+
+function renderHeatmap(){
+  const days=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  const hours=['07h','09h','11h','13h','15h','17h'];
+  const hm_data=[
+    [2,3,4,3,5,4,2],
+    [3,4,5,4,5,5,3],
+    [3,4,4,5,4,4,2],
+    [2,3,3,4,4,3,1],
+    [4,5,5,5,5,4,2],
+    [1,2,2,3,3,2,1],
+  ];
+  const grid=el('heatmap-grid');
+  let html='<div class="hm-cell hm-label"></div>';
+  days.forEach(d=>html+=`<div class="hm-cell hm-head">${d}</div>`);
+  hours.forEach((h,r)=>{
+    html+=`<div class="hm-cell hm-label">${h}</div>`;
+    hm_data[r].forEach(v=>html+=`<div class="hm-cell hm-${v}" title="${v} agendamentos">${v||''}</div>`);
+  });
+  grid.innerHTML=html;
+}
+
+function renderDashActivity(){
+  el('activity-timeline').innerHTML=ACTIVITIES.map(a=>
+    `<div class="tl-item">
+      <div class="tl-time">${a.time}</div>
+      <div class="tl-dot ${a.dot}"></div>
+      <div class="tl-content"><strong>${a.text}</strong><span>${a.sub}</span></div>
+    </div>`
+  ).join('');
+}
+
+function renderDashAgenda(){
+  const today=AGENDAMENTOS.filter(a=>a.data==='2026-11-17').slice(0,6);
+  el('dash-agenda-tbody').innerHTML=today.map(a=>`
+    <tr>
+      <td style="font-weight:700">${a.hora}</td>
+      <td>${a.cliente}</td>
+      <td>${a.servico}</td>
+      <td><span class="td-muted">${a.prof.split(' ')[0]}</span></td>
+      <td>${statusBadge(a.status)}</td>
+    </tr>`).join('');
+}
+
+function renderProfStatus(){
+  el('prof-status-tbody').innerHTML=PROFISSIONAIS.map(p=>{
+    const disp=p.hoje<2?'Disponível':'Ocupado';
+    const dCls=disp==='Disponível'?'bs':'bw';
+    const statusCls=p.status==='Ativo'?'bs':p.status==='Férias'?'bw':'bd';
+    return `<tr>
+      <td><strong>${p.nome}</strong></td>
+      <td><span class="td-muted">${p.esp.split('·')[0].trim()}</span></td>
+      <td style="font-weight:700">${p.hoje} serviços</td>
+      <td class="td-muted">${p.hoje===0?'Agora':p.hoje<2?'14:00':'17:00'}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="toast('Abrindo agenda de ${p.nome}','info')">Ver agenda</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDashboard(){
+  renderKPIs();
+  renderMainBarChart();
+  renderDonut('donut-svg','donut-legend',[
+    {label:'Padrão',pct:50,color:'var(--teal)'},
+    {label:'Pesada',pct:20,color:'var(--teal2)'},
+    {label:'Pré-mudança',pct:12,color:'var(--amber)'},
+    {label:'Pós-obra',pct:10,color:'var(--info)'},
+    {label:'Outros',pct:8,color:'#CBD5E0'},
+  ]);
+  renderHeatmap();
+  renderDashActivity();
+  renderDashAgenda();
+  renderProfStatus();
+}
+
+// ═══════════════════════════════════════════════════
+// AGENDAMENTOS
+// ═══════════════════════════════════════════════════
+let agPage=1;const agPerPage=8;let agFiltered=[];
+function renderAgendamentos(){
+  const q=(el('ag-filter-status')?.value||'').toLowerCase();
+  const t=(el('ag-filter-tipo')?.value||'').toLowerCase();
+  const s=document.querySelector('#page-agendamentos .si')?.value.toLowerCase()||'';
+  agFiltered=AGENDAMENTOS.filter(a=>{
+    const qs=q?a.status.toLowerCase()===q:true;
+    const qt=t?a.servico.toLowerCase().includes(t):true;
+    const ss=s?a.cliente.toLowerCase().includes(s)||a.end.toLowerCase().includes(s):true;
+    return qs&&qt&&ss;
+  });
+  el('agenda-count-label').textContent=`${agFiltered.length} agendamento(s) encontrado(s)`;
+  const start=(agPage-1)*agPerPage,end=start+agPerPage;
+  const page=agFiltered.slice(start,end);
+  el('agenda-tbody').innerHTML=page.length?page.map(a=>`
+    <tr>
+      <td><strong>${a.data.split('-').reverse().join('/')}</strong><br><span class="td-muted">${a.hora}</span></td>
+      <td><div class="td-name">${a.cliente}</div></td>
+      <td><span class="td-muted" style="font-size:12px">${a.end}</span></td>
+      <td>${a.servico}</td>
+      <td><span class="td-muted">${a.prof}</span></td>
+      <td><strong>${fmtMoney(a.valor)}</strong></td>
+      <td>${statusBadge(a.status)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm btn-icon" onclick="toast('Editando agendamento #${a.id}','info')" title="Editar">✏️</button>
+        <button class="btn btn-outline btn-sm btn-icon" onclick="confirmAction('Cancelar agendamento de ${a.cliente}?',()=>toast('Agendamento cancelado','error'))" title="Cancelar">🗑️</button>
+      </td>
+    </tr>`).join(''):`<tr><td colspan="8"><div class="empty-state"><div class="es-icon">📅</div><p>Nenhum agendamento encontrado</p></div></td></tr>`;
+  renderPagination('agenda-pg-btns','agenda-pag-info',agFiltered.length,agPage,agPerPage,(p)=>{agPage=p;renderAgendamentos();});
+}
+function filterAgendamentos(){agPage=1;renderAgendamentos();}
+
+// ═══════════════════════════════════════════════════
+// CLIENTES
+// ═══════════════════════════════════════════════════
+let cliPage=1;const cliPerPage=8;let cliFiltered=[];
+function renderClientes(){
+  const s=document.querySelector('#page-clientes .si')?.value.toLowerCase()||'';
+  cliFiltered=CLIENTES.filter(c=>!s||c.nome.toLowerCase().includes(s)||c.email.toLowerCase().includes(s)||c.tel.includes(s));
+  el('cli-count-label').textContent=`${cliFiltered.length} cliente(s) · ${CLIENTES.filter(c=>c.status==='Ativo').length} ativos`;
+  const start=(cliPage-1)*cliPerPage;
+  el('cli-tbody').innerHTML=cliFiltered.slice(start,start+cliPerPage).map(c=>`
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:4px">
+          <div class="card-avatar" style="width:34px;height:34px;font-size:12px">${initials(c.nome)}</div>
+          <div><div class="td-name">${c.nome}</div></div>
+        </div>
+      </td>
+      <td><div style="font-size:12px">${c.email}</div><div class="td-muted">${c.tel}</div></td>
+      <td>${c.bairro}</td>
+      <td class="td-muted">${c.desde}</td>
+      <td style="font-weight:700">${c.servicos}</td>
+      <td>${fmtMoney(c.ticket)}</td>
+      <td class="td-muted">${c.ultima.split('-').reverse().join('/')}</td>
+      <td>${statusBadge(c.status)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm btn-icon" onclick="toast('Perfil de ${c.nome}','info')" title="Ver perfil">👤</button>
+        <button class="btn btn-outline btn-sm btn-icon" onclick="toast('WhatsApp para ${c.nome}','info')" title="WhatsApp">💬</button>
+      </td>
+    </tr>`).join('');
+  renderPagination('cli-pg-btns','cli-pag-info',cliFiltered.length,cliPage,cliPerPage,(p)=>{cliPage=p;renderClientes();});
+}
+function filterClientes(s){cliPage=1;renderClientes();}
+
+// ═══════════════════════════════════════════════════
+// PROFISSIONAIS
+// ═══════════════════════════════════════════════════
+let profFiltered=[];
+function renderProfs(){
+  const s=document.querySelector('#page-profissionais .si')?.value.toLowerCase()||'';
+  const st=el('prof-filter-status')?.value||'';
+  profFiltered=PROFISSIONAIS.filter(p=>{
+    const qs=st?p.status===st:true;
+    const ss=s?p.nome.toLowerCase().includes(s)||p.esp.toLowerCase().includes(s):true;
+    return qs&&ss;
+  });
+  el('prof-count-label').textContent=`${profFiltered.length} profissional(is) · ${PROFISSIONAIS.filter(p=>p.status==='Ativo').length} ativos`;
+  el('prof-cards').innerHTML=profFiltered.map(p=>{
+    const sCls=p.status==='Ativo'?'bs':p.status==='Férias'?'bw':'bd';
+    return `<div class="card">
+      <div class="card-top">
+        <div class="card-avatar">${initials(p.nome)}</div>
+        <div class="card-info">
+          <strong>${p.nome}</strong>
+          <span>${p.esp}</span>
+          <div style="margin-top:4px">${statusBadge(p.status)}</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">📍 ${p.zona}</div>
+      <div class="card-stats">
+        <div class="cs"><span class="cs-val">${p.servicos}</span><span class="cs-lbl">Serviços</span></div>
+        <div class="cs"><span class="cs-val">${p.nota}</span><span class="cs-lbl">Nota</span></div>
+        <div class="cs"><span class="cs-val">${p.hoje}</span><span class="cs-lbl">Hoje</span></div>
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-outline btn-sm" onclick="toast('Agenda de ${p.nome}','info')" style="flex:1">📅 Agenda</button>
+        <button class="btn btn-outline btn-sm btn-icon" onclick="toast('Editando ${p.nome}','info')">✏️</button>
+        <button class="btn btn-outline btn-sm btn-icon" onclick="toast('WhatsApp para ${p.nome}','info')">💬</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function filterProfs(s){renderProfs();}
+
+// ═══════════════════════════════════════════════════
+// FINANCEIRO
+// ═══════════════════════════════════════════════════
+function renderFinanceiro(){
+  // daily bar
+  const daily=[420,680,540,920,760,440,590,810,650,970,720,480,630,880,750,560,490,840,710,970,620,540,780,840,690,460,580,780,660,0];
+  const maxD=Math.max(...daily)||1;
+  el('fin-bar-chart').innerHTML=daily.map((v,i)=>
+    `<div class="bar-col"><div class="bar" style="height:${Math.round(v/maxD*120)}px;background:${v>700?'var(--amber)':'var(--teal)'};width:100%" data-val="${fmtMoney(v)}"></div><span class="blabel">${i+1}</span></div>`
+  ).join('');
+  renderDonut('pag-donut','pag-legend',[
+    {label:'Pix',pct:52,color:'var(--teal)'},
+    {label:'Crédito',pct:30,color:'var(--amber)'},
+    {label:'Débito',pct:18,color:'var(--teal2)'},
+  ]);
+  // transactions table
+  el('fin-tbody').innerHTML=FIN_TRANS.map(t=>
+    `<tr>
+      <td class="td-muted">${t.data}</td>
+      <td><strong>${t.cliente}</strong></td>
+      <td>${t.servico}</td>
+      <td style="font-weight:700">${fmtMoney(t.valor)}</td>
+      <td class="td-muted">${fmtMoney(t.repasse)}</td>
+      <td>${t.forma}</td>
+      <td>${statusBadge(t.status)}</td>
+    </tr>`
+  ).join('');
+  renderPagination('fin-pg-btns','fin-pag-info',FIN_TRANS.length,1,10,()=>{});
+}
+
+// ═══════════════════════════════════════════════════
+// AVALIAÇÕES
+// ═══════════════════════════════════════════════════
+function renderAvaliacoes(){
+  const dist=[{n:5,c:390},{n:4,c:62},{n:3,c:18},{n:2,c:9},{n:1,c:8}];
+  const total=dist.reduce((s,d)=>s+d.c,0);
+  el('rating-bars').innerHTML=dist.map(d=>`
+    <div class="rbar-row">
+      <span class="rbar-label">${d.n}★</span>
+      <div class="rbar-track"><div class="rbar-fill" style="width:${Math.round(d.c/total*100)}%"></div></div>
+      <span class="rbar-num">${d.c}</span>
+    </div>`).join('');
+  el('reviews-list').innerHTML=REVIEWS.map(r=>{
+    const pending=r.pendente?`<button class="btn btn-primary btn-sm" onclick="toast('Resposta enviada!','success')" style="margin-top:10px">Responder avaliação</button>`:'';
+    return `<div class="review-card">
+      <div class="rv-header">
+        <div>
+          <div class="rv-name">${r.nome}</div>
+          <div class="rv-service">${r.servico}</div>
+        </div>
+        <div>
+          <div class="stars">${stars(r.nota)}</div>
+          ${r.pendente?'<span class="badge bi" style="font-size:10px;margin-top:4px;display:block;text-align:center">Sem resposta</span>':''}
+        </div>
+      </div>
+      <div class="rv-text">${r.texto}</div>
+      ${r.resposta?`<div class="rv-reply"><strong>Limpei respondeu:</strong>${r.resposta}</div>`:''}
+      ${pending}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// RELATÓRIOS
+// ═══════════════════════════════════════════════════
+function renderRelatorios(){
+  const reports=[
+    {icon:'📊',title:'Faturamento mensal',desc:'Receita, repasses e margem por período',action:'Gerar PDF'},
+    {icon:'👥',title:'Relatório de clientes',desc:'Aquisição, retenção e churn',action:'Exportar XLSX'},
+    {icon:'🧹',title:'Performance de profissionais',desc:'Notas, pontualidade e produtividade',action:'Gerar PDF'},
+    {icon:'📅',title:'Agendamentos por período',desc:'Volume, tipos e taxa de cancelamento',action:'Exportar XLSX'},
+    {icon:'⭐',title:'NPS e satisfação',desc:'Evolução das avaliações e comentários',action:'Gerar PDF'},
+    {icon:'💰',title:'Fluxo de caixa',desc:'Entradas, repasses e projeção 30 dias',action:'Exportar XLSX'},
+  ];
+  el('report-cards').innerHTML=reports.map(r=>`
+    <div class="card" style="cursor:pointer" onclick="toast('Gerando: ${r.title}…','info')">
+      <div style="font-size:32px;margin-bottom:12px">${r.icon}</div>
+      <strong style="font-size:14px">${r.title}</strong>
+      <p style="font-size:12px;color:var(--muted);margin:6px 0 16px;line-height:1.5">${r.desc}</p>
+      <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();toast('Gerando…','info')">${r.action}</button>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// PAGINATION
+// ═══════════════════════════════════════════════════
+function renderPagination(btnId,infoId,total,current,perPage,cb){
+  const pages=Math.ceil(total/perPage);
+  const start=Math.min((current-1)*perPage+1,total);
+  const end=Math.min(current*perPage,total);
+  if(el(infoId))el(infoId).textContent=`Mostrando ${start}–${end} de ${total}`;
+  if(!el(btnId))return;
+  let html='';
+  html+=`<button class="pg-btn" onclick="(${cb})(${current-1})" ${current===1?'disabled':''}>‹</button>`;
+  for(let i=1;i<=pages;i++){
+    if(pages<=7||i===1||i===pages||Math.abs(i-current)<=1){
+      html+=`<button class="pg-btn${i===current?' on':''}" onclick="(${cb})(${i})">${i}</button>`;
+    }else if(Math.abs(i-current)===2){html+='<span style="padding:0 4px;color:var(--muted);align-self:center">…</span>';}
+  }
+  html+=`<button class="pg-btn" onclick="(${cb})(${current+1})" ${current===pages?'disabled':''}>›</button>`;
+  el(btnId).innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════════
+// CONFIRM DIALOG (simples)
+// ═══════════════════════════════════════════════════
+function confirmAction(msg,cb){if(confirm(msg))cb();}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+function initApp(){
+  el('dash-date').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  renderDashboard();
+}
+
+// Auto-login em modo demo (opcional — remove para produção)
+// initApp(); el('login-screen').style.display='none'; el('app').style.display='block';
+</script>
+</body>
+</html>

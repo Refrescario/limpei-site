@@ -576,8 +576,8 @@ body {
               <div class="svc-desc-s">Limpeza completa de rotina para manter o espaço sempre limpo</div>
             </div>
             <div>
-              <div class="svc-price">R$ 40</div>
-              <span class="svc-price-from">por hora</span>
+              <div class="svc-price">R$ 114</div>
+              <span class="svc-price-from">a partir de</span>
             </div>
             <div class="svc-check"></div>
           </div>
@@ -589,8 +589,8 @@ body {
               <div class="svc-desc-s">Limpeza profunda, incluindo detalhes difíceis e áreas acumuladas</div>
             </div>
             <div>
-              <div class="svc-price">R$ 55</div>
-              <span class="svc-price-from">por hora</span>
+              <div class="svc-price">R$ 231</div>
+              <span class="svc-price-from">a partir de</span>
             </div>
             <div class="svc-check"></div>
           </div>
@@ -602,8 +602,8 @@ body {
               <div class="svc-desc-s">Limpeza completa antes ou depois de uma mudança de imóvel</div>
             </div>
             <div>
-              <div class="svc-price">R$ 65</div>
-              <span class="svc-price-from">por hora</span>
+              <div class="svc-price">R$ 526</div>
+              <span class="svc-price-from">a partir de</span>
             </div>
             <div class="svc-check"></div>
           </div>
@@ -615,8 +615,8 @@ body {
               <div class="svc-desc-s">Passagem de roupas com cuidado profissional, em casa</div>
             </div>
             <div>
-              <div class="svc-price">R$ 35</div>
-              <span class="svc-price-from">por hora</span>
+              <div class="svc-price">R$ 97</div>
+              <span class="svc-price-from">a partir de</span>
             </div>
             <div class="svc-check"></div>
           </div>
@@ -940,70 +940,97 @@ var state = {
   termsAccepted: false
 };
 
-// Regra de profissionais (lógica exata Parafuzo):
-// total_time > 18h → 3 profissionais | > 9h → 2 profissionais | ≤ 9h → 1 profissional
+// ── TABELA DE PREÇOS EXATOS (baseada na Parafuzo) ──────────────────────────
+// Chave: "Q_B" → { price: R$ total, hours: horas totais, pros: nº profissionais }
+// quartos 1–5 (clampa), banheiros 1–3 (clampa)
+// studio = 1 quarto para fins de cálculo
+
+var PRICE_TABLE = {
+  padrao: {
+    '1_1':{price:114, hours:3,    pros:1},
+    '2_1':{price:135, hours:4,    pros:1},
+    '3_1':{price:144, hours:4.5,  pros:1},
+    '4_1':{price:166, hours:5.5,  pros:1},
+    '5_1':{price:178, hours:6,    pros:1},
+    '1_2':{price:135, hours:4,    pros:1},
+    '2_2':{price:144, hours:4.5,  pros:1},
+    '3_2':{price:166, hours:5.5,  pros:1},
+    '4_2':{price:178, hours:6,    pros:1},
+    '5_2':{price:190, hours:6.5,  pros:1},
+    '1_3':{price:144, hours:4.5,  pros:1},
+    '2_3':{price:166, hours:5.5,  pros:1},
+    '3_3':{price:178, hours:6,    pros:1},
+    '4_3':{price:190, hours:6.5,  pros:1},
+    '5_3':{price:204, hours:7.5,  pros:1}
+  },
+  pesada: {
+    '1_1':{price:231, hours:7.5,  pros:1},
+    '2_1':{price:251, hours:9,    pros:1},
+    '3_1':{price:338, hours:10.5, pros:2},
+    '4_1':{price:386, hours:12,   pros:2},
+    '5_1':{price:436, hours:13.5, pros:2},
+    '1_2':{price:251, hours:9,    pros:1},
+    '2_2':{price:338, hours:10.5, pros:2},
+    '3_2':{price:386, hours:12,   pros:2},
+    '4_2':{price:436, hours:13.5, pros:2},
+    '5_2':{price:484, hours:15,   pros:2},
+    '1_3':{price:338, hours:10.5, pros:2},
+    '2_3':{price:386, hours:12,   pros:2},
+    '3_3':{price:436, hours:13.5, pros:2},
+    '4_3':{price:484, hours:15,   pros:2},
+    '5_3':{price:532, hours:16.5, pros:2}
+  },
+  mudanca: {
+    '1_1':{price:526, hours:12,   pros:2},
+    '2_1':{price:610, hours:14,   pros:2},
+    '3_1':{price:702, hours:16,   pros:2},
+    '4_1':{price:790, hours:18,   pros:2},
+    '5_1':{price:876, hours:20,   pros:3},
+    '1_2':{price:610, hours:14,   pros:2},
+    '2_2':{price:702, hours:16,   pros:2},
+    '3_2':{price:790, hours:18,   pros:2},
+    '4_2':{price:876, hours:20,   pros:3},
+    '5_2':{price:960, hours:22,   pros:3},
+    '1_3':{price:702, hours:16,   pros:2},
+    '2_3':{price:790, hours:18,   pros:2},
+    '3_3':{price:876, hours:20,   pros:3},
+    '4_3':{price:960, hours:22,   pros:3},
+    '5_3':{price:1047,hours:24,   pros:3}
+  },
+  passadoria: {} // passadoria mantém lógica por peças
+};
+
 function getProsForHours(svc, h) {
-  if (svc === 'passadoria') return 1; // passadoria sempre 1 profissional
+  if (svc === 'passadoria') return 1;
   if (h > 18) return 3;
   if (h > 9)  return 2;
   return 1;
 }
 
-// Taxa horária por serviço (R$/h de profissional)
-var HOURLY_RATES = {
-  padrao:    48,   // R$/h
-  pesada:    65,   // R$/h
-  mudanca:   75,   // R$/h
-  passadoria:42    // R$/h
-};
-
-// ── TABELA DE HORAS (extraída da API Parafuzo, subscription=SINGLE, APARTMENT)
-// Chave: "Q_B" (quartos_banheiros)  — quartos 0–6, banheiros 1–3
-// Para casa/studio usamos o mesmo cálculo (Parafuzo usa APARTMENT como base)
-var HOURS_TABLE = {
-  padrao: {
-    '0_1':2.5, '0_2':3,   '0_3':4,
-    '1_1':3,   '1_2':4,   '1_3':4.5,
-    '2_1':4,   '2_2':4.5, '2_3':5.5,
-    '3_1':4.5, '3_2':5.5, '3_3':6,
-    '4_1':5.5, '4_2':6,   '4_3':6.5,
-    '5_1':6,   '5_2':6.5, '5_3':7.5,
-    '6_1':6.5, '6_2':7.5, '6_3':8
-  },
-  pesada: {
-    '0_1':6,   '0_2':7.5, '0_3':9,
-    '1_1':7.5, '1_2':9,   '1_3':10.5,
-    '2_1':9,   '2_2':10.5,'2_3':12,
-    '3_1':10.5,'3_2':12,  '3_3':13.5,
-    '4_1':12,  '4_2':13.5,'4_3':15,
-    '5_1':13.5,'5_2':15,  '5_3':16.5,
-    '6_1':15,  '6_2':16.5,'6_3':18
-  },
-  mudanca: {
-    '0_1':7,   '0_2':8.5, '0_3':10.5,
-    '1_1':8.5, '1_2':10.5,'1_3':12,
-    '2_1':10.5,'2_2':12,  '2_3':14,
-    '3_1':12,  '3_2':14,  '3_3':15.5,
-    '4_1':14,  '4_2':15.5,'4_3':17.5,
-    '5_1':15.5,'5_2':17.5,'5_3':19,
-    '6_1':17.5,'6_2':19,  '6_3':21
-  }
-};
-
-// Horas para passadoria baseada em nº de peças (incrementos de 5 peças → ~0.5h)
+// Horas para passadoria
 function hoursForPecas(n) {
-  // ~10 peças por hora, mínimo 2.5h
   return Math.max(2.5, Math.round((n / 10) * 2) / 2);
 }
 
-// Busca horas na tabela, clampa quartos 0–6, banheiros 1–3
+function lookupRow(svc, quartos, banheiros) {
+  if (svc === 'passadoria') return null;
+  var tbl = PRICE_TABLE[svc];
+  if (!tbl) return null;
+  var q = String(Math.min(5, Math.max(1, quartos)));
+  var b = String(Math.min(3, Math.max(1, banheiros)));
+  return tbl[q + '_' + b] || null;
+}
+
 function lookupHours(svc, quartos, banheiros) {
   if (svc === 'passadoria') return hoursForPecas(state.counters.pecas);
-  var tbl = HOURS_TABLE[svc];
-  if (!tbl) return 4;
-  var q = Math.min(6, Math.max(0, quartos));
-  var b = Math.min(3, Math.max(1, banheiros));
-  return tbl[q + '_' + b] || 4;
+  var row = lookupRow(svc, quartos, banheiros);
+  return row ? row.hours : 4;
+}
+
+function lookupPrice(svc, quartos, banheiros) {
+  if (svc === 'passadoria') return Math.round(hoursForPecas(state.counters.pecas) * 42);
+  var row = lookupRow(svc, quartos, banheiros);
+  return row ? row.price : 0;
 }
 
 function formatHours(h) {
@@ -1134,7 +1161,7 @@ function selectSvc(el) {
 
   state.svc = el.dataset.svc;
   state.svcName = el.querySelector('.svc-name').textContent;
-  state.svcHourlyRate = HOURLY_RATES[state.svc] || 40;
+  // preço calculado por PRICE_TABLE
   state.hours = null;
   state.pros = null;
   state.hoursAdj = 0;
@@ -1412,14 +1439,17 @@ function updateSummary() {
     addrEl.classList.remove('placeholder');
   }
 
-  // calc price: hours × hourly rate
-  if (state.svcHourlyRate > 0 && state.hours) {
-    var base = state.hours * state.svcHourlyRate;
-    var total = base + state.extrasTotal;
+  // calc price: tabela exata por quartos+banheiros
+  if (state.svc && state.hours) {
+    var basePrice = lookupPrice(state.svc, state.counters.quartos, state.counters.banheiros);
+    var total = basePrice + state.extrasTotal;
     totalEl.textContent = formatPrice(total);
-    document.getElementById('sum-total-sub').textContent = state.extrasTotal > 0 ? 'inclui extras' : formatHours(state.hours) + 'h × R$' + state.svcHourlyRate + '/h';
-  } else if (state.svcHourlyRate > 0) {
-    totalEl.textContent = formatPrice(2.5 * state.svcHourlyRate);
+    var subLabel = state.extrasTotal > 0 ? 'inclui extras' :
+      (state.pros > 1 ? state.pros + ' profissionais · ' + formatHours(state.durationOnSite) + 'h cada' : '1 profissional · ' + formatHours(state.hours) + 'h');
+    document.getElementById('sum-total-sub').textContent = subLabel;
+  } else if (state.svc) {
+    var row = lookupRow(state.svc, 1, 1);
+    totalEl.textContent = row ? formatPrice(row.price) : 'R$ —';
     document.getElementById('sum-total-sub').textContent = 'a partir de';
   }
 
@@ -1439,8 +1469,8 @@ function submitOrder() {
   btn.classList.add('loading');
   btn.querySelector('.btn-label').textContent = 'Processando…';
 
-  // calc final total: hours × hourly rate + extras
-  var base = state.hours * state.svcHourlyRate;
+  // calc final total: preço tabelado + extras
+  var base = lookupPrice(state.svc, state.counters.quartos, state.counters.banheiros);
   var total = base + state.extrasTotal;
 
   // store for confirmation page
